@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { backendUrl } from '../App';
 import { Users, Home, Bed, Star, ChevronLeft, ChevronRight, Upload, Wifi, Tv, Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Calendar, Lock, Eye, EyeOff, Sparkles, Hotel } from 'lucide-react';
 
 const Booking = () => {
@@ -23,6 +24,7 @@ const Booking = () => {
   const [authName, setAuthName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
+  
 
   const bookingOptions = {
     entire: {
@@ -181,12 +183,11 @@ const Booking = () => {
 
   const handleAuthSubmit = (e) => {
     e.preventDefault();
-    setAuthLoading(true);
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    setAuthLoading(true);   
     const payload = { email: authEmail, password: authPassword };
     if (authMode === 'signup') payload.name = authName;
 
-    fetch(`${baseUrl}/auth/${authMode === 'login' ? 'login' : 'signup'}`, {
+      fetch(`${backendUrl}/auth/${authMode === 'login' ? 'login' : 'signup'}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -234,9 +235,9 @@ const Booking = () => {
   };
 
   const handleLogout = () => {
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+    const baseUrl = backendUrl;
     const refreshToken = localStorage.getItem('refresh_token');
-    fetch(`${baseUrl}/auth/logout`, {
+    fetch(`${backendUrl}/auth/logout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ refresh_token: refreshToken }),
@@ -249,11 +250,9 @@ const Booking = () => {
     });
   };
 
-  const getApiBase = () => import.meta.env.VITE_API_URL || 'http://localhost:4000';
   const startOAuth = (provider) => {
-    const api = getApiBase();
     const redirect = `${window.location.origin}/auth/callback`;
-    window.location.href = `${api}/auth/oauth/${provider}?redirect=${encodeURIComponent(redirect)}`;
+    window.location.href = `${backendUrl}/auth/oauth/${provider}?redirect=${encodeURIComponent(redirect)}`;
   };
 
   const handleProceedToPayment = () => {
@@ -261,77 +260,85 @@ const Booking = () => {
       setShowAuthModal(true);
       return;
     }
-    
+
     if (!guestPhone || !idType || !idFile) {
       alert('Please complete all required fields');
       return;
     }
-    
-    const baseUrl = getApiBase();
+
     const txRef = `book_${Date.now()}`;
     const amount = price.total;
 
-    // open Flutterwave checkout
-    if (window.FlutterwaveCheckout) {
-      window.FlutterwaveCheckout({
-        public_key: import.meta.env.VITE_FLUTTERWAVE_PUBLIC_KEY || '',
-        tx_ref: txRef,
-        amount,
-        currency: 'NGN',
-        payment_options: 'card,ussd,account',
-        customer: {
-          email: guestEmail || authEmail || 'guest@example.com',
-          name: guestName || authName || 'Guest User',
-          phone_number: guestPhone || ''
-        },
-        onclose: function() {
-          /* closed */
-        },
-        callback: function(payment) {
-          // normalize status and transaction id
-          const status = (payment && (payment.status || payment.event || '')).toString().toLowerCase();
-          const tx = payment?.transaction_id || payment?.tx_ref || payment?.flw_ref || payment?.id || null;
-          if (status === 'successful' || status === 'success') {
-            // Confirm with backend
-            fetch(`${baseUrl}/api/bookings/confirm`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                name: guestName || authName || 'Guest User',
-                email: guestEmail || authEmail,
-                phone: guestPhone,
-                room_type: activeTab,
-                check_in_date: checkIn,
-                check_out_date: checkOut,
-                price: amount,
-                payment_reference: tx,
-                provider: 'flutterwave',
-                user_id: null
-              })
-            })
-            .then(r => r.json())
-            .then(data => {
-              if (data.error) return alert('Booking failed: ' + data.error);
-              // update local bookings and UI
-              setBookings(prev => [...prev, { option: activeTab, checkIn, checkOut }]);
-              setGuestPhone(''); setIdType(''); setIdFile(null); setCheckIn(''); setCheckOut(''); setNumGuests(1);
-              alert('Booking confirmed!');
-            })
-            .catch(err => alert('Confirmation failed: ' + (err.message || err)));
-          } else {
-            alert('Payment was not successful');
-          }
+    // open Paystack inline modal
+    const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || '';
+    if (!PAYSTACK_KEY) return alert('Paystack public key is not configured.');
+    if (!window.PaystackPop) return alert('Paystack library failed to load. Check your internet or try reloading the page.');
+    if (!amount || amount <= 0) return alert('Invalid payment amount');
+
+    const handler = window.PaystackPop.setup({
+      key: PAYSTACK_KEY,
+      email: guestEmail || authEmail || 'guest@example.com',
+      amount: Math.round(amount * 100), // Paystack expects kobo
+      ref: txRef,
+      onClose: function() {
+        // user closed the modal
+      },
+      callback: function(response) {
+        // Normalize payment reference (Paystack returns `reference`; other responses might vary)
+        const paymentRef = response?.reference || response?.txRef || response?.transaction_reference || null;
+        if (!paymentRef) {
+          console.error('Missing payment reference from payment provider', response);
+          return alert('Payment succeeded but payment reference is missing. Please contact support with your transaction details.');
         }
-      });
-    } else {
-      alert('Flutterwave not loaded.');
-    }
+
+        // Build multipart form with multiple commonly-expected keys so backend can verify
+        const form = new FormData();
+        form.append('user_id', localStorage.getItem('userId') || '');
+        form.append('name', guestName || authName || 'Guest User');
+        form.append('email', guestEmail || authEmail || '');
+        form.append('phone', guestPhone);
+        form.append('room_type', activeTab);
+        form.append('check_in_date', checkIn);
+        form.append('check_out_date', checkOut);
+        form.append('price', amount);
+        form.append('payment_reference', paymentRef);
+        form.append('tx_ref', txRef); // original reference we sent to Paystack
+        form.append('transaction_reference', paymentRef);
+        form.append('provider', 'paystack');
+        form.append('id_type', idType);
+        try { form.append('provider_response', JSON.stringify(response)); } catch (e) { /* ignore circular */ }
+        if (idFile) form.append('id_file', idFile, idFile.name);
+
+        fetch(`${backendUrl}/api/bookings/confirm`, {
+          method: 'POST',
+          body: form // let browser set Content-Type for multipart/form-data
+        })
+          .then(async (r) => {
+            const data = await r.json().catch(() => ({}));
+            if (!r.ok) {
+              const msg = data?.error || data?.message || `Server responded ${r.status}`;
+              console.error('Booking confirmation failed', msg, data);
+              return alert('Booking failed: ' + msg);
+            }
+            if (data.error) {
+              return alert('Booking failed: ' + data.error);
+            }
+            setBookings(prev => [...prev, { option: activeTab, checkIn, checkOut }]);
+            setGuestPhone(''); setIdType(''); setIdFile(null); setCheckIn(''); setCheckOut(''); setNumGuests(1);
+            alert('Booking confirmed!');
+          })
+          .catch(err => {
+            console.error('Confirmation request error', err);
+            alert('Confirmation failed: ' + (err.message || err));
+          });
+      }
+    });
+    handler.openIframe();
   };
 
   // Fetch blocked booking date ranges on mount and load Flutterwave script if missing
   React.useEffect(() => {
-    const baseUrl = getApiBase();
-    fetch(`${baseUrl}/api/bookings/dates`)
+    fetch(`${backendUrl}/api/bookings/dates`)
       .then(r => r.json())
       .then(d => {
         const ranges = (d.dates || []).map(x => ({ from: x.check_in_date, to: x.check_out_date }));
@@ -339,13 +346,13 @@ const Booking = () => {
       })
       .catch(() => setBlockedRanges([]));
 
-    // load Flutterwave script dynamically in dev if not already loaded
-    if (typeof window !== 'undefined' && !window.FlutterwaveCheckout) {
+  // load Paystack inline script if not present
+    if (typeof window !== 'undefined' && !window.PaystackPop) {
       const s = document.createElement('script');
-      s.src = 'https://checkout.flutterwave.com/v3.js';
+      s.src = 'https://js.paystack.co/v1/inline.js';
       s.async = true;
-      s.onload = () => console.log('Flutterwave script loaded');
-      s.onerror = () => console.warn('Failed to load Flutterwave script');
+      s.onload = () => console.log('Paystack script loaded');
+      s.onerror = () => console.warn('Failed to load Paystack script');
       document.body.appendChild(s);
     }
   }, []);

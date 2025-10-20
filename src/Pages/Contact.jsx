@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { backendUrl } from '../App';
 import { Phone, Mail, MapPin, Send, MessageCircle, Clock, CheckCircle } from 'lucide-react';
 
 const Contact = () => {
@@ -21,9 +22,8 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // submit to backend
-    const api = import.meta.env.VITE_API_URL || 'http://localhost:4000';
     setIsSubmitted('loading');
-    fetch(`${api}/api/contact`, {
+    fetch(`${backendUrl}/api/contact`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
@@ -233,7 +233,7 @@ const Contact = () => {
               <div className="space-y-4">
                 <div className="border-b border-gray-200 pb-4">
                   <h4 className="font-semibold text-gray-900 mb-2">What are your payment options?</h4>
-                  <p className="text-gray-600 text-sm">We accept payments via Flutterwave including cards, bank transfers, and mobile money.</p>
+                  <p className="text-gray-600 text-sm">We accept payments via Paystack including cards, bank transfers, and mobile money.</p>
                 </div>
                 <div className="border-b border-gray-200 pb-4">
                   <h4 className="font-semibold text-gray-900 mb-2">Can I cancel my booking?</h4>

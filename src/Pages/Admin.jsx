@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
-const apiBase = () => import.meta.env.VITE_API_URL || 'http://localhost:4000';
+import { backendUrl } from '../App';
 
 function Admin() {
   const [adminKey, setAdminKey] = useState(localStorage.getItem('admin_key') || '');
@@ -22,12 +21,12 @@ function Admin() {
   async function fetchAll() {
     setLoading(true); setError('');
     try {
-      const s = await fetch(`${apiBase()}/admin/stats`, { headers: headers() });
+  const s = await fetch(`${backendUrl}/admin/stats`, { headers: headers() });
       if (!s.ok) throw new Error('Unauthorized or server error');
       const sdata = await s.json();
       setStats(sdata);
 
-      const res = await fetch(`${apiBase()}/admin/bookings`, { headers: headers() });
+  const res = await fetch(`${backendUrl}/admin/bookings`, { headers: headers() });
       if (!res.ok) throw new Error('Failed to fetch bookings');
       const data = await res.json();
       setBookings(data.bookings || []);
@@ -53,7 +52,7 @@ function Admin() {
   async function updateStatus(id, status) {
     setLoading(true); setError('');
     try {
-      const res = await fetch(`${apiBase()}/admin/bookings/${id}/status`, {
+      const res = await fetch(`${backendUrl}/admin/bookings/${id}/status`, {
         method: 'PATCH', headers: headers(), body: JSON.stringify({ status })
       });
       if (!res.ok) throw new Error('Failed to update');
