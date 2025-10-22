@@ -9,7 +9,6 @@ const Booking = () => {
   const [numGuests, setNumGuests] = useState(1);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [bookings, setBookings] = useState([]);
-  const [blockedRanges, setBlockedRanges] = useState([]);
   const [guestName, setGuestName] = useState('');
   const [guestEmail, setGuestEmail] = useState('');
   const [guestPhone, setGuestPhone] = useState('');
@@ -24,7 +23,124 @@ const Booking = () => {
   const [authName, setAuthName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
-  
+
+  // Availability state
+  const [availability, setAvailability] = useState(null); // null = not checked, true = available, false = unavailable
+  const [availabilityLoading, setAvailabilityLoading] = useState(false);
+  const [availabilityError, setAvailabilityError] = useState('');
+
+  // Debounce timer
+  const availabilityTimer = React.useRef(null);
+
+  // Central availability check function
+  const checkAvailability = React.useCallback(async (opts = {}) => {
+    const roomType = opts.roomType ?? activeTab ?? 'entire';
+    const inDate = opts.checkIn ?? checkIn;
+    const outDate = opts.checkOut ?? checkOut;
+
+    // If either date is missing, reset to unchecked state
+    if (!inDate || !outDate) {
+      setAvailability(null);
+      setAvailabilityError('');
+      setAvailabilityLoading(false);
+      return;
+    }
+
+    // Clear previous debounce
+    if (availabilityTimer.current) clearTimeout(availabilityTimer.current);
+    
+    setAvailabilityLoading(true);
+    setAvailabilityError('');
+
+    availabilityTimer.current = setTimeout(async () => {
+      try {
+        const params = new URLSearchParams({
+          room_type: roomType,
+          check_in_date: inDate,
+          check_out_date: outDate,
+        });
+        
+        const resp = await fetch(`${backendUrl}/api/availability?${params.toString()}`);
+        const json = await resp.json().catch(() => ({}));
+
+        if (!resp.ok || !json || !json.success) {
+          setAvailability(false);
+          setAvailabilityError(json?.message || 'Failed to check availability');
+        } else {
+          if (json.available) {
+            setAvailability(true);
+            setAvailabilityError('');
+          } else {
+            const msg = json.message || 'Selected dates are not available';
+            setAvailabilityError(msg);
+            setAvailability(false);
+          }
+        }
+      } catch (e) {
+        setAvailability(false);
+        setAvailabilityError('Network error checking availability');
+      } finally {
+        setAvailabilityLoading(false);
+        availabilityTimer.current = null;
+      }
+    }, 400); // 400ms debounce
+  }, [activeTab, checkIn, checkOut, backendUrl]);
+
+  // Run availability check when dates or room type changes
+  React.useEffect(() => {
+    checkAvailability();
+    return () => {
+      if (availabilityTimer.current) {
+        clearTimeout(availabilityTimer.current);
+        availabilityTimer.current = null;
+      }
+    };
+  }, [checkIn, checkOut, activeTab, checkAvailability]);
+
+  // Post-login confirmation: re-check availability immediately
+  React.useEffect(() => {
+    if (isAuthenticated && checkIn && checkOut) {
+      // Immediate non-debounced check
+      if (availabilityTimer.current) {
+        clearTimeout(availabilityTimer.current);
+        availabilityTimer.current = null;
+      }
+      
+      (async () => {
+        setAvailabilityLoading(true);
+        setAvailabilityError('');
+        try {
+          const params = new URLSearchParams({
+            room_type: activeTab || 'entire',
+            check_in_date: checkIn,
+            check_out_date: checkOut,
+          });
+          
+          const resp = await fetch(`${backendUrl}/api/availability?${params.toString()}`);
+          const json = await resp.json().catch(() => ({}));
+          
+          if (resp.ok && json && json.success && json.available) {
+            setAvailability(true);
+            setAvailabilityError('');
+          } else {
+            setAvailability(false);
+            const msg = json?.message || 'Selected dates are not available';
+            setAvailabilityError(msg);
+          }
+        } catch (e) {
+          setAvailability(false);
+          setAvailabilityError('Network error checking availability');
+        } finally {
+          setAvailabilityLoading(false);
+        }
+      })();
+    }
+  }, [isAuthenticated, activeTab, checkIn, checkOut, backendUrl]);
+
+  // Helper: whether user can proceed to booking
+  const canProceedToBooking = () => {
+    return availability === true && !availabilityLoading && checkIn && checkOut;
+  };
 
   const bookingOptions = {
     entire: {
@@ -36,7 +152,7 @@ const Booking = () => {
       bedrooms: 2,
       beds: 2,
       bathrooms: 2,
-  description: 'Experience the ultimate comfort in our spacious 2-bedroom luxury apartment. Featuring modern amenities, a fully equipped kitchen, elegant living spaces, and two stunning balconies with breathtaking views. Located in the heart of Abeokuta with easy access to shopping, dining, and entertainment.',
+      description: 'Experience the ultimate comfort in our spacious 2-bedroom luxury apartment. Featuring modern amenities, a fully equipped kitchen, elegant living spaces, and two stunning balconies with breathtaking views. Located in the heart of Abeokuta with easy access to shopping, dining, and entertainment.',
       basePrice: 50000,
       extraGuestCharge: 5000,
       maxGuests: 4,
@@ -135,31 +251,17 @@ const Booking = () => {
 
   const currentOption = bookingOptions[activeTab];
 
-  const isOptionAvailable = (optionId) => {
-    if (!checkIn || !checkOut) return true;
-    const requestStart = new Date(checkIn);
-    const requestEnd = new Date(checkOut);
-    return !bookings.some(booking => {
-      const bookingStart = new Date(booking.checkIn);
-      const bookingEnd = new Date(booking.checkOut);
-      const hasDateConflict = requestStart < bookingEnd && requestEnd > bookingStart;
-      if (!hasDateConflict) return false;
-      if (booking.option === 'entire') return true;
-      if (optionId === 'entire' && (booking.option === 'room1' || booking.option === 'room2')) return true;
-      if (optionId === booking.option) return true;
-      return false;
-    });
-  };
-
   const calculatePrice = () => {
     if (!checkIn || !checkOut) return { base: 0, discount: 0, extraGuest: 0, total: 0, nights: 0, discountType: '' };
     const start = new Date(checkIn);
     const end = new Date(checkOut);
     const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
     if (nights <= 0) return { base: 0, discount: 0, extraGuest: 0, total: 0, nights: 0, discountType: '' };
+    
     let basePrice = currentOption.basePrice * nights;
     let discountRate = 0;
     let discountType = '';
+    
     if (nights >= 30) {
       discountRate = 0.10;
       discountType = '10% Monthly Discount';
@@ -167,11 +269,14 @@ const Booking = () => {
       discountRate = 0.05;
       discountType = '5% Weekly Discount';
     }
+    
     const discount = basePrice * discountRate;
     let extraGuestCharge = 0;
+    
     if (activeTab === 'entire' && numGuests === 4) {
       extraGuestCharge = currentOption.extraGuestCharge * nights;
     }
+    
     const total = basePrice - discount + extraGuestCharge;
     return { base: basePrice, discount, extraGuest: extraGuestCharge, total, nights, discountType };
   };
@@ -183,11 +288,12 @@ const Booking = () => {
 
   const handleAuthSubmit = (e) => {
     e.preventDefault();
-    setAuthLoading(true);   
+    setAuthLoading(true);
+    
     const payload = { email: authEmail, password: authPassword };
     if (authMode === 'signup') payload.name = authName;
 
-      fetch(`${backendUrl}/auth/${authMode === 'login' ? 'login' : 'signup'}`, {
+    fetch(`${backendUrl}/auth/${authMode === 'login' ? 'login' : 'signup'}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -195,15 +301,18 @@ const Booking = () => {
       .then(async (res) => {
         const body = await res.json();
         if (!res.ok) throw new Error(body.error || 'Auth failed');
-        // Supabase returns session in data.session or data
+        
         const session = body.data?.session || body.data || body;
         const accessToken = session?.access_token || session?.accessToken || null;
         const refreshToken = session?.refresh_token || null;
+        
         if (accessToken) {
           localStorage.setItem('access_token', accessToken);
           if (refreshToken) localStorage.setItem('refresh_token', refreshToken);
-          // fetch user info
-          fetch(`${baseUrl}/auth/me`, { headers: { Authorization: `Bearer ${accessToken}` } })
+          
+          fetch(`${backendUrl}/auth/me`, { 
+            headers: { Authorization: `Bearer ${accessToken}` } 
+          })
             .then(r => r.json())
             .then(d => {
               setIsAuthenticated(true);
@@ -216,7 +325,6 @@ const Booking = () => {
               setGuestEmail(authEmail);
             });
         } else {
-          // fallback: set as authenticated (email magic link case)
           setIsAuthenticated(true);
           setGuestName(authName || 'Guest User');
           setGuestEmail(authEmail);
@@ -235,7 +343,6 @@ const Booking = () => {
   };
 
   const handleLogout = () => {
-    const baseUrl = backendUrl;
     const refreshToken = localStorage.getItem('refresh_token');
     fetch(`${backendUrl}/auth/logout`, {
       method: 'POST',
@@ -261,6 +368,11 @@ const Booking = () => {
       return;
     }
 
+    if (!canProceedToBooking()) {
+      alert('Please wait for availability confirmation or select different dates');
+      return;
+    }
+
     if (!guestPhone || !idType || !idFile) {
       alert('Please complete all required fields');
       return;
@@ -269,7 +381,6 @@ const Booking = () => {
     const txRef = `book_${Date.now()}`;
     const amount = price.total;
 
-    // open Paystack inline modal
     const PAYSTACK_KEY = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || '';
     if (!PAYSTACK_KEY) return alert('Paystack public key is not configured.');
     if (!window.PaystackPop) return alert('Paystack library failed to load. Check your internet or try reloading the page.');
@@ -278,20 +389,18 @@ const Booking = () => {
     const handler = window.PaystackPop.setup({
       key: PAYSTACK_KEY,
       email: guestEmail || authEmail || 'guest@example.com',
-      amount: Math.round(amount * 100), // Paystack expects kobo
+      amount: Math.round(amount * 100),
       ref: txRef,
       onClose: function() {
-        // user closed the modal
+        // User closed the modal
       },
       callback: function(response) {
-        // Normalize payment reference (Paystack returns `reference`; other responses might vary)
         const paymentRef = response?.reference || response?.txRef || response?.transaction_reference || null;
         if (!paymentRef) {
           console.error('Missing payment reference from payment provider', response);
           return alert('Payment succeeded but payment reference is missing. Please contact support with your transaction details.');
         }
 
-        // Build multipart form with multiple commonly-expected keys so backend can verify
         const form = new FormData();
         form.append('user_id', localStorage.getItem('userId') || '');
         form.append('name', guestName || authName || 'Guest User');
@@ -302,16 +411,16 @@ const Booking = () => {
         form.append('check_out_date', checkOut);
         form.append('price', amount);
         form.append('payment_reference', paymentRef);
-        form.append('tx_ref', txRef); // original reference we sent to Paystack
+        form.append('tx_ref', txRef);
         form.append('transaction_reference', paymentRef);
         form.append('provider', 'paystack');
         form.append('id_type', idType);
-        try { form.append('provider_response', JSON.stringify(response)); } catch (e) { /* ignore circular */ }
+        try { form.append('provider_response', JSON.stringify(response)); } catch (e) { /* ignore */ }
         if (idFile) form.append('id_file', idFile, idFile.name);
 
         fetch(`${backendUrl}/api/bookings/confirm`, {
           method: 'POST',
-          body: form // let browser set Content-Type for multipart/form-data
+          body: form
         })
           .then(async (r) => {
             const data = await r.json().catch(() => ({}));
@@ -324,8 +433,14 @@ const Booking = () => {
               return alert('Booking failed: ' + data.error);
             }
             setBookings(prev => [...prev, { option: activeTab, checkIn, checkOut }]);
-            setGuestPhone(''); setIdType(''); setIdFile(null); setCheckIn(''); setCheckOut(''); setNumGuests(1);
-            alert('Booking confirmed!');
+            setGuestPhone(''); 
+            setIdType(''); 
+            setIdFile(null); 
+            setCheckIn(''); 
+            setCheckOut(''); 
+            setNumGuests(1);
+            setAvailability(null);
+            alert('Booking confirmed successfully!');
           })
           .catch(err => {
             console.error('Confirmation request error', err);
@@ -336,17 +451,14 @@ const Booking = () => {
     handler.openIframe();
   };
 
-  // Fetch blocked booking date ranges on mount and load Flutterwave script if missing
   React.useEffect(() => {
     fetch(`${backendUrl}/api/bookings/dates`)
       .then(r => r.json())
       .then(d => {
-        const ranges = (d.dates || []).map(x => ({ from: x.check_in_date, to: x.check_out_date }));
-        setBlockedRanges(ranges);
+        // Store blocked ranges if needed for calendar UI
       })
-      .catch(() => setBlockedRanges([]));
+      .catch(() => {});
 
-  // load Paystack inline script if not present
     if (typeof window !== 'undefined' && !window.PaystackPop) {
       const s = document.createElement('script');
       s.src = 'https://js.paystack.co/v1/inline.js';
@@ -355,7 +467,7 @@ const Booking = () => {
       s.onerror = () => console.warn('Failed to load Paystack script');
       document.body.appendChild(s);
     }
-  }, []);
+  }, [backendUrl]);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -458,7 +570,6 @@ const Booking = () => {
                   </button>
                 </div>
                 
-                {/* OAuth buttons */}
                 <div className="mt-4">
                   <div className="text-sm text-gray-500 mb-2 text-center">Or continue with</div>
                   <div className="grid grid-cols-3 gap-3">
@@ -506,7 +617,12 @@ const Booking = () => {
               return (
                 <button
                   key={key}
-                  onClick={() => { setActiveTab(key); setCurrentImageIndex(0); setNumGuests(1); }}
+                  onClick={() => { 
+                    setActiveTab(key); 
+                    setCurrentImageIndex(0); 
+                    setNumGuests(1);
+                    setAvailability(null); // Reset availability when switching tabs
+                  }}
                   className={`px-6 py-3.5 rounded-xl font-semibold whitespace-nowrap transition-all transform hover:scale-105 ${
                     isActive
                       ? `${option.accentColor} text-white shadow-lg`
@@ -717,16 +833,35 @@ const Booking = () => {
                   </div>
                 </div>
 
-                {checkIn && checkOut && !isOptionAvailable(activeTab) && (
-                  <div className="mb-6 p-4 bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-300 rounded-xl">
-                    <p className="text-sm font-bold text-red-800 flex items-center gap-2">
-                      <X size={18} />
-                      Not available for selected dates
+                {/* Availability Status Banner */}
+                {availabilityLoading && (
+                  <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                      <p className="text-sm font-bold text-blue-800">Checking availability...</p>
+                    </div>
+                  </div>
+                )}
+
+                {!availabilityLoading && availability === true && checkIn && checkOut && (
+                  <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl">
+                    <p className="text-sm font-bold text-green-800 flex items-center gap-2">
+                      <Check size={18} />
+                      Available for your dates
                     </p>
                   </div>
                 )}
 
-                {checkIn && checkOut && isOptionAvailable(activeTab) && price.nights > 0 && (
+                {!availabilityLoading && availability === false && availabilityError && (
+                  <div className="mb-6 p-4 bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-300 rounded-xl">
+                    <p className="text-sm font-bold text-red-800 flex items-center gap-2">
+                      <X size={18} />
+                      {availabilityError}
+                    </p>
+                  </div>
+                )}
+
+                {checkIn && checkOut && price.nights > 0 && (
                   <>
                     <div className="mb-6 space-y-3 pb-6 border-b-2 border-gray-200">
                       <div className="flex justify-between text-gray-900 font-semibold">
@@ -785,13 +920,6 @@ const Booking = () => {
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        <div className="p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl mb-4">
-                          <p className="text-sm font-bold text-green-800 flex items-center gap-2">
-                            <Check size={18} />
-                            Available for your dates
-                          </p>
-                        </div>
-
                         <input 
                           type="tel" 
                           value={guestPhone} 
@@ -840,9 +968,14 @@ const Booking = () => {
 
                         <button
                           onClick={handleProceedToPayment}
-                          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3.5 rounded-xl font-bold hover:from-purple-700 hover:to-pink-700 transition shadow-lg hover:shadow-xl transform hover:scale-105"
+                          disabled={!canProceedToBooking() || !guestPhone || !idType || !idFile}
+                          className={`w-full py-3.5 rounded-xl font-bold transition transform ${
+                            (!canProceedToBooking() || !guestPhone || !idType || !idFile)
+                              ? 'bg-gray-300 text-gray-700 cursor-not-allowed opacity-60'
+                              : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-xl hover:scale-105'
+                          }`}
                         >
-                          Reserve
+                          {availabilityLoading ? 'Checking...' : 'Reserve'}
                         </button>
                         <p className="text-xs text-center text-gray-600 font-medium">You won't be charged yet</p>
                       </div>
