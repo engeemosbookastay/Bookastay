@@ -7,8 +7,8 @@ import Living from '../assets/Living.jpg';
 import Dine from '../assets/Dine.jpg';
 import LiveRoom from '../assets/LiveRoom.jpg';
 import Room from '../assets/Room.jpg';
-import Bedroom1 from '../assets/Bedroom1.jpg';
-import Bedroom2 from '../assets/Bedroom2.jpg';
+// import Bedroom1 from '../assets/Bedroom1.jpg';
+// import Bedroom2 from '../assets/Bedroom2.jpg';
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -31,8 +31,8 @@ const Hero = () => {
     LiveRoom,
     Room,
     Dine,
-    Bedroom1,
-    Bedroom2
+    // Bedroom1,
+    // Bedroom2
   ];
 
   // Auto-slide every 5 seconds
