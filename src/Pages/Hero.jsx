@@ -4,7 +4,7 @@ import { backendUrl } from '../App';
 
 // Import your actual apartment images
 import Sitting from '../assets/Sitting.jpg';
-import Dining from '../assets/Dinning.jpg';
+// import Dining from '../assets/Dinning.jpg';
 import SittingRoom from '../assets/SittingRoom.jpg';
 import SittingRoom2 from '../assets/SittingRoom2.jpg';
 import Bedroom from '../assets/Bedroom1.jpg';
@@ -30,7 +30,7 @@ const Hero = () => {
     Sitting,
     SittingRoom,
     SittingRoom2,
-    Dining,
+    // Dining,
     Bedroom,
     Bedroom2
   ];
