@@ -3,12 +3,10 @@ import { backendUrl } from '../App';
 import { Users, Home, Bed, Star, ChevronLeft, ChevronRight, Upload, Wifi, Tv, Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Calendar, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
 
 // Import actual images
-import Bedroom from '../assets/Bedroom1.jpg';
-import Bedroom2 from '../assets/Bedroom2.jpg';
-import Sitting from '../assets/Sitting.jpg';
-import Dining from '../assets/Dinning.jpg';
-import SittingRoom from '../assets/SittingRoom.jpg';
-import SittingRoom2 from '../assets/SittingRoom2.jpg';
+import Living from '../assets/Living.jpg';
+import Dine from '../assets/Dine.jpg';
+import LiveRoom from '../assets/LiveRoom.jpg';
+import Room from '../assets/Room.jpg';
 
 const Rooms = () => {
   const [activeTab, setActiveTab] = useState('2bedroom');
@@ -142,7 +140,10 @@ const Rooms = () => {
         { name: 'Self Check-in', icon: Shield, desc: 'Keyless entry' },
         { name: 'Workspace', icon: Home, desc: 'Dedicated desk' }
       ],
-      images: [Sitting, SittingRoom, SittingRoom2, Dining, Bedroom, Bedroom2]
+      images: [Living,
+          LiveRoom,
+          Room,
+          Dine,]
     },
     '1bedroom': {
       id: '1bedroom',
@@ -169,7 +170,10 @@ const Rooms = () => {
         { name: 'Balcony Access', icon: DoorOpen, desc: 'Shared' },
         { name: 'Private Bathroom', icon: Shield, desc: 'En-suite' }
       ],
-      images: [Bedroom, Bedroom2, SittingRoom, Dining]
+      images: [Living,
+          LiveRoom,
+          Room,
+          Dine,]
     }
   };
 
