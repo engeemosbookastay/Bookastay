@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, Home, Bed, Building, Navigation, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Logo from '../assets/Logo.png';
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -29,11 +31,11 @@ const Navbar = () => {
           {/* Logo Section - Conspicuously Located */}
           <a href="/" className="flex items-center gap-3 lg:gap-4 group">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
+              <div className=""></div>
               <img 
-                src="/BookaStay.png" 
+                src={Logo} 
                 alt="Engeemos Bookastay Logo" 
-                className="w-12 h-12 lg:w-16 lg:h-16 object-contain relative rounded-xl border-2 border-teal-400/30 bg-white/10 p-1" 
+                className="w-12 h-12 lg:w-16 lg:h-16 object-contain relative " 
               />
             </div>
             <div>

@@ -1,5 +1,7 @@
 import React from "react";
 import { Phone, Mail, MapPin, Instagram, Facebook, Twitter, ChevronRight } from "lucide-react";
+import Logo from '../assets/Logo.png';
+
 
 const Footer = () => {
   return (
@@ -13,9 +15,9 @@ const Footer = () => {
             {/* Logo & Brand */}
             <div className="flex items-center gap-4 mb-4">
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-orange-400 rounded-lg blur-md opacity-30"></div>
+                <div className=""></div>
                 <img
-                  src="/BookaStay.png"
+                  src={Logo}
                   alt="Engeemos Bookastay Apartments Logo"
                   className="w-16 h-16 object-contain relative"
                 />
