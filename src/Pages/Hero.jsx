@@ -6,7 +6,7 @@ import { backendUrl } from '../App';
 import Living from '../assets/Living.jpg';
 import Dine from '../assets/Dine.jpg';
 import LiveRoom from '../assets/LiveRoom.jpg';
-import SittingRoom2 from '../assets/SittingRoom2.jpg';
+import Room from '../assets/Room.jpg';
 import Bedroom1 from '../assets/Bedroom1.jpg';
 import Bedroom2 from '../assets/Bedroom2.jpg';
 
@@ -29,7 +29,7 @@ const Hero = () => {
   const images = [
     Living,
     LiveRoom,
-    SittingRoom2,
+    Room,
     Dine,
     Bedroom1,
     Bedroom2
