@@ -11,6 +11,7 @@ import Review from "./Component/Review";
 import Login from "./Component/Login";
 import Feauters from "./Component/Feauters";
 import Why from "./Component/Why";
+import GettingAround from "./Pages/GettingAround";
 // import { Home } from "lucide-react";
 import Home from "./Pages/Home";
 // Support multiple possible env names and a safe localhost default
@@ -28,8 +29,9 @@ const App = () => {
         <Route path="/review" element={<Review />} />
         <Route path="/login" element={<Login />} />
         {/* <Route path="/about" element={<About />} /> */}
-        <Route path="/features" element={<Feauters />} />
+        <Route path="/facilities" element={<Feauters />} />
         <Route path="/why" element={<Why />} />
+        <Route path="/getting-around" element={<GettingAround />} />
       </Routes>
       <Footer />
     </>

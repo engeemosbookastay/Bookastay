@@ -1,142 +1,209 @@
-import React from 'react'
-import { Phone, Mail, MapPin, Facebook, Instagram, Twitter, MessageCircle, Heart } from 'lucide-react'
+import React from "react";
+import { Phone, Mail, MapPin, Instagram, Facebook, Twitter, ChevronRight } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
-      {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          
-          {/* Brand Section */}
-          <div className="space-y-4">
-            <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Book A Stay
-            </h3>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Your premier destination for comfortable and affordable accommodation in Abeokuta. Experience hospitality at its finest.
+    <footer className="bg-gradient-to-b from-slate-900 to-slate-950 text-white border-t border-teal-500/20">
+      {/* Main Footer */}
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+
+          {/* LEFT – CONTACT INFO */}
+          <div className="space-y-6">
+            {/* Logo & Brand */}
+            <div className="flex items-center gap-4 mb-4">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-orange-400 rounded-lg blur-md opacity-30"></div>
+                <img
+                  src="/BookaStay.png"
+                  alt="Engeemos Bookastay Apartments Logo"
+                  className="w-16 h-16 object-contain relative"
+                />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-white">
+                  Engeemos Bookastay Apartments
+                </h3>
+                <p className="text-sm text-teal-300 font-medium">Luxury Serviced Apartments</p>
+              </div>
+            </div>
+
+            <p className="text-base text-gray-300 leading-relaxed max-w-md">
+              Experience comfort, security, and style in our premium serviced apartments. 
+              Designed for both short and extended stays in the heart of Abeokuta.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center hover:scale-110 transition-transform">
-                <Facebook size={18} />
+
+            {/* Contact Details */}
+            <div className="space-y-4 pt-4">
+              <div className="flex items-start gap-4 group">
+                <div className="bg-teal-500/10 p-3 rounded-lg group-hover:bg-teal-500/20 transition-all">
+                  <MapPin size={20} className="text-teal-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white mb-1">Address</p>
+                  <p className="text-gray-300 text-sm">
+                    No 5, Adesola Babarinde Close, Off Professor Adewunmi Abioye Avenue, Olomore
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 group">
+                <div className="bg-teal-500/10 p-3 rounded-lg group-hover:bg-teal-500/20 transition-all">
+                  <Mail size={20} className="text-teal-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white mb-1">Email</p>
+                  <a href="mailto:info@engeemosbookastay.com" className="text-gray-300 text-sm hover:text-teal-400 transition-colors">
+                    engeemosbookastay@gmail.com
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 group">
+                <div className="bg-teal-500/10 p-3 rounded-lg group-hover:bg-teal-500/20 transition-all">
+                  <Phone size={20} className="text-teal-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white mb-1">Phone</p>
+                  <a href="tel:+2348030000000" className="text-gray-300 text-sm hover:text-teal-400 transition-colors">
+                    +2348166939592, +2348066215431
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 group">
+                <div className="bg-teal-500/10 p-3 rounded-lg group-hover:bg-teal-500/20 transition-all">
+                  <Instagram size={20} className="text-teal-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white mb-1">Instagram</p>
+                  <a 
+                    href="https://instagram.com/engeemosbookastay" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-300 text-sm hover:text-teal-400 transition-colors"
+                  >
+                    @engeemos.bookastay
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Social Media Icons */}
+            <div className="flex gap-3 pt-4">
+              <a 
+                href="https://instagram.com/engeemosbookastay" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white/5 hover:bg-teal-500/20 p-3 rounded-lg transition-all group border border-white/10 hover:border-teal-400/50"
+              >
+                <Instagram size={20} className="text-gray-400 group-hover:text-teal-400 transition-colors" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center hover:scale-110 transition-transform">
-                <Instagram size={18} />
+              <a 
+                href="https://facebook.com/engeemosbookastay" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white/5 hover:bg-teal-500/20 p-3 rounded-lg transition-all group border border-white/10 hover:border-teal-400/50"
+              >
+                <Facebook size={20} className="text-gray-400 group-hover:text-teal-400 transition-colors" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center hover:scale-110 transition-transform">
-                <Twitter size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center hover:scale-110 transition-transform">
-                <MessageCircle size={18} />
+              <a 
+                href="https://twitter.com/engeemosbookastay" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white/5 hover:bg-teal-500/20 p-3 rounded-lg transition-all group border border-white/10 hover:border-teal-400/50"
+              >
+                <Twitter size={20} className="text-gray-400 group-hover:text-teal-400 transition-colors" />
               </a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">Quick Links</h4>
-            <ul className="space-y-2">
+          {/* RIGHT – SITE LINKS */}
+          <div className="lg:pl-16">
+            <h4 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+              <span className="w-1 h-8 bg-gradient-to-b from-teal-400 to-cyan-400 rounded-full"></span>
+              Quick Links
+            </h4>
+
+            <ul className="space-y-3">
               <li>
-                <a href="#home" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Home</a>
+                <a 
+                  href="/" 
+                  className="flex items-center gap-3 text-gray-300 hover:text-teal-400 transition-all group py-2"
+                >
+                  <ChevronRight size={18} className="text-teal-400 group-hover:translate-x-1 transition-transform" />
+                  <span className="text-base">Home</span>
+                </a>
               </li>
               <li>
-                <a href="#rooms" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Rooms & Suites</a>
+                <a 
+                  href="/rooms" 
+                  className="flex items-center gap-3 text-gray-300 hover:text-teal-400 transition-all group py-2"
+                >
+                  <ChevronRight size={18} className="text-teal-400 group-hover:translate-x-1 transition-transform" />
+                  <span className="text-base">Rooms</span>
+                </a>
               </li>
               <li>
-                <a href="#about" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">About Us</a>
+                <a 
+                  href="/facilities" 
+                  className="flex items-center gap-3 text-gray-300 hover:text-teal-400 transition-all group py-2"
+                >
+                  <ChevronRight size={18} className="text-teal-400 group-hover:translate-x-1 transition-transform" />
+                  <span className="text-base">Facilities</span>
+                </a>
               </li>
               <li>
-                <a href="#amenities" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Amenities</a>
+                <a 
+                  href="/getting-around" 
+                  className="flex items-center gap-3 text-gray-300 hover:text-teal-400 transition-all group py-2"
+                >
+                  <ChevronRight size={18} className="text-teal-400 group-hover:translate-x-1 transition-transform" />
+                  <span className="text-base">Getting Around</span>
+                </a>
               </li>
               <li>
-                <a href="#contact" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Contact</a>
-              </li>
-              <li>
-                <a href="#faq" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">FAQ</a>
+                <a 
+                  href="/blog" 
+                  className="flex items-center gap-3 text-gray-300 hover:text-teal-400 transition-all group py-2"
+                >
+                  <ChevronRight size={18} className="text-teal-400 group-hover:translate-x-1 transition-transform" />
+                  <span className="text-base">Blog</span>
+                </a>
               </li>
             </ul>
-          </div>
 
-          {/* Services */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">Our Services</h4>
-            <ul className="space-y-2">
-              <li>
-                <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Room Booking</a>
-              </li>
-              <li>
-                <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Airport Pickup</a>
-              </li>
-              <li>
-                <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Restaurant & Bar</a>
-              </li>
-              <li>
-                <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Event Spaces</a>
-              </li>
-              <li>
-                <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">Laundry Service</a>
-              </li>
-              <li>
-                <a href="#" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">24/7 Support</a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">Contact Us</h4>
-            <div className="space-y-3">
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
-                  <Phone size={16} />
-                </div>
-                <div>
-                  <p className="text-slate-400 text-sm">+234 803 456 7890</p>
-                  <p className="text-slate-400 text-sm">+234 701 234 5678</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
-                  <Mail size={16} />
-                </div>
-                <div>
-                  <p className="text-slate-400 text-sm">info@bookastay.com</p>
-                  <p className="text-slate-400 text-sm">bookings@bookastay.com</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start space-x-3">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center flex-shrink-0">
-                  <MapPin size={16} />
-                </div>
-                <div>
-                  <p className="text-slate-400 text-sm">123 GRA Phase 2,</p>
-                  <p className="text-slate-400 text-sm">Abeokuta, Nigeria</p>
-                </div>
-              </div>
+            {/* Newsletter/CTA Section */}
+            <div className="mt-12 bg-gradient-to-br from-teal-500/10 to-cyan-500/10 border border-teal-500/20 rounded-2xl p-6">
+              <h5 className="text-lg font-bold text-white mb-2">Ready to Book?</h5>
+              <p className="text-sm text-gray-300 mb-4">
+                Reserve your luxury apartment today and experience premium comfort.
+              </p>
+              <a 
+                href="/bookings" 
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-3 rounded-lg font-semibold hover:from-teal-400 hover:to-cyan-400 transition-all shadow-lg hover:shadow-teal-500/50"
+              >
+                <span>Book Now</span>
+                <ChevronRight size={18} />
+              </a>
             </div>
           </div>
+
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-slate-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-slate-400 text-sm text-center md:text-left">
-              © 2025 Book A Stay. All rights reserved.
+      <div className="border-t border-white/10 bg-slate-950">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+            <p>
+              © {new Date().getFullYear()} Engeemos Bookastay Apartments. All rights reserved.
             </p>
-            <div className="flex items-center space-x-1 text-slate-400 text-sm">
-              <span>Made with</span>
-              <Heart size={14} className="text-red-500 fill-red-500" />
-              <span>in Abeokuta</span>
-            </div>
-            <div className="flex space-x-6">
-              <a href="#privacy" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">
+            <div className="flex gap-6">
+              <a href="/privacy" className="hover:text-teal-400 transition-colors">
                 Privacy Policy
               </a>
-              <a href="#terms" className="text-slate-400 hover:text-blue-400 transition-colors text-sm">
+              <a href="/terms" className="hover:text-teal-400 transition-colors">
                 Terms of Service
               </a>
             </div>
@@ -144,7 +211,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
