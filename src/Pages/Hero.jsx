@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Calendar, Users, Search, Check, X, MapPin, Mail, Phone, Instagram, Home, Bed, Building, Navigation, BookOpen, ChevronDown } from 'lucide-react';
 import { backendUrl } from '../App';
 
-// Import your actual apartment images
-// import Sitting from '../assets/Sitting.jpg';
-// import Dinning from '../assets/Dinning.jpg';
+
+import Living from '../assets/Living.jpg';
+import Dine from '../assets/Dine.jpg';
 import SittingRoom from '../assets/SittingRoom.jpg';
 import SittingRoom2 from '../assets/SittingRoom2.jpg';
-// import Bedroom from '../assets/Bedroom1.jpg';
-// import Bedroom2 from '../assets/Bedroom2.jpg';
+import Bedroom1 from '../assets/Bedroom1.jpg';
+import Bedroom2 from '../assets/Bedroom2.jpg';
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -27,12 +27,12 @@ const Hero = () => {
 
   // High-quality apartment images
   const images = [
-    // Sitting,
+    Living,
     SittingRoom,
     SittingRoom2,
-    // Dinning,
-    // Bedroom,
-    // Bedroom2
+    Dine,
+    Bedroom1,
+    Bedroom2
   ];
 
   // Auto-slide every 5 seconds
