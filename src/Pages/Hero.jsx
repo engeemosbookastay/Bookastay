@@ -3,7 +3,7 @@ import { Calendar, Users, Search, Check, X, MapPin, Mail, Phone, Instagram, Home
 import { backendUrl } from '../App';
 
 // Import your actual apartment images
-import Sitting from '../assets/Sitting.jpg';
+// import Sitting from '../assets/Sitting.jpg';
 import Dinning from '../assets/Dinning.jpg';
 import SittingRoom from '../assets/SittingRoom.jpg';
 import SittingRoom2 from '../assets/SittingRoom2.jpg';
@@ -27,7 +27,7 @@ const Hero = () => {
 
   // High-quality apartment images
   const images = [
-    Sitting,
+    // Sitting,
     SittingRoom,
     SittingRoom2,
     Dinning,
