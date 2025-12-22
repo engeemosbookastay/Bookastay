@@ -48,7 +48,7 @@ const Navbar = () => {
             </div>
           </a>
 
-          {/* Desktop Navigation */}
+         
           <div className="hidden lg:flex items-center gap-1">
             <a 
               href="/" 
