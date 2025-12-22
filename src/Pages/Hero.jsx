@@ -3,12 +3,12 @@ import { Calendar, Users, Search, Check, X, MapPin, Mail, Phone, Instagram, Home
 import { backendUrl } from '../App';
 
 // Import your actual apartment images
-import Sitting from '../assets/Sitting.jpg';
+// import Sitting from '../assets/Sitting.jpg';
 import Dining from '../assets/Dinning.jpg';
 import SittingRoom from '../assets/SittingRoom.jpg';
 import SittingRoom2 from '../assets/SittingRoom2.jpg';
-import Bedroom from '../assets/Bedroom1.jpg';
-import Bedroom2 from '../assets/Bedroom2.jpg';
+// import Bedroom from '../assets/Bedroom1.jpg';
+// import Bedroom2 from '../assets/Bedroom2.jpg';
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -27,12 +27,12 @@ const Hero = () => {
 
   // High-quality apartment images
   const images = [
-    Sitting,
+    // Sitting,
     SittingRoom,
     SittingRoom2,
     Dining,
-    Bedroom,
-    Bedroom2
+    // Bedroom,
+    // Bedroom2
   ];
 
   // Auto-slide every 5 seconds
