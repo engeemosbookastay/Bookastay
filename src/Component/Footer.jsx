@@ -80,7 +80,7 @@ const Footer = () => {
                 <div>
                   <p className="text-sm font-semibold text-white mb-1">Instagram</p>
                   <a 
-                    href="https://instagram.com/engeemosbookastay" 
+                    href="https://instagram.com/engeemos.bookastay" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-gray-300 text-sm hover:text-teal-400 transition-colors"

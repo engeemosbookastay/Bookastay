@@ -108,12 +108,12 @@ const Navbar = () => {
               <span>Blog</span>
             </a>
             
-            <Link 
+            <Link  
               to="/bookings" 
               className="ml-4 px-8 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-full font-bold hover:from-teal-400 hover:to-cyan-400 transition-all shadow-lg hover:shadow-teal-500/50 hover:scale-105"
             >
              BOOK
-            </Link>
+            </Link  >
           </div>
 
           {/* Mobile Menu Button */}
