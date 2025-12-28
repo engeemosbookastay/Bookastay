@@ -1,180 +1,137 @@
 import React from "react";
-import { CheckCircle, Wifi, Tv, Coffee, MapPin, Star } from "lucide-react";
+import { CheckCircle, Wifi, Tv, Coffee, MapPin, Zap, Shield, Car, Droplet, Home, Wind, Utensils, Waves, Gamepad2, Briefcase, Sparkles } from "lucide-react";
 import Navbar from "./Navbar";
 
 const Feauters = () => {
-  const benefits = [
-    { title: "Central Location", desc: "Close to shops, nightlife, and restaurants." },
-    { title: "Affordable Luxury", desc: "Enjoy premium comfort without the high price tag." },
-    { title: "24/7 Support", desc: "We’re always available to assist you." },
-  ];
-
-  const properties = [
+  const amenitiesCategories = [
     {
-      id: 1,
-      title: "Entire Apartment",
-      desc: "Spacious 2-bedroom apartment with full amenities — perfect for families or groups.",
-      image: "https://a0.muscache.com/im/pictures/miso/Hosting-1062424467186970425/original/3a39d6c7-8e9c-46ff-9e9c-f6b3c92b62df.jpeg?im_w=1200",
-      link: "https://www.airbnb.com.au/rooms/1062424467186970425",
+      category: "Entertainment & Connectivity",
+      items: [
+        { icon: Wifi, label: "Unlimited Internet", desc: "MTN 5G Broadband for seamless streaming" },
+        { icon: Tv, label: "Smart TV", desc: "Premium entertainment in every room" },
+        { icon: Gamepad2, label: "Board Games Collection", desc: "Chess, Scrabble, Ludo, Opon Ayo & more" },
+      ]
     },
     {
-      id: 2,
-      title: "Deluxe Private Room",
-      desc: "Cozy and private room with modern furnishings and great lighting.",
-      image: "https://a0.muscache.com/im/pictures/miso/Hosting-1073067628849955052/original/63a8dd89-b083-4519-bad9-99cf14e62fef.jpeg?im_w=1200",
-      link: "https://www.airbnb.com.au/rooms/1073067628849955052",
+      category: "Kitchen & Dining",
+      items: [
+        { icon: Utensils, label: "Fully-Equipped Kitchen", desc: "Gas cooker, microwave, air fryer, blender, toaster & refrigerator" },
+        { icon: Coffee, label: "Complimentary Beverages", desc: "Tea, coffee, milk, sugar & welcome juice" },
+      ]
     },
     {
-      id: 3,
-      title: "Premium Studio Suite",
-      desc: "A stylish suite perfect for solo travelers or couples.",
-      image: "https://a0.muscache.com/im/pictures/miso/Hosting-1062425116260973522/original/4203a5db-290b-4e47-a7cc-f78643df87e2.jpeg?im_w=1200",
-      link: "https://www.airbnb.com.au/rooms/1062425116260973522",
-    },
-  ];
-
-  const amenities = [
-    { icon: Wifi, label: "Free Wi-Fi" },
-    { icon: Tv, label: "Smart TV" },
-    { icon: Coffee, label: "Coffee Maker" },
-    { icon: CheckCircle, label: "Private Bathroom" },
-    { icon: MapPin, label: "Secure Location" },
-  ];
-
-  const reviews = [
-    {
-      name: "Blessing A.",
-      comment:
-        "The place is clean, peaceful, and well-equipped. The host was very kind and responsive. I’ll definitely come again!",
+      category: "Comfort & Convenience",
+      items: [
+        { icon: Wind, label: "Climate Control", desc: "Air conditioners with remote smart controls" },
+        { icon: Waves, label: "Laundry Service", desc: "Washing machine, detergent, clips & drying rack" },
+        { icon: Droplet, label: "Hot Water System", desc: "Water heaters in all bathrooms" },
+        { icon: CheckCircle, label: "Hair Dryers", desc: "Available in every bathroom" },
+        { icon: Sparkles, label: "Premium Bedding", desc: "Hotel-grade linens, towels & toiletries" },
+      ]
     },
     {
-      name: "Tunde O.",
-      comment:
-        "Perfect location and amenities! Booking was easy and the service top-notch. Highly recommended.",
+      category: "Work & Productivity",
+      items: [
+        { icon: Briefcase, label: "Dedicated Workspace", desc: "Comfortable work area with ergonomic setup" },
+        { icon: Zap, label: "Uninterrupted Power", desc: "10Kva inverter, generator & PHCN backup" },
+      ]
+    },
+    {
+      category: "Security & Access",
+      items: [
+        { icon: Shield, label: "24/7 Security System", desc: "CCTV surveillance & electric fencing" },
+        { icon: MapPin, label: "Contactless Check-in", desc: "Self check-in with secure key safe" },
+        { icon: Car, label: "Private Parking", desc: "Spacious compound with multiple spots" },
+      ]
     },
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-white min-h-screen">
       <Navbar />
 
-      {/* Hero Section */}
-      <section
-        className="relative bg-cover bg-center h-[90vh] flex items-center justify-center"
-        style={{
-          backgroundImage:
-            "url('https://a0.muscache.com/im/pictures/miso/Hosting-1062424467186970425/original/3a39d6c7-8e9c-46ff-9e9c-f6b3c92b62df.jpeg?im_w=1200')",
-        }}
-      >
-        <div className="bg-black bg-opacity-50 absolute inset-0"></div>
-        <div className="relative text-center text-white px-4">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">Welcome to Book A Stay</h1>
-          <p className="text-xl mb-8">Your comfort getaway in Abeokuta — where luxury meets peace.</p>
-          <a
-            href="#properties"
-            className="px-8 py-4 bg-yellow-400 text-gray-900 font-semibold rounded-xl hover:bg-yellow-300 transition"
-          >
-            Explore Apartments
+      {/* Minimalist Hero */}
+      <section className="pt-32 pb-20 px-4 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="inline-block px-4 py-2 bg-blue-50 rounded-full mb-6">
+            <span className="text-blue-600 font-medium text-sm">PREMIUM AMENITIES</span>
+          </div>
+          <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-6 tracking-tight">
+            World-Class<br />Facilities
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Every detail thoughtfully designed for your comfort and convenience
+          </p>
+        </div>
+      </section>
+
+      {/* Facilities by Category */}
+      <section className="py-16 px-4">
+        <div className="max-w-7xl mx-auto space-y-24">
+          {amenitiesCategories.map((category, idx) => (
+            <div key={idx} className="space-y-8">
+              <div className="flex items-center space-x-4">
+                <div className="h-px bg-gradient-to-r from-blue-500 to-transparent flex-1"></div>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+                  {category.category}
+                </h2>
+                <div className="h-px bg-gradient-to-l from-blue-500 to-transparent flex-1"></div>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {category.items.map((item, index) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={index}
+                      className="group relative bg-white border border-gray-200 rounded-2xl p-8 hover:border-blue-500 transition-all duration-500 overflow-hidden"
+                    >
+                      {/* Hover gradient effect */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      
+                      <div className="relative z-10">
+                        <div className="mb-5">
+                          <div className="inline-flex p-3 bg-gray-50 rounded-xl group-hover:bg-blue-500 transition-colors duration-300">
+                            <Icon className="w-6 h-6 text-gray-700 group-hover:text-white transition-colors duration-300" strokeWidth={1.5} />
+                          </div>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-3">
+                          {item.label}
+                        </h3>
+                        <p className="text-gray-600 leading-relaxed text-sm">
+                          {item.desc}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Elegant CTA */}
+      {/* <section className="py-32 px-4 bg-gray-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20"></div>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h2 className="text-5xl md:text-6xl font-bold text-white mb-6">
+            Experience Excellence
+          </h2>
+          <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+            Book your stay and discover why our guests choose us time and time again
+          </p>
+          
+          <a>
+            href="/"
+            className="inline-flex items-center px-12 py-5 bg-white text-gray-900 font-semibold rounded-full hover:bg-gray-100 transition-all duration-300 shadow-2xl hover:shadow-white/20 hover:scale-105"
+            Reserve Your Stay
+            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </a>
         </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-10">Why Stay With Us?</h2>
-          <div className="grid md:grid-cols-3 gap-10">
-            {benefits.map((b, i) => (
-              <div key={i} className="bg-gray-100 p-8 rounded-2xl shadow hover:shadow-xl transition">
-                <CheckCircle className="text-yellow-500 w-10 h-10 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{b.title}</h3>
-                <p className="text-gray-600">{b.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Properties Section */}
-      <section id="properties" className="py-20 bg-gradient-to-br from-purple-50 via-white to-pink-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Spaces</h2>
-            <p className="text-xl text-gray-600">Choose from our full apartment or private suites</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {properties.map((property) => (
-              <div
-                key={property.id}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl overflow-hidden transition transform hover:-translate-y-2 border border-gray-200"
-              >
-                <div className="relative">
-                  <img
-                    src={property.image}
-                    alt={property.title}
-                    className="w-full h-64 object-cover"
-                  />
-                </div>
-                <div className="p-6 text-center">
-                  <h3 className="text-2xl font-semibold mb-3">{property.title}</h3>
-                  <p className="text-gray-600 mb-5">{property.desc}</p>
-                  <a
-                    href={property.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                  >
-                    View on Airbnb
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Amenities Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-gray-900 mb-10">Amenities</h2>
-          <div className="flex flex-wrap justify-center gap-10">
-            {amenities.map((a, i) => {
-              const Icon = a.icon;
-              return (
-                <div key={i} className="flex flex-col items-center space-y-3">
-                  <Icon className="text-blue-600 w-10 h-10" />
-                  <span className="text-gray-800 font-medium">{a.label}</span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 bg-gradient-to-r from-indigo-600 to-blue-600 text-white">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-10">What Our Guests Say</h2>
-          <div className="grid md:grid-cols-2 gap-10">
-            {reviews.map((review, i) => (
-              <div key={i} className="bg-white bg-opacity-10 p-8 rounded-2xl shadow-lg">
-                <p className="text-lg mb-4">“{review.comment}”</p>
-                <h4 className="text-yellow-300 font-semibold">{review.name}</h4>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-2xl font-semibold text-white mb-2">Book A Stay</h3>
-          <p className="mb-6">Abeokuta • Premium Apartments</p>
-          <p>© {new Date().getFullYear()} Book A Stay. All rights reserved.</p>
-        </div>
-      </footer>
+      </section> */}
     </div>
   );
 };
