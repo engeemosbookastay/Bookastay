@@ -14,11 +14,13 @@ import Why from "./Component/Why";
 import GettingAround from "./Pages/GettingAround";
 // import { Home } from "lucide-react";
 import Home from "./Pages/Home";
+import ScrollToTop from "./Component/ScrollToTop";
 // Support multiple possible env names and a safe localhost default
 export const backendUrl = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:4000';
 const App = () => {
   return (
     <>
+    <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

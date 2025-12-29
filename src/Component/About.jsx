@@ -1,9 +1,9 @@
 import React from 'react';
-import { MapPin, Shield, Crown, Sparkles, Award, Heart, Star } from 'lucide-react';
+import { MapPin, Shield, Crown, Sparkles, Award, Heart, Star, Building } from 'lucide-react';
 
 const About = () => {
   return (
-    <section className="relative py-32 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+    <section className="relative py-20 md:py-32 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       
       {/* Luxury Background Pattern */}
       <div className="absolute inset-0 opacity-5">
@@ -19,133 +19,136 @@ const About = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Luxury Header */}
-        <div className="text-center mb-20">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-amber-500"></div>
-            <Crown className="w-8 h-8 text-amber-400" />
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-amber-500"></div>
+        <div className="text-center mb-12 md:mb-20">
+          <div className="flex items-center justify-center gap-3 mb-4 md:mb-6">
+            <div className="h-px w-12 md:w-16 bg-gradient-to-r from-transparent to-amber-500"></div>
+            <Crown className="w-6 h-6 md:w-8 md:h-8 text-amber-400" />
+            <div className="h-px w-12 md:w-16 bg-gradient-to-l from-transparent to-amber-500"></div>
           </div>
-          <h2 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
-            Luxury <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200">Redefined</span>
+          <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-white mb-3 md:mb-6 tracking-tight">
+            About <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200">Engeemos</span>
           </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Experience the pinnacle of comfort and elegance at Engeemos Bookastay
+          <p className="text-sm md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            Where luxury hospitality meets exceptional comfort
           </p>
         </div>
 
-        {/* Main Content */}
-        <div className="grid lg:grid-cols-2 gap-12 mb-20">
+        {/* Compact Grid Layout */}
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
           
-          {/* Left - Story */}
-          <div className="space-y-8">
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/20 rounded-3xl p-10 shadow-2xl">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/50">
-                    <Award className="w-8 h-8 text-slate-900" />
-                  </div>
-                  <div>
-                    <h3 className="text-3xl font-bold text-white">Our Heritage</h3>
-                    <div className="h-1 w-20 bg-gradient-to-r from-amber-400 to-transparent mt-2"></div>
-                  </div>
+          {/* Who We Are - Compact */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-2xl md:rounded-3xl blur-lg md:blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/20 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-2xl">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/50">
+                  <Award className="w-5 h-5 md:w-6 md:h-6 text-slate-900" />
                 </div>
-                
-                <div className="space-y-5 text-gray-300 text-lg leading-relaxed">
-                  <p>
-                    <span className="text-amber-400 font-semibold">Engeemos Bookastay Ventures</span>, a distinguished registered establishment, proudly oversees <span className="text-amber-400 font-semibold">Oluwadarasimi Villa</span>—an exquisite collection of residences featuring state-of-the-art facilities and meticulously curated interiors.
-                  </p>
-                  
-                  <p>
-                    Nestled in the prestigious and tranquil enclave of Olomsore, Abeokuta, our property offers unparalleled access to the city's finest destinations. Within a leisurely 20-25 minute drive, discover the Olusegun Obasanjo Presidential Library, while cultural treasures like the revitalized Olumo Rock and Kuti Heritage Museum await just moments away.
-                  </p>
-                </div>
+                <h3 className="text-xl md:text-2xl font-bold text-white">Who We Are</h3>
               </div>
-            </div>
-
-            {/* Philosophy */}
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-blue-500/20 rounded-3xl p-10 shadow-2xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <Heart className="w-10 h-10 text-amber-400" />
-                  <h3 className="text-3xl font-bold text-white">Our Philosophy</h3>
-                </div>
-                <p className="text-gray-300 text-lg leading-relaxed">
-                  We elevate <span className="text-amber-400 font-semibold">privacy and satisfaction</span> to an art form. Unlike conventional hotels where staff presence can intrude upon your sanctuary, we ensure every guest experiences the warmth of home while enjoying world-class luxury.
-                </p>
-              </div>
+              
+              <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+                <span className="text-amber-400 font-semibold">Engeemos Bookastay Ventures</span> manages <span className="text-amber-400 font-semibold">Oluwadarasimi Villa</span>—a premium short-stay property in Olomsore, Abeokuta, featuring modern amenities and elegant interiors.
+              </p>
             </div>
           </div>
 
-          {/* Right - Features & Attractions */}
-          <div className="space-y-8">
-            
-            {/* Premium Features */}
-            <div className="grid gap-6">
-              {[
-                { icon: Crown, title: "Unmatched Elegance", desc: "Aesthetically designed with premium finishes" },
-                { icon: Shield, title: "Exclusive Sanctuary", desc: "Serene, secure & private location" },
-                { icon: Sparkles, title: "Modern Opulence", desc: "State-of-the-art facilities throughout" },
-                { icon: Star, title: "Prime Positioning", desc: "Minutes from Abeokuta's finest attractions" }
-              ].map((item, idx) => {
-                const Icon = item.icon;
-                return (
-                  <div key={idx} className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
-                    <div className="relative bg-slate-800/50 backdrop-blur-sm border border-amber-500/20 rounded-2xl p-6 hover:border-amber-500/40 transition-all duration-300">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/30 flex-shrink-0">
-                          <Icon className="w-6 h-6 text-slate-900" />
-                        </div>
-                        <div>
-                          <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
-                          <p className="text-gray-400">{item.desc}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+          {/* Our Promise - Compact */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl md:rounded-3xl blur-lg md:blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-blue-500/20 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-2xl">
+              <div className="flex items-center gap-3 mb-4">
+                <Heart className="w-8 h-8 md:w-10 md:h-10 text-amber-400" />
+                <h3 className="text-xl md:text-2xl font-bold text-white">Our Promise</h3>
+              </div>
+              <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+                We prioritize <span className="text-amber-400 font-semibold">guest privacy and satisfaction</span>, offering a home-like experience without the intrusion typical of traditional hotels.
+              </p>
             </div>
+          </div>
 
-            {/* Attractions */}
-            <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
-              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/20 rounded-3xl p-10 shadow-2xl">
-                <div className="flex items-center gap-3 mb-8">
-                  <MapPin className="w-8 h-8 text-amber-400" />
-                  <h3 className="text-3xl font-bold text-white">Cultural Landmarks</h3>
+        </div>
+
+        {/* Features Grid - 2x2 on mobile */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-16">
+          {[
+            { icon: Crown, title: "Elegant Design", desc: "Premium finishes" },
+            { icon: Shield, title: "Private & Secure", desc: "Peaceful location" },
+            { icon: Sparkles, title: "Modern Amenities", desc: "State-of-the-art" },
+            { icon: Star, title: "Prime Location", desc: "City attractions" }
+          ].map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <div key={idx} className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 rounded-xl blur-md group-hover:blur-lg transition-all duration-300"></div>
+                <div className="relative bg-slate-800/50 backdrop-blur-sm border border-amber-500/20 rounded-xl p-4 md:p-5 hover:border-amber-500/40 transition-all duration-300 text-center">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center shadow-lg shadow-amber-500/30 mx-auto mb-3">
+                    <Icon className="w-5 h-5 md:w-6 md:h-6 text-slate-900" />
+                  </div>
+                  <h4 className="text-sm md:text-base font-bold text-white mb-1">{item.title}</h4>
+                  <p className="text-xs text-gray-400">{item.desc}</p>
                 </div>
-                <div className="space-y-4">
-                  {[
-                    "Olumo Rock Heritage Site",
-                    "Kuti Heritage Museum",
-                    "Adire Mall, Itoku",
-                    "Presidential Library Complex"
-                  ].map((attraction, idx) => (
-                    <div key={idx} className="flex items-center gap-4 group/item">
-                      <div className="w-2 h-2 bg-amber-400 rounded-full group-hover/item:scale-150 transition-transform duration-300"></div>
-                      <span className="text-gray-300 text-lg group-hover/item:text-white transition-colors duration-300">{attraction}</span>
-                    </div>
-                  ))}
-                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Location & Vision - Side by Side */}
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16">
+          
+          {/* Nearby Attractions - Compact */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-2xl md:rounded-3xl blur-lg md:blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/20 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-2xl">
+              <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                <MapPin className="w-6 h-6 md:w-8 md:h-8 text-amber-400" />
+                <h3 className="text-xl md:text-2xl font-bold text-white">Prime Location</h3>
+              </div>
+              <div className="space-y-2 md:space-y-3">
+                {[
+                  "Olumo Rock",
+                  "Kuti Museum",
+                  "Adire Mall",
+                  "Presidential Library"
+                ].map((attraction, idx) => (
+                  <div key={idx} className="flex items-center gap-3 group/item">
+                    <div className="w-1.5 h-1.5 bg-amber-400 rounded-full group-hover/item:scale-150 transition-transform duration-300"></div>
+                    <span className="text-gray-300 text-sm md:text-base group-hover/item:text-white transition-colors duration-300">{attraction}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs md:text-sm text-gray-500 mt-4 italic">Minutes from major attractions</p>
+            </div>
+          </div>
+
+          {/* Our Vision - Compact */}
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl md:rounded-3xl blur-lg md:blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-blue-500/20 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-2xl">
+              <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
+                <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-amber-400" />
+                <h3 className="text-xl md:text-2xl font-bold text-white">Our Vision</h3>
+              </div>
+              <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+                We're expanding our collection of <span className="text-amber-400 font-semibold">premium accommodations</span>, each selected for exceptional comfort and guest-centric service.
+              </p>
+              <div className="mt-4 text-center">
+                <span className="inline-block px-4 py-2 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/30 rounded-full text-sm md:text-base font-semibold text-amber-300">
+                  More Coming Soon
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Vision Statement */}
-        <div className="relative group max-w-5xl mx-auto">
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/30 via-yellow-500/30 to-amber-500/30 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-700"></div>
-          <div className="relative bg-gradient-to-r from-slate-800/95 to-slate-900/95 backdrop-blur-xl border-2 border-amber-500/30 rounded-3xl p-12 shadow-2xl text-center">
-            <Sparkles className="w-12 h-12 text-amber-400 mx-auto mb-6" />
-            <h3 className="text-4xl font-bold text-white mb-6">The Future Awaits</h3>
-            <p className="text-xl text-gray-300 leading-relaxed">
-              Our vision extends beyond today. We are curating a collection of <span className="text-amber-400 font-semibold">extraordinary accommodations</span>, each handpicked for exceptional comfort and uncompromising quality. 
-              <span className="block mt-4 text-2xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">
-                The journey has only just begun.
-              </span>
+        {/* Final Statement - Full Width */}
+        <div className="relative group">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/30 via-yellow-500/30 to-amber-500/30 rounded-2xl md:rounded-3xl blur-xl md:blur-2xl group-hover:blur-3xl transition-all duration-700"></div>
+          <div className="relative bg-gradient-to-r from-slate-800/95 to-slate-900/95 backdrop-blur-xl border-2 border-amber-500/30 rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-2xl text-center">
+            <Building className="w-8 h-8 md:w-10 md:h-10 text-amber-400 mx-auto mb-3 md:mb-4" />
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4">Experience Hospitality Excellence</h3>
+            <p className="text-sm md:text-lg text-gray-300 leading-relaxed max-w-3xl mx-auto">
+              At <span className="text-amber-400 font-semibold">Engeemos Bookastay</span>, we combine luxury accommodation with personalized service, creating unforgettable stays in the heart of Abeokuta.
             </p>
           </div>
         </div>

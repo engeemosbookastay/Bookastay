@@ -7,6 +7,8 @@ import Living from '../assets/Living.jpg';
 import Dine from '../assets/Dine.jpg';
 import LiveRoom from '../assets/LiveRoom.jpg';
 import Room from '../assets/Room.jpg';
+import Bedroom from '../assets/Bedroom.jpg';
+import Bedroomss from '../assets/Bedroomss.jpg';
 
 const Rooms = () => {
   const [activeTab, setActiveTab] = useState('2bedroom');
@@ -133,7 +135,7 @@ const Rooms = () => {
         { name: 'Self Check-in', icon: Shield, desc: 'Keyless entry' },
         { name: 'Workspace', icon: Home, desc: 'Dedicated desk' }
       ],
-      images: [Living, LiveRoom, Room, Dine]
+      images: [Living, LiveRoom, Bedroom, Bedroomss, Room, Dine]
     },
     '1bedroom': {
       id: '1bedroom',
@@ -158,7 +160,7 @@ const Rooms = () => {
         { name: 'Balcony Access', icon: DoorOpen, desc: 'Shared' },
         { name: 'Private Bathroom', icon: Shield, desc: 'En-suite' }
       ],
-      images: [Living, LiveRoom, Room, Dine]
+      images: [Bedroom, Room, Living, Dine]
     }
   };
 
@@ -291,65 +293,65 @@ const Rooms = () => {
       {/* Booking Modal */}
       {showBookingModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl shadow-2xl border border-amber-500/20 max-w-md w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-8">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl md:rounded-3xl shadow-2xl border border-amber-500/20 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 md:p-8">
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">
+                  <h2 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">
                     Complete Booking
                   </h2>
-                  <p className="text-gray-400 text-sm mt-1">
+                  <p className="text-gray-400 text-xs md:text-sm mt-1">
                     Enter your details to proceed
                   </p>
                 </div>
                 <button onClick={() => setShowBookingModal(false)} className="text-gray-400 hover:text-white p-2 hover:bg-white/10 rounded-full transition">
-                  <X size={24} />
+                  <X size={20} />
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-300 mb-2">Full Name</label>
+                  <label className="block text-xs md:text-sm font-semibold text-gray-300 mb-2">Full Name</label>
                   <input 
                     type="text" 
                     value={guestName} 
                     onChange={(e) => setGuestName(e.target.value)} 
                     placeholder="John Doe" 
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
+                    className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
                     required 
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-300 mb-2">Email Address</label>
+                  <label className="block text-xs md:text-sm font-semibold text-gray-300 mb-2">Email Address</label>
                   <input 
                     type="email" 
                     value={guestEmail} 
                     onChange={(e) => setGuestEmail(e.target.value)} 
                     placeholder="you@example.com" 
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
+                    className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
                     required 
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-300 mb-2">Phone Number</label>
+                  <label className="block text-xs md:text-sm font-semibold text-gray-300 mb-2">Phone Number</label>
                   <input 
                     type="tel" 
                     value={guestPhone} 
                     onChange={(e) => setGuestPhone(e.target.value)} 
                     placeholder="+234 800 000 0000" 
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
+                    className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
                     required 
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-300 mb-2">ID Type</label>
+                  <label className="block text-xs md:text-sm font-semibold text-gray-300 mb-2">ID Type</label>
                   <select 
                     value={idType} 
                     onChange={(e) => setIdType(e.target.value)} 
-                    className="w-full px-4 py-3 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
+                    className="w-full px-3 md:px-4 py-2.5 md:py-3 text-sm md:text-base bg-slate-700/50 border border-amber-500/20 rounded-xl text-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
                     required
                   >
                     <option value="">Select ID type</option>
@@ -360,8 +362,8 @@ const Rooms = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-300 mb-2">Upload ID Document</label>
-                  <div className="border-2 border-dashed border-amber-500/30 rounded-xl p-6 text-center hover:border-amber-500/50 hover:bg-slate-700/30 transition cursor-pointer">
+                  <label className="block text-xs md:text-sm font-semibold text-gray-300 mb-2">Upload ID Document</label>
+                  <div className="border-2 border-dashed border-amber-500/30 rounded-xl p-4 md:p-6 text-center hover:border-amber-500/50 hover:bg-slate-700/30 transition cursor-pointer">
                     <input 
                       type="file" 
                       accept="image/*,.pdf" 
@@ -373,14 +375,14 @@ const Rooms = () => {
                     <label htmlFor="id-upload-modal" className="cursor-pointer">
                       {idFile ? (
                         <div className="flex items-center justify-center gap-2 text-white">
-                          <Check size={22} className="text-green-400" />
-                          <span className="font-bold">{idFile.name}</span>
+                          <Check size={18} className="text-green-400" />
+                          <span className="font-bold text-sm">{idFile.name}</span>
                         </div>
                       ) : (
                         <>
-                          <Upload className="w-10 h-10 mx-auto mb-2 text-amber-400" />
-                          <p className="font-bold text-white">Click to upload</p>
-                          <p className="text-sm text-gray-400 mt-1">PNG, JPG or PDF</p>
+                          <Upload className="w-8 md:w-10 h-8 md:h-10 mx-auto mb-2 text-amber-400" />
+                          <p className="font-bold text-white text-sm md:text-base">Click to upload</p>
+                          <p className="text-xs md:text-sm text-gray-400 mt-1">PNG, JPG or PDF</p>
                         </>
                       )}
                     </label>
@@ -390,7 +392,7 @@ const Rooms = () => {
                 <button
                   onClick={handleProceedToPayment}
                   disabled={!guestName || !guestEmail || !guestPhone || !idType || !idFile}
-                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3 md:py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 text-sm md:text-base"
                 >
                   Proceed to Payment
                 </button>
@@ -409,9 +411,9 @@ const Rooms = () => {
 
       {/* Room Type Selection */}
       <div className="border-b border-amber-500/20 bg-gradient-to-r from-slate-800/50 to-slate-900/50 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h2 className="text-5xl font-bold text-white mb-8 text-center">Select Your Suite</h2>
-          <div className="flex gap-6 justify-center flex-wrap">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 md:mb-8 text-center">Select Your Suite</h2>
+          <div className="flex gap-4 md:gap-6 justify-center flex-wrap">
             {Object.entries(roomOptions).map(([key, option]) => (
               <button
                 key={key}
@@ -421,7 +423,7 @@ const Rooms = () => {
                   setNumGuests(key === '2bedroom' ? 2 : 2);
                   setAvailability(null);
                 }}
-                className={`relative group px-12 py-8 rounded-2xl font-semibold transition-all transform hover:scale-105 overflow-hidden ${
+                className={`relative group px-8 md:px-12 py-6 md:py-8 rounded-2xl font-semibold transition-all transform hover:scale-105 overflow-hidden ${
                   activeTab === key
                     ? 'shadow-2xl shadow-amber-500/50'
                     : 'bg-slate-800/50 border-2 border-slate-700 hover:border-amber-500/50'
@@ -429,9 +431,9 @@ const Rooms = () => {
               >
                 <div className={`absolute inset-0 bg-gradient-to-r ${option.accentColor} ${activeTab === key ? 'opacity-100' : 'opacity-0'} transition-opacity`}></div>
                 <div className="relative z-10">
-                  <div className="text-4xl mb-3">{option.bedrooms === 2 ? '🏠' : '🛏️'}</div>
-                  <div className={`font-bold text-2xl mb-2 ${activeTab === key ? 'text-white' : 'text-gray-300'}`}>{option.title}</div>
-                  <div className={`text-sm ${activeTab === key ? 'text-amber-200' : 'text-gray-500'}`}>₦{option.basePrice.toLocaleString()}/night</div>
+                  <div className="text-3xl md:text-4xl mb-2 md:mb-3">{option.bedrooms === 2 ? '🏠' : '🛏️'}</div>
+                  <div className={`font-bold text-lg md:text-2xl mb-1 md:mb-2 ${activeTab === key ? 'text-white' : 'text-gray-300'}`}>{option.title}</div>
+                  <div className={`text-xs md:text-sm ${activeTab === key ? 'text-amber-200' : 'text-gray-500'}`}>₦{option.basePrice.toLocaleString()}/night</div>
                 </div>
               </button>
             ))}
@@ -439,44 +441,44 @@ const Rooms = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid lg:grid-cols-5 gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+        <div className="grid lg:grid-cols-5 gap-8 md:gap-12">
           
           {/* Main Content */}
-          <div className="lg:col-span-3 space-y-10">
+          <div className="lg:col-span-3 space-y-6 md:space-y-10">
             
             {/* Header Info */}
             <div>
-              <div className="flex items-center gap-3 text-sm mb-4 flex-wrap">
-                <span className="px-5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 rounded-xl font-bold shadow-lg">
+              <div className="flex items-center gap-2 md:gap-3 text-xs md:text-sm mb-3 md:mb-4 flex-wrap">
+                <span className="px-4 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 rounded-xl font-bold shadow-lg text-xs md:text-sm">
                   {currentOption.category}
                 </span>
-                <span className="flex items-center gap-2 bg-slate-800/50 backdrop-blur-sm px-4 py-2 rounded-xl border border-amber-500/20 text-white">
-                  <MapPin className="w-4 h-4 text-amber-400" />
+                <span className="flex items-center gap-2 bg-slate-800/50 backdrop-blur-sm px-3 md:px-4 py-1.5 md:py-2 rounded-xl border border-amber-500/20 text-white text-xs md:text-sm">
+                  <MapPin className="w-3 h-3 md:w-4 md:h-4 text-amber-400" />
                   Abeokuta, Nigeria
                 </span>
               </div>
-              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4">{currentOption.title}</h1>
-              <p className="text-xl text-gray-400">{currentOption.subtitle}</p>
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-4">{currentOption.title}</h1>
+              <p className="text-base md:text-xl text-gray-400">{currentOption.subtitle}</p>
             </div>
 
             {/* Image Gallery */}
-            <div className="relative rounded-3xl overflow-hidden group shadow-2xl shadow-black/50">
-              <div className="relative h-96 sm:h-[500px]">
+            <div className="relative rounded-2xl md:rounded-3xl overflow-hidden group shadow-2xl shadow-black/50">
+              <div className="relative h-64 md:h-96 lg:h-[500px]">
                 <img src={currentOption.images[currentImageIndex]} alt="Room" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 
                 {currentOption.images.length > 1 && (
                   <>
-                    <button onClick={prevImage} className="absolute left-6 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm p-4 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 text-white">
-                      <ChevronLeft className="w-6 h-6" />
+                    <button onClick={prevImage} className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm p-2 md:p-4 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 text-white">
+                      <ChevronLeft className="w-4 h-4 md:w-6 md:h-6" />
                     </button>
-                    <button onClick={nextImage} className="absolute right-6 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm p-4 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 text-white">
-                      <ChevronRight className="w-6 h-6" />
+                    <button onClick={nextImage} className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm p-2 md:p-4 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 text-white">
+                      <ChevronRight className="w-4 h-4 md:w-6 md:h-6" />
                     </button>
-                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
+                    <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex gap-2 md:gap-3">
                       {currentOption.images.map((_, idx) => (
-                        <button key={idx} onClick={() => setCurrentImageIndex(idx)} className={`h-2 rounded-full transition-all ${idx === currentImageIndex ? 'bg-amber-400 w-12' : 'bg-white/60 w-2'}`} />
+                        <button key={idx} onClick={() => setCurrentImageIndex(idx)} className={`h-1.5 md:h-2 rounded-full transition-all ${idx === currentImageIndex ? 'bg-amber-400 w-8 md:w-12' : 'bg-white/60 w-1.5 md:w-2'}`} />
                       ))}
                     </div>
                   </>
@@ -485,47 +487,47 @@ const Rooms = () => {
             </div>
 
             {/* Room Details */}
-            <div className="flex items-center gap-6 py-8 border-y-2 border-amber-500/20 flex-wrap">
-              <div className="flex items-center gap-3 bg-slate-800/50 backdrop-blur-sm px-6 py-3 rounded-xl border border-amber-500/20">
-                <Users className="w-6 h-6 text-amber-400" />
-                <span className="text-white font-bold text-lg">{currentOption.guests} guests</span>
+            <div className="flex items-center gap-3 md:gap-6 py-6 md:py-8 border-y-2 border-amber-500/20 flex-wrap">
+              <div className="flex items-center gap-2 md:gap-3 bg-slate-800/50 backdrop-blur-sm px-4 md:px-6 py-2 md:py-3 rounded-xl border border-amber-500/20">
+                <Users className="w-4 h-4 md:w-6 md:h-6 text-amber-400" />
+                <span className="text-white font-bold text-sm md:text-lg">{currentOption.guests} guests</span>
               </div>
-              <div className="flex items-center gap-3 bg-slate-800/50 backdrop-blur-sm px-6 py-3 rounded-xl border border-amber-500/20">
-                <Bed className="w-6 h-6 text-amber-400" />
-                <span className="text-white font-bold text-lg">{currentOption.bedrooms} bedroom{currentOption.bedrooms > 1 ? 's' : ''}</span>
+              <div className="flex items-center gap-2 md:gap-3 bg-slate-800/50 backdrop-blur-sm px-4 md:px-6 py-2 md:py-3 rounded-xl border border-amber-500/20">
+                <Bed className="w-4 h-4 md:w-6 md:h-6 text-amber-400" />
+                <span className="text-white font-bold text-sm md:text-lg">{currentOption.bedrooms} bedroom{currentOption.bedrooms > 1 ? 's' : ''}</span>
               </div>
-              <div className="flex items-center gap-3 bg-slate-800/50 backdrop-blur-sm px-6 py-3 rounded-xl border border-amber-500/20">
-                <Home className="w-6 h-6 text-amber-400" />
-                <span className="text-white font-bold text-lg">{currentOption.bathrooms} bathroom{currentOption.bathrooms > 1 ? 's' : ''}</span>
+              <div className="flex items-center gap-2 md:gap-3 bg-slate-800/50 backdrop-blur-sm px-4 md:px-6 py-2 md:py-3 rounded-xl border border-amber-500/20">
+                <Home className="w-4 h-4 md:w-6 md:h-6 text-amber-400" />
+                <span className="text-white font-bold text-sm md:text-lg">{currentOption.bathrooms} bathroom{currentOption.bathrooms > 1 ? 's' : ''}</span>
               </div>
             </div>
 
             {/* Description */}
             <div className="relative group">
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all"></div>
-              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl p-10 rounded-3xl border border-amber-500/20">
-                <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-                  <Sparkles className="w-8 h-8 text-amber-400" />
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-2xl md:rounded-3xl blur-lg md:blur-xl group-hover:blur-2xl transition-all"></div>
+              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl p-6 md:p-10 rounded-2xl md:rounded-3xl border border-amber-500/20">
+                <h2 className="text-xl md:text-3xl font-bold text-white mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+                  <Sparkles className="w-6 h-6 md:w-8 md:h-8 text-amber-400" />
                   About This Space
                 </h2>
-                <p className="text-gray-300 leading-relaxed text-lg">{currentOption.description}</p>
+                <p className="text-gray-300 leading-relaxed text-sm md:text-lg">{currentOption.description}</p>
               </div>
             </div>
 
             {/* Amenities */}
             <div>
-              <h2 className="text-3xl font-bold text-white mb-8">Premium Amenities</h2>
-              <div className="grid sm:grid-cols-2 gap-6">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8">Premium Amenities</h2>
+              <div className="grid sm:grid-cols-2 gap-4 md:gap-6">
                 {currentOption.amenities.map((amenity, idx) => {
                   const Icon = amenity.icon;
                   return (
-                    <div key={idx} className="flex items-start gap-4 bg-slate-800/50 backdrop-blur-sm p-6 rounded-2xl border border-amber-500/20 hover:border-amber-500/40 transition hover:shadow-lg hover:shadow-amber-500/10 group">
-                      <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-3 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
-                        <Icon className="w-6 h-6 text-slate-900" />
+                    <div key={idx} className="flex items-start gap-3 md:gap-4 bg-slate-800/50 backdrop-blur-sm p-4 md:p-6 rounded-xl md:rounded-2xl border border-amber-500/20 hover:border-amber-500/40 transition hover:shadow-lg hover:shadow-amber-500/10 group">
+                      <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-2 md:p-3 rounded-lg md:rounded-xl shadow-lg group-hover:scale-110 transition-transform">
+                        <Icon className="w-4 h-4 md:w-6 md:h-6 text-slate-900" />
                       </div>
                       <div>
-                        <p className="font-bold text-white text-lg">{amenity.name}</p>
-                        <p className="text-sm text-gray-400">{amenity.desc}</p>
+                        <p className="font-bold text-white text-sm md:text-lg">{amenity.name}</p>
+                        <p className="text-xs md:text-sm text-gray-400">{amenity.desc}</p>
                       </div>
                     </div>
                   );
@@ -537,32 +539,32 @@ const Rooms = () => {
 
           {/* Booking Sidebar */}
           <div className="lg:col-span-2">
-            <div className="sticky top-24">
+            <div className="sticky top-20 md:top-24">
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/30 to-yellow-500/30 rounded-3xl blur-2xl group-hover:blur-3xl transition-all"></div>
-                <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-xl border-2 border-amber-500/30 rounded-3xl shadow-2xl p-8">
-                  <div className="mb-8">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/30 to-yellow-500/30 rounded-2xl md:rounded-3xl blur-xl md:blur-2xl group-hover:blur-3xl transition-all"></div>
+                <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-xl border-2 border-amber-500/30 rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-8">
+                  <div className="mb-6 md:mb-8">
                     <div className="flex items-baseline gap-2">
-                      <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">₦{currentOption.basePrice.toLocaleString()}</span>
-                      <span className="text-gray-400 font-medium">/ night</span>
+                      <span className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">₦{currentOption.basePrice.toLocaleString()}</span>
+                      <span className="text-gray-400 font-medium text-sm md:text-base">/ night</span>
                     </div>
                   </div>
 
-                  <div className="space-y-4 mb-8">
+                  <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
                     <div className="grid grid-cols-2 gap-0 border-2 border-amber-500/30 rounded-xl overflow-hidden">
-                      <div className="p-4 border-r-2 border-amber-500/30 bg-slate-700/30">
-                        <label className="block text-xs font-bold text-gray-300 uppercase mb-2">Check-in</label>
-                        <input type="date" value={checkIn} min={today} onChange={(e) => setCheckIn(e.target.value)} className="w-full text-sm text-white focus:outline-none bg-transparent font-semibold" />
+                      <div className="p-3 md:p-4 border-r-2 border-amber-500/30 bg-slate-700/30">
+                        <label className="block text-xs font-bold text-gray-300 uppercase mb-1 md:mb-2">Check-in</label>
+                        <input type="date" value={checkIn} min={today} onChange={(e) => setCheckIn(e.target.value)} className="w-full text-xs md:text-sm text-white focus:outline-none bg-transparent font-semibold" />
                       </div>
-                      <div className="p-4 bg-slate-700/30">
-                        <label className="block text-xs font-bold text-gray-300 uppercase mb-2">Checkout</label>
-                        <input type="date" value={checkOut} min={checkIn || today} onChange={(e) => setCheckOut(e.target.value)} className="w-full text-sm text-white focus:outline-none bg-transparent font-semibold" />
+                      <div className="p-3 md:p-4 bg-slate-700/30">
+                        <label className="block text-xs font-bold text-gray-300 uppercase mb-1 md:mb-2">Checkout</label>
+                        <input type="date" value={checkOut} min={checkIn || today} onChange={(e) => setCheckOut(e.target.value)} className="w-full text-xs md:text-sm text-white focus:outline-none bg-transparent font-semibold" />
                       </div>
                     </div>
 
-                    <div className="border-2 border-amber-500/30 rounded-xl p-4 bg-slate-700/30">
-                      <label className="block text-xs font-bold text-gray-300 uppercase mb-2">Guests</label>
-                      <select value={numGuests} onChange={(e) => setNumGuests(parseInt(e.target.value))} className="w-full text-sm text-white focus:outline-none bg-transparent font-semibold">
+                    <div className="border-2 border-amber-500/30 rounded-xl p-3 md:p-4 bg-slate-700/30">
+                      <label className="block text-xs font-bold text-gray-300 uppercase mb-1 md:mb-2">Guests</label>
+                      <select value={numGuests} onChange={(e) => setNumGuests(parseInt(e.target.value))} className="w-full text-xs md:text-sm text-white focus:outline-none bg-transparent font-semibold">
                         {[...Array(currentOption.maxGuests)].map((_, i) => (
                           <option key={i + 1} value={i + 1} className="bg-slate-800">{i + 1} guest{i > 0 ? 's' : ''}</option>
                         ))}
@@ -572,27 +574,27 @@ const Rooms = () => {
 
                   {/* Availability Status */}
                   {availabilityLoading && (
-                    <div className="mb-6 p-4 bg-blue-500/20 border-2 border-blue-400/50 rounded-xl backdrop-blur-sm">
-                      <div className="flex items-center gap-3">
-                        <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-                        <p className="text-sm font-bold text-blue-200">Checking availability...</p>
+                    <div className="mb-4 md:mb-6 p-3 md:p-4 bg-blue-500/20 border-2 border-blue-400/50 rounded-xl backdrop-blur-sm">
+                      <div className="flex items-center gap-2 md:gap-3">
+                        <div className="w-4 h-4 md:w-5 md:h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                        <p className="text-xs md:text-sm font-bold text-blue-200">Checking availability...</p>
                       </div>
                     </div>
                   )}
 
                   {!availabilityLoading && availability === true && checkIn && checkOut && (
-                    <div className="mb-6 p-4 bg-green-500/20 border-2 border-green-400/50 rounded-xl backdrop-blur-sm">
-                      <p className="text-sm font-bold text-green-200 flex items-center gap-2">
-                        <Check size={18} />
+                    <div className="mb-4 md:mb-6 p-3 md:p-4 bg-green-500/20 border-2 border-green-400/50 rounded-xl backdrop-blur-sm">
+                      <p className="text-xs md:text-sm font-bold text-green-200 flex items-center gap-2">
+                        <Check size={16} />
                         Available for your dates
                       </p>
                     </div>
                   )}
 
                   {!availabilityLoading && availability === false && availabilityError && (
-                    <div className="mb-6 p-4 bg-red-500/20 border-2 border-red-400/50 rounded-xl backdrop-blur-sm">
-                      <p className="text-sm font-bold text-red-200 flex items-center gap-2">
-                        <X size={18} />
+                    <div className="mb-4 md:mb-6 p-3 md:p-4 bg-red-500/20 border-2 border-red-400/50 rounded-xl backdrop-blur-sm">
+                      <p className="text-xs md:text-sm font-bold text-red-200 flex items-center gap-2">
+                        <X size={16} />
                         {availabilityError}
                       </p>
                     </div>
@@ -600,27 +602,27 @@ const Rooms = () => {
 
                   {checkIn && checkOut && price.nights > 0 && (
                     <>
-                      <div className="mb-8 space-y-4 pb-8 border-b-2 border-amber-500/20">
-                        <div className="flex justify-between text-gray-300 font-semibold text-lg">
+                      <div className="mb-6 md:mb-8 space-y-3 md:space-y-4 pb-6 md:pb-8 border-b-2 border-amber-500/20">
+                        <div className="flex justify-between text-gray-300 font-semibold text-sm md:text-lg">
                           <span>₦{currentOption.basePrice.toLocaleString()} × {price.nights} nights</span>
                           <span className="text-white">₦{price.base.toLocaleString()}</span>
                         </div>
                         {price.discount > 0 && (
-                          <div className="flex justify-between text-green-400 font-bold bg-green-500/20 px-4 py-3 rounded-lg border border-green-500/30">
+                          <div className="flex justify-between text-green-400 font-bold bg-green-500/20 px-3 md:px-4 py-2 md:py-3 rounded-lg border border-green-500/30 text-xs md:text-base">
                             <span>{price.discountType}</span>
                             <span>-₦{price.discount.toLocaleString()}</span>
                           </div>
                         )}
                         {price.extraGuest > 0 && (
-                          <div className="flex justify-between text-gray-300 font-semibold">
+                          <div className="flex justify-between text-gray-300 font-semibold text-sm md:text-base">
                             <span>4th guest fee</span>
                             <span className="text-white">₦{price.extraGuest.toLocaleString()}</span>
                           </div>
                         )}
                       </div>
 
-                      <div className="mb-8 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 p-6 rounded-xl border-2 border-amber-500/30">
-                        <div className="flex justify-between text-2xl font-bold">
+                      <div className="mb-6 md:mb-8 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 p-4 md:p-6 rounded-xl border-2 border-amber-500/30">
+                        <div className="flex justify-between text-xl md:text-2xl font-bold">
                           <span className="text-white">Total</span>
                           <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">₦{price.total.toLocaleString()}</span>
                         </div>
@@ -633,7 +635,7 @@ const Rooms = () => {
                           }
                         }}
                         disabled={!canProceedToBooking()}
-                        className={`w-full py-5 rounded-xl font-bold text-lg transition transform ${
+                        className={`w-full py-4 md:py-5 rounded-xl font-bold text-base md:text-lg transition transform ${
                           !canProceedToBooking()
                             ? 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-60'
                             : 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 hover:from-amber-400 hover:to-amber-500 shadow-lg shadow-amber-500/50 hover:shadow-amber-500/70 hover:scale-105'
@@ -641,14 +643,14 @@ const Rooms = () => {
                       >
                         {availabilityLoading ? 'Checking...' : canProceedToBooking() ? 'Reserve Now' : 'Not Available'}
                       </button>
-                      <p className="text-xs text-center text-gray-400 font-medium mt-4">Secure booking • No hidden fees</p>
+                      <p className="text-xs text-center text-gray-400 font-medium mt-3 md:mt-4">Secure booking • No hidden fees</p>
                     </>
                   )}
 
                   {(!checkIn || !checkOut) && (
-                    <div className="text-center py-12">
-                      <Calendar className="w-16 h-16 mx-auto mb-4 text-amber-400" />
-                      <p className="text-gray-400 font-semibold">Select dates to view pricing</p>
+                    <div className="text-center py-8 md:py-12">
+                      <Calendar className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 md:mb-4 text-amber-400" />
+                      <p className="text-sm md:text-base text-gray-400 font-semibold">Select dates to view pricing</p>
                     </div>
                   )}
                 </div>
