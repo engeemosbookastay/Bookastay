@@ -1,5 +1,5 @@
 import React from "react";
-import { Phone, Mail, MapPin, Instagram, Facebook, Twitter, ChevronRight } from "lucide-react";
+import { Phone, Mail, MapPin, Instagram, Facebook, Twitter, ChevronRight, MessageCircle } from "lucide-react";
 import Logo from '../assets/Logo.png';
 
 
@@ -55,7 +55,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-white mb-1">Email</p>
-                  <a href="mailto:info@engeemosbookastay.com" className="text-gray-300 text-sm hover:text-teal-400 transition-colors">
+                  <a href="mailto:engeemosbookastay@gmail.com" className="text-gray-300 text-sm hover:text-teal-400 transition-colors">
                     engeemosbookastay@gmail.com
                   </a>
                 </div>
@@ -67,8 +67,28 @@ const Footer = () => {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-white mb-1">Phone</p>
-                  <a href="tel:+2348030000000" className="text-gray-300 text-sm hover:text-teal-400 transition-colors">
-                    +2348166939592, +2348066215431
+                  <div className="space-y-1">
+                    <a href="tel:+2348166939592" className="text-gray-300 text-sm hover:text-teal-400 transition-colors block">
+                      +234 816 693 9592
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 group">
+                <div className="bg-green-500/10 p-3 rounded-lg group-hover:bg-green-500/20 transition-all">
+                  <MessageCircle size={20} className="text-green-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white mb-1">WhatsApp</p>
+                  <a 
+                    href="https://wa.me/2348066215431" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-300 text-sm hover:text-green-400 transition-colors flex items-center gap-2"
+                  >
+                    +234 806 621 5431
+                    <span className="text-xs text-green-400 font-medium">(WhatsApp Only)</span>
                   </a>
                 </div>
               </div>
@@ -94,7 +114,15 @@ const Footer = () => {
             {/* Social Media Icons */}
             <div className="flex gap-3 pt-4">
               <a 
-                href="https://instagram.com/engeemosbookastay" 
+                href="https://wa.me/2348066215431" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white/5 hover:bg-green-500/20 p-3 rounded-lg transition-all group border border-white/10 hover:border-green-400/50"
+              >
+                <MessageCircle size={20} className="text-gray-400 group-hover:text-green-400 transition-colors" />
+              </a>
+              <a 
+                href="https://instagram.com/engeemos.bookastay" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white/5 hover:bg-teal-500/20 p-3 rounded-lg transition-all group border border-white/10 hover:border-teal-400/50"

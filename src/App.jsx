@@ -12,6 +12,7 @@ import Login from "./Component/Login";
 import Feauters from "./Component/Feauters";
 import Why from "./Component/Why";
 import GettingAround from "./Pages/GettingAround";
+import Rules from "./Component/Rules";
 // import { Home } from "lucide-react";
 import Home from "./Pages/Home";
 import ScrollToTop from "./Component/ScrollToTop";
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/facilities" element={<Feauters />} />
         <Route path="/why" element={<Why />} />
         <Route path="/getting-around" element={<GettingAround />} />
+        <Route path="/rules" element={<Rules />} />
       </Routes>
       <Footer />
     </>

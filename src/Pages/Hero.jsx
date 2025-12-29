@@ -27,12 +27,12 @@ const Hero = () => {
 
   // High-quality apartment images with captions and transitions
   const images = [
-    { src: Living, caption: "Luxury Living Spaces", subtitle: "Where Comfort Meets Elegance", transition: "fade" },
+    { src: Living, caption: "Engeemos Bookastay", subtitle: "hosting temporary stay in exotic style", transition: "fade" },
     { src: LiveRoom, caption: "Modern Interiors", subtitle: "Designed for Your Comfort", transition: "slide" },
     { src: Room, caption: "Peaceful Retreats", subtitle: "Your Home Away From Home", transition: "zoom" },
+    { src: Bedroomss, caption: "Luxury Living Spaces", subtitle: "Where Comfort Meets Elegance", transition: "slide" },
     { src: Dine, caption: "Elegant Dining", subtitle: "Create Memorable Moments", transition: "fade" },
     { src: Bedroom, caption: "Cozy Bedroom", subtitle: "Restful Sleep Awaits", transition: "zoom" },
-    { src: Bedroomss, caption: "Warm Bedroom", subtitle: "Dream land", transition: "slide" },
   ];
 
   // Auto-slide every 6 seconds

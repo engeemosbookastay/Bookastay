@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Home, Bed, Building, Navigation, BookOpen } from 'lucide-react';
+import { Menu, X, ChevronDown, Home, Bed, Building, Navigation, BookOpen, FileText } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../assets/Logo.png';
 
@@ -84,7 +84,7 @@ const Navbar = () => {
               </button>
               <div className="absolute top-full left-0 mt-2 w-56 bg-white backdrop-blur-lg rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 overflow-hidden">
                 <Link 
-                  to="/rooms?type=2bedroom" 
+                  to="/bookings?type=2bedroom" 
                   className="block px-5 py-3 text-gray-700 hover:text-blue-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-amber-50 transition-all"
                 >
                   <div className="font-semibold">2 Bedroom Apartment</div>
@@ -92,7 +92,7 @@ const Navbar = () => {
                 </Link>
                 <div className="border-t border-gray-200"></div>
                 <Link 
-                  to="/rooms?type=1bedroom" 
+                  to="/bookings?type=1bedroom" 
                   className="block px-5 py-3 text-gray-700 hover:text-blue-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-amber-50 transition-all"
                 >
                   <div className="font-semibold">1 Bedroom Suite</div>
@@ -123,6 +123,18 @@ const Navbar = () => {
             >
               <Navigation size={18} />
               <span>Getting Around</span>
+            </Link>
+
+            <Link 
+              to="/rules" 
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+                !scrolled && isHomePage
+                  ? 'text-white hover:bg-white/20'
+                  : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
+              }`}
+            >
+              <FileText size={18} />
+              <span>House Rules</span>
             </Link>
             
             <Link 
@@ -197,7 +209,7 @@ const Navbar = () => {
               <div className={`overflow-hidden transition-all duration-300 ${roomsOpen ? 'max-h-48' : 'max-h-0'}`}>
                 <div className="ml-4 mt-1 space-y-1 pb-1">
                   <Link 
-                    to="/rooms?type=2bedroom" 
+                    to="/bookings?type=2bedroom" 
                     className="block px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-amber-50 rounded-lg transition-all"
                     onClick={() => setIsOpen(false)}
                   >
@@ -205,7 +217,7 @@ const Navbar = () => {
                     <div className="text-xs text-amber-600 mt-0.5">Entire Place</div>
                   </Link>
                   <Link 
-                    to="/rooms?type=1bedroom" 
+                    to="/bookings?type=1bedroom" 
                     className="block px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-amber-50 rounded-lg transition-all"
                     onClick={() => setIsOpen(false)}
                   >
@@ -232,6 +244,15 @@ const Navbar = () => {
             >
               <Navigation size={20} />
               <span>Getting Around</span>
+            </Link>
+
+            <Link 
+              to="/rules" 
+              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium transition-all"
+              onClick={() => setIsOpen(false)}
+            >
+              <FileText size={20} />
+              <span>House Rules</span>
             </Link>
             
             <Link 
