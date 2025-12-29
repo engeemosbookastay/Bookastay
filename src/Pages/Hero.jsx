@@ -6,8 +6,8 @@ import Living from '../assets/Living.jpg';
 import Dine from '../assets/Dine.jpg';
 import LiveRoom from '../assets/LiveRoom.jpg';
 import Room from '../assets/Room.jpg';
-import Bedroom1 from '../assets/Bedroom1.jpg';
-import Bedroom2 from '../assets/Bedroom2.jpg';
+import Bedroom from '../assets/Bedroom.jpg';
+import Bedroomss from '../assets/Bedroomss.jpg';
 
 
 const Hero = () => {
@@ -31,8 +31,8 @@ const Hero = () => {
     { src: LiveRoom, caption: "Modern Interiors", subtitle: "Designed for Your Comfort", transition: "slide" },
     { src: Room, caption: "Peaceful Retreats", subtitle: "Your Home Away From Home", transition: "zoom" },
     { src: Dine, caption: "Elegant Dining", subtitle: "Create Memorable Moments", transition: "fade" },
-    { src: Bedroom1, caption: "Cozy Bedroom", subtitle: "Restful Sleep Awaits", transition: "zoom" },
-    { src: Bedroom2, caption: "Warm Bedroom", subtitle: "Dream land", transition: "slide" },
+    { src: Bedroom, caption: "Cozy Bedroom", subtitle: "Restful Sleep Awaits", transition: "zoom" },
+    { src: Bedroomss, caption: "Warm Bedroom", subtitle: "Dream land", transition: "slide" },
   ];
 
   // Auto-slide every 6 seconds

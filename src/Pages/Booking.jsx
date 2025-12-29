@@ -118,13 +118,11 @@ const Rooms = () => {
       beds: 2,
       bathrooms: 2,
       description: 'Experience luxury in our spacious 2-bedroom apartment. Featuring modern amenities, a fully equipped kitchen, elegant living spaces, and stunning balconies with breathtaking views. Perfect for families or groups seeking comfort and privacy in the heart of Abeokuta.',
-      basePrice: 50000,
-      extraGuestCharge: 5000,
+      basePrice: 100000,
+      extraGuestCharge: 0,
       maxGuests: 4,
-      accentColor: 'bg-gradient-to-br from-teal-500 to-cyan-600',
-      bgColor: 'bg-gradient-to-br from-teal-50 to-cyan-50',
-      borderColor: 'border-teal-300',
-      textColor: 'text-teal-700',
+      accentColor: 'from-blue-900 to-blue-800',
+      bgColor: 'from-slate-800 to-slate-900',
       amenities: [
         { name: 'High-Speed WiFi', icon: Wifi, desc: '100 Mbps fiber' },
         { name: 'Full Kitchen', icon: Utensils, desc: 'Cooking essentials' },
@@ -147,12 +145,10 @@ const Rooms = () => {
       beds: 1,
       bathrooms: 1,
       description: 'Your perfect retreat awaits! This beautifully designed 1-bedroom suite offers comfort and privacy with access to premium shared spaces. Ideal for solo travelers or couples seeking a peaceful escape with all the amenities you need.',
-      basePrice: 27000,
+      basePrice: 60000,
       maxGuests: 2,
-      accentColor: 'bg-gradient-to-br from-purple-500 to-indigo-600',
-      bgColor: 'bg-gradient-to-br from-purple-50 to-indigo-50',
-      borderColor: 'border-purple-300',
-      textColor: 'text-purple-700',
+      accentColor: 'from-amber-500 to-amber-600',
+      bgColor: 'from-slate-800 to-slate-900',
       amenities: [
         { name: 'High-Speed WiFi', icon: Wifi, desc: '100 Mbps fiber' },
         { name: 'Shared Kitchen', icon: Utensils, desc: 'Full access' },
@@ -165,13 +161,6 @@ const Rooms = () => {
       images: [Living, LiveRoom, Room, Dine]
     }
   };
-
-  const reviews = [
-    { name: 'Chioma A.', rating: 5, date: 'September 2024', comment: 'Absolutely stunning! The apartment exceeded all expectations. Everything was pristine, modern, and comfortable.', avatar: 'CA' },
-    { name: 'David O.', rating: 5, date: 'August 2024', comment: 'Perfect location and amazing value. The WiFi was incredibly fast - great for remote work. Will definitely return!', avatar: 'DO' },
-    { name: 'Blessing J.', rating: 5, date: 'July 2024', comment: 'Such a wonderful experience! The space was clean, spacious, and had everything we needed. Highly recommend!', avatar: 'BJ' },
-    { name: 'Emmanuel P.', rating: 5, date: 'June 2024', comment: 'Outstanding for business travel. Professional setup, quiet environment, and excellent amenities. Five stars!', avatar: 'EP' }
-  ];
 
   const currentOption = roomOptions[activeTab];
 
@@ -297,70 +286,70 @@ const Rooms = () => {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-teal-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
       
       {/* Booking Modal */}
       {showBookingModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl shadow-2xl border border-amber-500/20 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-8">
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <h2 className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">
-                    Complete Your Booking
+                  <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">
+                    Complete Booking
                   </h2>
-                  <p className="text-gray-500 text-sm mt-1">
+                  <p className="text-gray-400 text-sm mt-1">
                     Enter your details to proceed
                   </p>
                 </div>
-                <button onClick={() => setShowBookingModal(false)} className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition">
+                <button onClick={() => setShowBookingModal(false)} className="text-gray-400 hover:text-white p-2 hover:bg-white/10 rounded-full transition">
                   <X size={24} />
                 </button>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">Full Name</label>
                   <input 
                     type="text" 
                     value={guestName} 
                     onChange={(e) => setGuestName(e.target.value)} 
                     placeholder="John Doe" 
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition" 
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
                     required 
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">Email Address</label>
                   <input 
                     type="email" 
                     value={guestEmail} 
                     onChange={(e) => setGuestEmail(e.target.value)} 
                     placeholder="you@example.com" 
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition" 
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
                     required 
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">Phone Number</label>
                   <input 
                     type="tel" 
                     value={guestPhone} 
                     onChange={(e) => setGuestPhone(e.target.value)} 
                     placeholder="+234 800 000 0000" 
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition" 
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
                     required 
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">ID Type</label>
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">ID Type</label>
                   <select 
                     value={idType} 
                     onChange={(e) => setIdType(e.target.value)} 
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition text-gray-900" 
+                    className="w-full px-4 py-3 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition" 
                     required
                   >
                     <option value="">Select ID type</option>
@@ -371,8 +360,8 @@ const Rooms = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Upload ID Document</label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-teal-400 hover:bg-teal-50 transition cursor-pointer">
+                  <label className="block text-sm font-semibold text-gray-300 mb-2">Upload ID Document</label>
+                  <div className="border-2 border-dashed border-amber-500/30 rounded-xl p-6 text-center hover:border-amber-500/50 hover:bg-slate-700/30 transition cursor-pointer">
                     <input 
                       type="file" 
                       accept="image/*,.pdf" 
@@ -383,15 +372,15 @@ const Rooms = () => {
                     />
                     <label htmlFor="id-upload-modal" className="cursor-pointer">
                       {idFile ? (
-                        <div className="flex items-center justify-center gap-2 text-gray-900">
-                          <Check size={22} className="text-green-600" />
+                        <div className="flex items-center justify-center gap-2 text-white">
+                          <Check size={22} className="text-green-400" />
                           <span className="font-bold">{idFile.name}</span>
                         </div>
                       ) : (
                         <>
-                          <Upload className="w-10 h-10 mx-auto mb-2 text-teal-500" />
-                          <p className="font-bold text-gray-900">Click to upload</p>
-                          <p className="text-sm text-gray-600 mt-1">PNG, JPG or PDF</p>
+                          <Upload className="w-10 h-10 mx-auto mb-2 text-amber-400" />
+                          <p className="font-bold text-white">Click to upload</p>
+                          <p className="text-sm text-gray-400 mt-1">PNG, JPG or PDF</p>
                         </>
                       )}
                     </label>
@@ -401,13 +390,13 @@ const Rooms = () => {
                 <button
                   onClick={handleProceedToPayment}
                   disabled={!guestName || !guestEmail || !guestPhone || !idType || !idFile}
-                  className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3.5 rounded-xl font-bold hover:from-teal-700 hover:to-cyan-700 transition shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105"
                 >
                   Proceed to Payment
                 </button>
 
-                <p className="text-xs text-center text-gray-600 font-medium">
-                  You'll be redirected to secure payment gateway
+                <p className="text-xs text-center text-gray-400 font-medium">
+                  Secure payment via Paystack
                 </p>
               </div>
             </div>
@@ -416,12 +405,12 @@ const Rooms = () => {
       )}
 
       {/* Navbar Spacer */}
-      <div className="h-20 lg:h-24"></div>
+      <div className="h-16 lg:h-20"></div>
 
       {/* Room Type Selection */}
-      <div className="border-b border-gray-200 bg-gradient-to-r from-teal-50 via-cyan-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <h2 className="text-4xl font-bold text-gray-900 mb-6 text-center">Choose Your Room</h2>
+      <div className="border-b border-amber-500/20 bg-gradient-to-r from-slate-800/50 to-slate-900/50 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h2 className="text-5xl font-bold text-white mb-8 text-center">Select Your Suite</h2>
           <div className="flex gap-6 justify-center flex-wrap">
             {Object.entries(roomOptions).map(([key, option]) => (
               <button
@@ -432,16 +421,17 @@ const Rooms = () => {
                   setNumGuests(key === '2bedroom' ? 2 : 2);
                   setAvailability(null);
                 }}
-                className={`px-10 py-6 rounded-2xl font-semibold transition-all transform hover:scale-105 ${
+                className={`relative group px-12 py-8 rounded-2xl font-semibold transition-all transform hover:scale-105 overflow-hidden ${
                   activeTab === key
-                    ? `${option.accentColor} text-white shadow-2xl`
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200 shadow-lg'
+                    ? 'shadow-2xl shadow-amber-500/50'
+                    : 'bg-slate-800/50 border-2 border-slate-700 hover:border-amber-500/50'
                 }`}
               >
-                <div className="text-center">
-                  <div className="text-3xl mb-2">{option.bedrooms === 2 ? '🏠' : '🛏️'}</div>
-                  <div className="font-bold text-xl">{option.title}</div>
-                  <div className="text-sm opacity-90 mt-2">₦{option.basePrice.toLocaleString()}/night</div>
+                <div className={`absolute inset-0 bg-gradient-to-r ${option.accentColor} ${activeTab === key ? 'opacity-100' : 'opacity-0'} transition-opacity`}></div>
+                <div className="relative z-10">
+                  <div className="text-4xl mb-3">{option.bedrooms === 2 ? '🏠' : '🛏️'}</div>
+                  <div className={`font-bold text-2xl mb-2 ${activeTab === key ? 'text-white' : 'text-gray-300'}`}>{option.title}</div>
+                  <div className={`text-sm ${activeTab === key ? 'text-amber-200' : 'text-gray-500'}`}>₦{option.basePrice.toLocaleString()}/night</div>
                 </div>
               </button>
             ))}
@@ -449,48 +439,44 @@ const Rooms = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid lg:grid-cols-5 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid lg:grid-cols-5 gap-12">
           
           {/* Main Content */}
-          <div className="lg:col-span-3 space-y-8">
+          <div className="lg:col-span-3 space-y-10">
             
             {/* Header Info */}
             <div>
-              <div className="flex items-center gap-2 text-sm mb-3 flex-wrap">
-                <span className={`px-4 py-2 ${currentOption.bgColor} ${currentOption.textColor} rounded-xl font-bold border-2 ${currentOption.borderColor}`}>
+              <div className="flex items-center gap-3 text-sm mb-4 flex-wrap">
+                <span className="px-5 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 rounded-xl font-bold shadow-lg">
                   {currentOption.category}
                 </span>
-                <span className="flex items-center gap-1 bg-yellow-50 px-3 py-2 rounded-xl border border-yellow-200">
-                  <Star className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                  <span className="font-bold text-gray-900">5.0</span>
-                  <span className="text-gray-600">(12 reviews)</span>
-                </span>
-                <span className="flex items-center gap-1 text-gray-600 bg-gray-50 px-3 py-2 rounded-xl border border-gray-200">
-                  <MapPin className="w-4 h-4" />
+                <span className="flex items-center gap-2 bg-slate-800/50 backdrop-blur-sm px-4 py-2 rounded-xl border border-amber-500/20 text-white">
+                  <MapPin className="w-4 h-4 text-amber-400" />
                   Abeokuta, Nigeria
                 </span>
               </div>
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-3">{currentOption.title}</h1>
-              <p className="text-xl text-gray-600">{currentOption.subtitle}</p>
+              <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4">{currentOption.title}</h1>
+              <p className="text-xl text-gray-400">{currentOption.subtitle}</p>
             </div>
 
             {/* Image Gallery */}
-            <div className="relative rounded-2xl overflow-hidden group shadow-2xl">
+            <div className="relative rounded-3xl overflow-hidden group shadow-2xl shadow-black/50">
               <div className="relative h-96 sm:h-[500px]">
                 <img src={currentOption.images[currentImageIndex]} alt="Room" className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 
                 {currentOption.images.length > 1 && (
                   <>
-                    <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110">
+                    <button onClick={prevImage} className="absolute left-6 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm p-4 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 text-white">
                       <ChevronLeft className="w-6 h-6" />
                     </button>
-                    <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110">
+                    <button onClick={nextImage} className="absolute right-6 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 backdrop-blur-sm p-4 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all hover:scale-110 text-white">
                       <ChevronRight className="w-6 h-6" />
                     </button>
-                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
                       {currentOption.images.map((_, idx) => (
-                        <button key={idx} onClick={() => setCurrentImageIndex(idx)} className={`h-2 rounded-full transition-all ${idx === currentImageIndex ? 'bg-white w-10' : 'bg-white/60 w-2'}`} />
+                        <button key={idx} onClick={() => setCurrentImageIndex(idx)} className={`h-2 rounded-full transition-all ${idx === currentImageIndex ? 'bg-amber-400 w-12' : 'bg-white/60 w-2'}`} />
                       ))}
                     </div>
                   </>
@@ -499,41 +485,47 @@ const Rooms = () => {
             </div>
 
             {/* Room Details */}
-            <div className="flex items-center gap-6 py-6 border-y-2 border-gray-200 flex-wrap">
-              <div className="flex items-center gap-2 bg-teal-50 px-4 py-2 rounded-xl border border-teal-200">
-                <Users className="w-5 h-5 text-teal-600" />
-                <span className="text-gray-900 font-semibold">{currentOption.guests} guests</span>
+            <div className="flex items-center gap-6 py-8 border-y-2 border-amber-500/20 flex-wrap">
+              <div className="flex items-center gap-3 bg-slate-800/50 backdrop-blur-sm px-6 py-3 rounded-xl border border-amber-500/20">
+                <Users className="w-6 h-6 text-amber-400" />
+                <span className="text-white font-bold text-lg">{currentOption.guests} guests</span>
               </div>
-              <div className="flex items-center gap-2 bg-cyan-50 px-4 py-2 rounded-xl border border-cyan-200">
-                <Bed className="w-5 h-5 text-cyan-600" />
-                <span className="text-gray-900 font-semibold">{currentOption.bedrooms} bedroom{currentOption.bedrooms > 1 ? 's' : ''}</span>
+              <div className="flex items-center gap-3 bg-slate-800/50 backdrop-blur-sm px-6 py-3 rounded-xl border border-amber-500/20">
+                <Bed className="w-6 h-6 text-amber-400" />
+                <span className="text-white font-bold text-lg">{currentOption.bedrooms} bedroom{currentOption.bedrooms > 1 ? 's' : ''}</span>
               </div>
-              <div className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-xl border border-blue-200">
-                <Home className="w-5 h-5 text-blue-600" />
-                <span className="text-gray-900 font-semibold">{currentOption.bathrooms} bathroom{currentOption.bathrooms > 1 ? 's' : ''}</span>
+              <div className="flex items-center gap-3 bg-slate-800/50 backdrop-blur-sm px-6 py-3 rounded-xl border border-amber-500/20">
+                <Home className="w-6 h-6 text-amber-400" />
+                <span className="text-white font-bold text-lg">{currentOption.bathrooms} bathroom{currentOption.bathrooms > 1 ? 's' : ''}</span>
               </div>
             </div>
 
             {/* Description */}
-            <div className="bg-gradient-to-br from-gray-50 to-teal-50 p-8 rounded-2xl border border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">About this space</h2>
-              <p className="text-gray-700 leading-relaxed text-lg">{currentOption.description}</p>
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all"></div>
+              <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl p-10 rounded-3xl border border-amber-500/20">
+                <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+                  <Sparkles className="w-8 h-8 text-amber-400" />
+                  About This Space
+                </h2>
+                <p className="text-gray-300 leading-relaxed text-lg">{currentOption.description}</p>
+              </div>
             </div>
 
             {/* Amenities */}
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">What this place offers</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
+              <h2 className="text-3xl font-bold text-white mb-8">Premium Amenities</h2>
+              <div className="grid sm:grid-cols-2 gap-6">
                 {currentOption.amenities.map((amenity, idx) => {
                   const Icon = amenity.icon;
                   return (
-                    <div key={idx} className="flex items-start gap-4 bg-white p-4 rounded-xl border-2 border-gray-200 hover:border-teal-300 transition hover:shadow-lg">
-                      <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-3 rounded-xl">
-                        <Icon className="w-6 h-6 text-teal-600" />
+                    <div key={idx} className="flex items-start gap-4 bg-slate-800/50 backdrop-blur-sm p-6 rounded-2xl border border-amber-500/20 hover:border-amber-500/40 transition hover:shadow-lg hover:shadow-amber-500/10 group">
+                      <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-3 rounded-xl shadow-lg group-hover:scale-110 transition-transform">
+                        <Icon className="w-6 h-6 text-slate-900" />
                       </div>
                       <div>
-                        <p className="font-bold text-gray-900">{amenity.name}</p>
-                        <p className="text-sm text-gray-600">{amenity.desc}</p>
+                        <p className="font-bold text-white text-lg">{amenity.name}</p>
+                        <p className="text-sm text-gray-400">{amenity.desc}</p>
                       </div>
                     </div>
                   );
@@ -541,157 +533,126 @@ const Rooms = () => {
               </div>
             </div>
 
-            {/* Reviews */}
-            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-8 rounded-2xl border-2 border-yellow-200">
-              <div className="flex items-center gap-3 mb-6">
-                <Star className="w-7 h-7 fill-yellow-500 text-yellow-500" />
-                <h2 className="text-2xl font-bold text-gray-900">5.0 · 12 reviews</h2>
-              </div>
-              
-              <div className="grid sm:grid-cols-2 gap-6">
-                {reviews.map((review, idx) => (
-                  <div key={idx} className="space-y-3 bg-white p-5 rounded-xl border border-yellow-200">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-600 to-cyan-600 flex items-center justify-center text-white font-bold shadow-lg">
-                        {review.avatar}
-                      </div>
-                      <div>
-                        <p className="font-bold text-gray-900">{review.name}</p>
-                        <p className="text-sm text-gray-600">{review.date}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-1">
-                      {[...Array(review.rating)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                      ))}
-                    </div>
-                    <p className="text-gray-700">{review.comment}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
           </div>
 
           {/* Booking Sidebar */}
           <div className="lg:col-span-2">
-            <div className="sticky top-28">
-              <div className="border-2 border-gray-200 rounded-2xl shadow-2xl p-6 bg-white">
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">₦{currentOption.basePrice.toLocaleString()}</span>
-                    <span className="text-gray-600 font-medium">/ night</span>
-                  </div>
-                </div>
-
-                <div className="space-y-3 mb-6">
-                  <div className="grid grid-cols-2 gap-0 border-2 border-gray-300 rounded-xl overflow-hidden">
-                    <div className="p-4 border-r-2 border-gray-300 bg-gradient-to-br from-teal-50 to-cyan-50">
-                      <label className="block text-xs font-bold text-gray-900 uppercase mb-1">Check-in</label>
-                      <input type="date" value={checkIn} min={today} onChange={(e) => setCheckIn(e.target.value)} className="w-full text-sm text-gray-900 focus:outline-none bg-transparent font-semibold" />
-                    </div>
-                    <div className="p-4 bg-gradient-to-br from-cyan-50 to-blue-50">
-                      <label className="block text-xs font-bold text-gray-900 uppercase mb-1">Checkout</label>
-                      <input type="date" value={checkOut} min={checkIn || today} onChange={(e) => setCheckOut(e.target.value)} className="w-full text-sm text-gray-900 focus:outline-none bg-transparent font-semibold" />
+            <div className="sticky top-24">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/30 to-yellow-500/30 rounded-3xl blur-2xl group-hover:blur-3xl transition-all"></div>
+                <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-xl border-2 border-amber-500/30 rounded-3xl shadow-2xl p-8">
+                  <div className="mb-8">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">₦{currentOption.basePrice.toLocaleString()}</span>
+                      <span className="text-gray-400 font-medium">/ night</span>
                     </div>
                   </div>
 
-                  <div className="border-2 border-gray-300 rounded-xl p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
-                    <label className="block text-xs font-bold text-gray-900 uppercase mb-1">Guests</label>
-                    <select value={numGuests} onChange={(e) => setNumGuests(parseInt(e.target.value))} className="w-full text-sm text-gray-900 focus:outline-none bg-transparent font-semibold">
-                      {[...Array(currentOption.maxGuests)].map((_, i) => (
-                        <option key={i + 1} value={i + 1}>{i + 1} guest{i > 0 ? 's' : ''}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Availability Status */}
-                {availabilityLoading && (
-                  <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                      <p className="text-sm font-bold text-blue-800">Checking availability...</p>
-                    </div>
-                  </div>
-                )}
-
-                {!availabilityLoading && availability === true && checkIn && checkOut && (
-                  <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl">
-                    <p className="text-sm font-bold text-green-800 flex items-center gap-2">
-                      <Check size={18} />
-                      Available for your dates
-                    </p>
-                  </div>
-                )}
-
-                {!availabilityLoading && availability === false && availabilityError && (
-                  <div className="mb-6 p-4 bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-300 rounded-xl">
-                    <p className="text-sm font-bold text-red-800 flex items-center gap-2">
-                      <X size={18} />
-                      {availabilityError}
-                    </p>
-                  </div>
-                )}
-
-                {checkIn && checkOut && price.nights > 0 && (
-                  <>
-                    <div className="mb-6 space-y-3 pb-6 border-b-2 border-gray-200">
-                      <div className="flex justify-between text-gray-900 font-semibold">
-                        <span>₦{currentOption.basePrice.toLocaleString()} × {price.nights} nights</span>
-                        <span>₦{price.base.toLocaleString()}</span>
+                  <div className="space-y-4 mb-8">
+                    <div className="grid grid-cols-2 gap-0 border-2 border-amber-500/30 rounded-xl overflow-hidden">
+                      <div className="p-4 border-r-2 border-amber-500/30 bg-slate-700/30">
+                        <label className="block text-xs font-bold text-gray-300 uppercase mb-2">Check-in</label>
+                        <input type="date" value={checkIn} min={today} onChange={(e) => setCheckIn(e.target.value)} className="w-full text-sm text-white focus:outline-none bg-transparent font-semibold" />
                       </div>
-                      {price.discount > 0 && (
-                        <div className="flex justify-between text-green-700 font-bold bg-green-50 px-3 py-2 rounded-lg border border-green-200">
-                          <span>{price.discountType}</span>
-                          <span>-₦{price.discount.toLocaleString()}</span>
-                        </div>
-                      )}
-                      {price.extraGuest > 0 && (
-                        <div className="flex justify-between text-gray-900 font-semibold">
-                          <span>4th guest fee</span>
-                          <span>₦{price.extraGuest.toLocaleString()}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="mb-6 bg-gradient-to-r from-teal-50 to-cyan-50 p-4 rounded-xl border-2 border-teal-200">
-                      <div className="flex justify-between text-xl font-bold text-gray-900">
-                        <span>Total</span>
-                        <span className="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">₦{price.total.toLocaleString()}</span>
+                      <div className="p-4 bg-slate-700/30">
+                        <label className="block text-xs font-bold text-gray-300 uppercase mb-2">Checkout</label>
+                        <input type="date" value={checkOut} min={checkIn || today} onChange={(e) => setCheckOut(e.target.value)} className="w-full text-sm text-white focus:outline-none bg-transparent font-semibold" />
                       </div>
                     </div>
 
-                    <button
-                      onClick={() => {
-                        if (canProceedToBooking()) {
-                          setShowBookingModal(true);
-                        }
-                      }}
-                      disabled={!canProceedToBooking()}
-                      className={`w-full py-4 rounded-xl font-bold text-lg transition transform ${
-                        !canProceedToBooking()
-                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-60'
-                          : 'bg-gradient-to-r from-teal-600 to-cyan-600 text-white hover:from-teal-700 hover:to-cyan-700 shadow-lg hover:shadow-2xl hover:scale-105'
-                      }`}
-                    >
-                      {availabilityLoading ? 'Checking...' : canProceedToBooking() ? 'Book Now' : 'Not Available'}
-                    </button>
-                    <p className="text-xs text-center text-gray-600 font-medium mt-3">You won't be charged yet</p>
-                  </>
-                )}
-
-                {(!checkIn || !checkOut) && (
-                  <div className="text-center py-8">
-                    <Calendar className="w-14 h-14 mx-auto mb-3 text-teal-400" />
-                    <p className="text-sm text-gray-600 font-semibold">Add dates for prices</p>
+                    <div className="border-2 border-amber-500/30 rounded-xl p-4 bg-slate-700/30">
+                      <label className="block text-xs font-bold text-gray-300 uppercase mb-2">Guests</label>
+                      <select value={numGuests} onChange={(e) => setNumGuests(parseInt(e.target.value))} className="w-full text-sm text-white focus:outline-none bg-transparent font-semibold">
+                        {[...Array(currentOption.maxGuests)].map((_, i) => (
+                          <option key={i + 1} value={i + 1} className="bg-slate-800">{i + 1} guest{i > 0 ? 's' : ''}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                )}
+
+                  {/* Availability Status */}
+                  {availabilityLoading && (
+                    <div className="mb-6 p-4 bg-blue-500/20 border-2 border-blue-400/50 rounded-xl backdrop-blur-sm">
+                      <div className="flex items-center gap-3">
+                        <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+                        <p className="text-sm font-bold text-blue-200">Checking availability...</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {!availabilityLoading && availability === true && checkIn && checkOut && (
+                    <div className="mb-6 p-4 bg-green-500/20 border-2 border-green-400/50 rounded-xl backdrop-blur-sm">
+                      <p className="text-sm font-bold text-green-200 flex items-center gap-2">
+                        <Check size={18} />
+                        Available for your dates
+                      </p>
+                    </div>
+                  )}
+
+                  {!availabilityLoading && availability === false && availabilityError && (
+                    <div className="mb-6 p-4 bg-red-500/20 border-2 border-red-400/50 rounded-xl backdrop-blur-sm">
+                      <p className="text-sm font-bold text-red-200 flex items-center gap-2">
+                        <X size={18} />
+                        {availabilityError}
+                      </p>
+                    </div>
+                  )}
+
+                  {checkIn && checkOut && price.nights > 0 && (
+                    <>
+                      <div className="mb-8 space-y-4 pb-8 border-b-2 border-amber-500/20">
+                        <div className="flex justify-between text-gray-300 font-semibold text-lg">
+                          <span>₦{currentOption.basePrice.toLocaleString()} × {price.nights} nights</span>
+                          <span className="text-white">₦{price.base.toLocaleString()}</span>
+                        </div>
+                        {price.discount > 0 && (
+                          <div className="flex justify-between text-green-400 font-bold bg-green-500/20 px-4 py-3 rounded-lg border border-green-500/30">
+                            <span>{price.discountType}</span>
+                            <span>-₦{price.discount.toLocaleString()}</span>
+                          </div>
+                        )}
+                        {price.extraGuest > 0 && (
+                          <div className="flex justify-between text-gray-300 font-semibold">
+                            <span>4th guest fee</span>
+                            <span className="text-white">₦{price.extraGuest.toLocaleString()}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mb-8 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 p-6 rounded-xl border-2 border-amber-500/30">
+                        <div className="flex justify-between text-2xl font-bold">
+                          <span className="text-white">Total</span>
+                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">₦{price.total.toLocaleString()}</span>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          if (canProceedToBooking()) {
+                            setShowBookingModal(true);
+                          }
+                        }}
+                        disabled={!canProceedToBooking()}
+                        className={`w-full py-5 rounded-xl font-bold text-lg transition transform ${
+                          !canProceedToBooking()
+                            ? 'bg-gray-700 text-gray-500 cursor-not-allowed opacity-60'
+                            : 'bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 hover:from-amber-400 hover:to-amber-500 shadow-lg shadow-amber-500/50 hover:shadow-amber-500/70 hover:scale-105'
+                        }`}
+                      >
+                        {availabilityLoading ? 'Checking...' : canProceedToBooking() ? 'Reserve Now' : 'Not Available'}
+                      </button>
+                      <p className="text-xs text-center text-gray-400 font-medium mt-4">Secure booking • No hidden fees</p>
+                    </>
+                  )}
+
+                  {(!checkIn || !checkOut) && (
+                    <div className="text-center py-12">
+                      <Calendar className="w-16 h-16 mx-auto mb-4 text-amber-400" />
+                      <p className="text-gray-400 font-semibold">Select dates to view pricing</p>
+                    </div>
+                  )}
+                </div>
               </div>
-
-              <p className="text-xs text-center text-gray-600 mt-4 font-medium bg-teal-50 px-4 py-2 rounded-xl border border-teal-200">
-                ⭐ This property is highly rated for cleanliness and location
-              </p>
             </div>
           </div>
 
