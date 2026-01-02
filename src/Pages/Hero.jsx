@@ -36,6 +36,7 @@ const Hero = () => {
     { src: Bedroomss, caption: "Luxury Living Spaces", subtitle: "Where Comfort Meets Elegance", transition: "slide" },
     { src: Dine, caption: "Elegant Dining", subtitle: "Create Memorable Moments", transition: "fade" },
     { src: Bedroom, caption: "Cozy Bedrooms", subtitle: "Restful Sleep Awaits", transition: "zoom" },
+    { src: Logo, caption: "Engeemos Bookastay", subtitle: "Hosting Temporary Stay In Exotic Style", transition: "fade" },
   ];
 
   // Check cookie consent on mount
@@ -235,13 +236,13 @@ const Hero = () => {
         </div>
 
         {/* Logo Overlay - Top Left */}
-        <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-30">
+        {/* <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-30">
           <img 
             src={Logo} 
             alt="Engeemos Bookastay" 
             className="w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 object-contain drop-shadow-2xl"
           />
-        </div>
+        </div> */}
 
         {/* Animated Text Tags - Top Left Below Logo */}
         <div className="absolute top-28 sm:top-40 md:top-44 left-4 sm:left-8 z-30">

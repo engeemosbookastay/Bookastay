@@ -16,6 +16,8 @@ import Rules from "./Component/Rules";
 // import { Home } from "lucide-react";
 import Home from "./Pages/Home";
 import ScrollToTop from "./Component/ScrollToTop";
+import PrivacyPolicy from "./Pages/PrivacyPolicy";
+import Cancellation from "./Pages/Cancellation";
 // Support multiple possible env names and a safe localhost default
 export const backendUrl = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:4000';
 const App = () => {
@@ -36,6 +38,8 @@ const App = () => {
         <Route path="/why" element={<Why />} />
         <Route path="/getting-around" element={<GettingAround />} />
         <Route path="/rules" element={<Rules />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/cancellation-policy" element={<Cancellation />} />
       </Routes>
       <Footer />
     </>

@@ -16,9 +16,9 @@ const GettingAround = () => {
         { name: 'Kuti Heritage Museum, Isabo (Ransome-Kuti family-focused)', time: '15-17 mins', link: 'https://www.google.com/maps/place/The+Kuti+Heritage+Museum/data=!4m2!3m1!1s0x0:0xbf071edbaf512766?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'OOPL Wildlife Park (mini-zoo experience for kids and adults)', time: '19-22 mins', link: 'https://www.google.com/maps/place/OOPL+WILDLIFE+PARK/data=!4m2!3m1!1s0x0:0xd56fd816953819c9?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'OOPL Rounda Fun Spot (play options for kids)', time: '16-21 mins', link: 'https://www.google.com/maps/place/OOPL+Rounda+Fun+Spot/data=!4m2!3m1!1s0x0:0x444ed0adf08f927a?sa=X&ved=1t:2428&hl=en&ictx=111' },
-        { name: 'Adonis Plaza Paintball and Games (multiple games options)', time: '21-25 mins', link: 'https://maps.app.goo.gl/HHaqCt8tYyMdc1x28' },
+        { name: 'Adonis Plaza Paintball and Games (multiple games options)', time: '21-25 mins', link: 'https://www.google.com/maps/place/Muda+Lawal+Stadium/data=!4m2!3m1!1s0x0:0xaf0350ccb7acbb9a?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'Funsation Games & Entertainment, Oke-Ilewo', time: '13-15 mins', link: 'https://www.google.com/maps/place/Funsation+Games+and+Entertainment+Center/data=!4m2!3m1!1s0x0:0x3be61307be257838?sa=X&ved=1t:2428&hl=en&ictx=111' },
-        { name: 'FoodCo Akin-Olugbade Social Centre (kids play area)', time: '8 mins', link: 'https://www.google.com/maps/place/FoodCo+Akin-Olugbade+Social+Centre/data=!4m2!3m1!1s0x0:0x6bdaa90f7fdcf79?sa=X&ved=1t:2428&ictx=111' },
+        { name: 'FoodCo Akin-Olugbade Social Centre (kids play area)', time: '8 mins', link: 'https://www.google.com/maps/place/FoodCo+Akin-Olugbade+Social+Centre/data=!4m2!3m1!1s0x0:0x6bdaa90f7fdcf79?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'OOPL Cinemas, Oke-Mosan', time: '19-23 mins', link: 'https://www.google.com/maps/place/OOPL+Cinemas/data=!4m2!3m1!1s0x0:0x9dbe344ed6f63164?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'OOPL Aje Place Cinemas & Lounge, Panseke', time: '13 mins', link: 'https://www.google.com/maps/place/OOPL+Aje+Place+Cinemas+%26+Lounge/data=!4m2!3m1!1s0x0:0x59afe40419450c3c?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'Centenary Hall, Ake (historical sight)', time: '15 mins', link: 'https://www.google.com/maps/place/Centenary+Hall-+Abeokuta/data=!4m2!3m1!1s0x0:0x7283ef228c31d42?sa=X&ved=1t:2428&hl=en&ictx=111' },
@@ -33,12 +33,12 @@ const GettingAround = () => {
       bgGradient: 'from-orange-500/10 to-amber-500/10',
       items: [
         { name: 'Burger King Oke-Ilewo (fast food)', time: '13 mins', link: 'https://www.google.com/maps/place/burger+king+oke+ilewo+abeokuta/data=!4m2!3m1!1s0x103a4d0000e34531:0x9ac7dd5f0c7b75a?sa=X&ved=1t:242&hl=en&ictx=111' },
-        { name: 'SUPERFOODS Oke-Ilewo (fast food)', time: '11 mins', link: 'https://maps.app.goo.gl/xTWWVHjZJxsFP25v9' },
-        { name: 'Domino\'s Pizza Abeokuta', time: '10 mins', link: 'https://maps.app.goo.gl/PFNDyEy6i5cRr7MT8' },
+        { name: 'SUPERFOODS Oke-Ilewo (fast food)', time: '11 mins', link: 'https://www.google.com/maps/place/SUPERFOODS+Abeokuta/data=!4m2!3m1!1s0x103a4c7175ee7779:0x9957b6fe87e92e1b?sa=X&ved=1t:242&ictx=111' },
+        { name: 'Domino\'s Pizza Abeokuta', time: '10 mins', link: 'https://www.google.com/maps/place/Dominos+Pizza+Abeokuta/data=!4m2!3m1!1s0x0:0xdc5f00b31973f0c9?sa=X&ved=1t:2428&ictx=111' },
         { name: 'Sweet Sensation Oke-Ilewo (fast food)', time: '12 mins', link: 'https://www.google.com/maps/place/Sweet+Sensation+(Abeokuta)/data=!4m2!3m1!1s0x0:0x8cd34ac69aab5f16?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'WokCity Restaurant Oke-Ilewo (multiple options)', time: '12 mins', link: 'https://www.google.com/maps/place/WokCity+Restaurant+Ibara+Abeokuta/data=!4m2!3m1!1s0x0:0xb709d11ef8207105?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'CHOW TOWN Adigbe (Rice, Pasta/Noodles & Sandwiches)', time: '19 mins', link: 'https://www.google.com/maps/place/CHOW+TOWN/data=!4m2!3m1!1s0x0:0x427a1b74f8a94ed?sa=X&ved=1t:2428&hl=en&ictx=111' },
-        { name: 'Halaga Restaurant Ope Oluwa Ita Oshin (local food)', time: '8 mins', link: 'https://maps.app.goo.gl/WWaAPfnDi9F5PBnZ6' },
+        { name: 'Halaga Restaurant Ope Oluwa Ita Oshin (local food)', time: '8 mins', link: 'https://www.google.com/maps/place/Halaga+Restaurant/data=!4m2!3m1!1s0x0:0x9a6509df71cf0f88?sa=X&ved=1t:2428&ictx=111' },
         { name: 'South Kitchen & Lounge Ibara Housing (fine dining)', time: '18-20 mins', link: 'https://www.google.com/maps/place/south+kitchen+and+lounge+abeokuta/data=!4m2!3m1!1s0x103a4be7c6c2d9c3:0xe1a17fc0472294e8?sa=X&ved=1t:242&hl=en&ictx=111' },
         { name: 'Royal Mandarin Restaurant Ibara Housing (fine dining)', time: '17 mins', link: 'https://www.google.com/maps/place/Royal+mandarin+restaurant/data=!4m2!3m1!1s0x0:0xa1d3a9f9d17f2ac8?sa=X&ved=1t:2428&hl=en&ictx=111' }
       ]
@@ -63,12 +63,12 @@ const GettingAround = () => {
       gradient: 'from-teal-500 to-cyan-500',
       bgGradient: 'from-teal-500/10 to-cyan-500/10',
       items: [
-        { name: 'WEMA Bank ATM (Lafenwa)', time: '9 mins', link: 'https://maps.app.goo.gl/j5FcjEbVhZYKuQug7' },
-        { name: 'Polaris Bank ATM (Oke-Ilewo/Ibara)', time: '12 mins', link: 'https://maps.app.goo.gl/irX54cwVqSDgerUNA' },
-        { name: 'UBA ATM (Ita-Eko)', time: '10 mins', link: 'https://maps.app.goo.gl/CuiCDVXfuuqmpkRh8' },
-        { name: 'GTB ATM (IBB Boulevard)', time: '12 mins', link: 'https://maps.app.goo.gl/tqe9XnYD8t9gDRrx9' },
-        { name: 'Access Bank ATM (Oke-Ilewo)', time: '13 mins', link: 'https://maps.app.goo.gl/1ydYZnhfpopBqBGT9' },
-        { name: 'FCMB ATM (Oke-Ilewo)', time: '11 mins', link: 'https://maps.app.goo.gl/8CTtvMozom3v1Hzk8' }
+        { name: 'WEMA Bank ATM (Lafenwa)', time: '9 mins', link: 'https://www.google.com/maps/place/Wema+Bank+-+Lafenwa/data=!4m2!3m1!1s0x0:0x13b83cbf747dac66?sa=X&ved=1t:2428&hl=en&ictx=111' },
+        { name: 'Polaris Bank ATM (Oke-Ilewo/Ibara)', time: '12 mins', link: 'https://www.google.com/maps/place/Polaris+Bank+Limited/data=!4m2!3m1!1s0x0:0x1bb152198e5f5cc6?sa=X&ved=1t:2428&hl=en&ictx=111' },
+        { name: 'UBA ATM (Ita-Eko)', time: '10 mins', link: 'https://www.google.com/maps/place/United+Bank+for+Africa/data=!4m2!3m1!1s0x0:0xae29cb562e06f62a?sa=X&ved=1t:2428&hl=en&ictx=111' },
+        { name: 'GTB ATM (IBB Boulevard)', time: '12 mins', link: 'https://www.google.com/maps/place/Guaranty+Trust+Bank+PLC+Kuto+Abeokuta/data=!4m2!3m1!1s0x0:0x2637eef8f199847d?sa=X&ved=1t:2428&hl=en&ictx=111' },
+        { name: 'Access Bank ATM (Oke-Ilewo)', time: '13 mins', link: 'https://www.google.com/maps/place/Access+Bank+Plc+Oke+Ilewo+Branch/data=!4m2!3m1!1s0x0:0xa4440a234118d531?sa=X&ved=1t:2428&hl=en&ictx=111' },
+        { name: 'FCMB ATM (Oke-Ilewo)', time: '11 mins', link: 'https://www.google.com/maps/place/FCMB+Abeokuta+Branch/data=!4m2!3m1!1s0x0:0x38132a8454f02dd9?sa=X&ved=1t:2428&hl=en&ictx=111' }
       ]
     },
     supermarkets: {
@@ -78,9 +78,9 @@ const GettingAround = () => {
       bgGradient: 'from-emerald-500/10 to-teal-500/10',
       items: [
         { name: 'FoodCo Supermarket Akin Olugbade', time: '8 mins', link: 'https://www.google.com/maps/place/FoodCo+Akin-Olugbade+Social+Centre/data=!4m2!3m1!1s0x0:0x6bdaa90f7fdcf79?sa=X&ved=1t:2428&ictx=111' },
-        { name: 'Justrite Superstore Lafenwa', time: '8 mins', link: 'https://www.google.com/maps/place/Justrite+Superstores+lafenwa/data=!4m2!3m1!1s0x0:0x9fe704b6f24bdae3?sa=X&ved=1t:2428&ictx=111' },
+        { name: 'Justrite Superstore Lafenwa', time: '8 mins', link: 'https://www.google.com/maps/place/Justrite+Superstores+lafenwa/data=!4m2!3m1!1s0x0:0x9fe704b6f24bdae3?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'Justrite Superstore Ibara', time: '13 mins', link: 'https://www.google.com/maps/place/Justrite+Superstore+Ibara,+Abeokuta/data=!4m2!3m1!1s0x0:0x6055edc019c82d83?sa=X&ved=1t:2428&ictx=111' },
-        { name: 'Bestdeal Supermarket Oke-Ilewo', time: '13 mins', link: 'https://www.google.com/maps/place/Bestdeal+Supermarket+Oke-ilewo/data=!4m2!3m1!1s0x0:0x283605172c635e8a?sa=X&ved=1t:2428&ictx=111' },
+        { name: 'Bestdeal Supermarket Oke-Ilewo', time: '13 mins', link: 'https://www.google.com/maps/place/Bestdeal+Supermarket+Oke-ilewo/data=!4m2!3m1!1s0x0:0x283605172c635e8a?sa=X&ved=1t:2428&hl=en&ictx=111' },
         { name: 'Shalom Megastores Oke-Ilewo', time: '13 mins', link: 'https://www.google.com/maps/place/shalom+mega+stores+oke-ilewo+abeokuta/data=!4m2!3m1!1s0x103a4c77f6b6b327:0x6ee76a5b7168a8da?sa=X&ved=1t:242&hl=en&ictx=111' }
       ]
     },
@@ -90,10 +90,10 @@ const GettingAround = () => {
       gradient: 'from-red-500 to-orange-500',
       bgGradient: 'from-red-500/10 to-orange-500/10',
       items: [
-        { name: 'Bovas Filling Station (along Ita-Oshin road)', time: '6 mins', link: 'https://maps.app.goo.gl/FESWd6Avz4EkiyiE8' },
-        { name: 'NNPC Filling Station (Ita-Oshin)', time: '6 mins', link: 'https://maps.app.goo.gl/HhQDE4LzL8WuR7nv8' },
-        { name: 'NNPC Filling Station (Akin Olugbade)', time: '9 mins', link: 'https://maps.app.goo.gl/KHAXQKVb3PTzy9Xh6' },
-        { name: 'World Oil Filling Station (Oke-Ilewo)', time: '11 mins', link: 'https://maps.app.goo.gl/uKMz4k1V4zzTcXfZ6' }
+        { name: 'Bovas Filling Station (along Ita-Oshin road)', time: '6 mins', link: 'https://www.google.com/maps/place/Bovas+Filling+Station/data=!4m2!3m1!1s0x0:0x5d102ab52a106ede?sa=X&ved=1t:2428&hl=en&ictx=111' },
+        { name: 'NNPC Filling Station (Ita-Oshin)', time: '6 mins', link: 'https://www.google.com/maps/place/NNPC+-+Ita-Oshin+Filling+Station/data=!4m2!3m1!1s0x0:0xa8ea96058bc51c06?sa=X&ved=1t:2428&hl=en&ictx=111' },
+        { name: 'NNPC Filling Station (Akin Olugbade)', time: '9 mins', link: 'https://maps.app.goo.gl/TjkmGocmpnXSpsCdA' },
+        { name: 'World Oil Filling Station (Oke-Ilewo)', time: '11 mins', link: 'https://www.google.com/maps/place/World+Oil+Nigeria+Limited/data=!4m2!3m1!1s0x0:0xf28be25caf21c578?sa=X&ved=1t:2428&hl=en&ictx=111' }
       ]
     },
     markets: {
@@ -141,8 +141,12 @@ const GettingAround = () => {
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6 tracking-tight">
                   Getting <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200">Around</span>
                 </h1>
+                {/* UPDATED: Split into two paragraphs as per Gbenga's feedback */}
+                <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-4">
+                  For guests arriving on the train, the apartment is 27-28 minutes' drive from Professor Wole Soyinka Train Station.
+                </p>
                 <p className="text-lg md:text-xl text-gray-300 max-w-2xl">
-                  For guests arriving on the train, the apartment is 27-28 minutes' drive from Professor Wole Soyinka Train Station. Carefully curated below is a list of important places and things that guests may want to visit or do during their stay.
+                  Carefully curated below is a list of important places and things that guests may want to visit or do during their stay...
                 </p>
               </div>
             </div>

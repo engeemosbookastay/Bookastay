@@ -21,7 +21,7 @@ const Footer = () => {
               Engeemos Bookastay Apartments
             </h3>
           </div>
-          <p className="text-sm text-teal-300 font-medium italic">hosting temporary stay in exotic style</p>
+          <p className="text-sm text-teal-300 font-medium italic">...hosting temporary stay in exotic style</p>
         </div>
 
         {/* Three Column Grid */}
@@ -195,7 +195,7 @@ const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="/house-rules" 
+                  href="/rules" 
                   className="flex items-center gap-3 text-gray-300 hover:text-teal-400 transition-all group py-2"
                 >
                   <ChevronRight size={18} className="text-teal-400 group-hover:translate-x-1 transition-transform" />

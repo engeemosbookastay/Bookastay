@@ -46,7 +46,7 @@ const About = () => {
                 </p>
                 
                 <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6">
-                  At <span className="text-amber-400 font-semibold">Engeemos Bookastay</span>, we put <span className="text-amber-400 font-semibold">guests' satisfaction and privacy</span> at the core of our service delivery, thus ensuring guests never felt like they have left their homes <span className="text-amber-400 font-semibold">a sharp contrast to the prevailing atmosphere at hotels</span>.
+                  At <span className="text-amber-400 font-semibold">Engeemos Bookastay</span>, we put <span className="text-amber-400 font-semibold">guests' satisfaction and privacy</span> at the core of our service delivery, thus ensuring guests never felt like they have left their homes <span className="text-amber-400 font-semibold">-a sharp contrast to the prevailing atmosphere at hotels</span>.
                 </p>
                 
                 <p className="text-gray-300 text-base md:text-lg leading-relaxed">
