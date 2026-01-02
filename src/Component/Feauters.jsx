@@ -1,8 +1,8 @@
 import React from "react";
-import { CheckCircle, Wifi, Tv, Coffee, MapPin, Zap, Shield, Car, Droplet, Home, Wind, Utensils, Waves, Gamepad2, Briefcase, Sparkles, Crown } from "lucide-react";
+import { CheckCircle, Wifi, Tv, Coffee, MapPin, Zap, Shield, Car, Droplet, Home, Wind, Utensils, Waves, Gamepad2, Briefcase, Sparkles, Crown, Lock, AlertTriangle, Activity, Flame, Snowflake, Package } from "lucide-react";
 import Navbar from "./Navbar";
 
-const Feauters = () => {
+const Features = () => {
   const amenitiesCategories = [
     {
       category: "Entertainment & Connectivity",
@@ -11,7 +11,7 @@ const Feauters = () => {
       items: [
         { icon: Wifi, label: "Unlimited Internet", desc: "MTN 5G Broadband for seamless streaming" },
         { icon: Tv, label: "Smart TV", desc: "Premium entertainment in the living area" },
-        { icon: Gamepad2, label: "Board Games Collection", desc: "Chess, Scrabble, Ludo, Opon Ayo & more" },
+        { icon: Gamepad2, label: "Board Games Collection", desc: "Snake-and-ladder, chess, ludo, scrabble and opon ayo" },
       ]
     },
     {
@@ -19,8 +19,8 @@ const Feauters = () => {
       gradient: "from-orange-500 to-amber-500",
       bgGradient: "from-orange-500/10 to-amber-500/10",
       items: [
-        { icon: Utensils, label: "Fully-Equipped Kitchen", desc: "Gas cooker, microwave, air fryer, blender, toaster & refrigerator" },
-        { icon: Coffee, label: "Complimentary Beverages", desc: "Tea, coffee, milk, sugar & welcome juice" },
+        { icon: Utensils, label: "Fully-Kitted Kitchen", desc: "Gas cooker, blender, microwave, electric kettle, toaster, air fryer, fridge-and-freezer (combined), dishes and cutlery" },
+        { icon: Coffee, label: "Complimentary Beverages", desc: "Teabags, coffee, milk, sugar and welcome juice" },
       ]
     },
     {
@@ -28,11 +28,14 @@ const Feauters = () => {
       gradient: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-500/10 to-cyan-500/10",
       items: [
-        { icon: Wind, label: "Climate Control", desc: "Air conditioners with remote smart control and rechargeable fans in rooms and living area" },
-        { icon: Waves, label: "Laundry Service", desc: "Washing machine, detergent, clips & drying rack" },
-        { icon: Droplet, label: "Hot Water System", desc: "Water heater in bathroom" },
-        { icon: CheckCircle, label: "Hair Dryers", desc: "Available in every bathroom" },
-        { icon: Sparkles, label: "Premium Bedding", desc: "Hotel-grade linens, towels & toiletries" },
+        { icon: Snowflake, label: "Air Conditioners", desc: "Climate control in all rooms" },
+        { icon: Wind, label: "Rechargeable Fans", desc: "For additional ventilation" },
+        { icon: Waves, label: "Washing Machine", desc: "Detergent supplied, clips and drying rack included" },
+        { icon: Droplet, label: "Water Heater", desc: "Hot water system in bathroom" },
+        { icon: CheckCircle, label: "Hair Dryers", desc: "Available for guest use" },
+        { icon: Sparkles, label: "Hotel-Grade Beddings", desc: "Premium linens and towels" },
+        { icon: Package, label: "Bathroom Essentials", desc: "Bathing soap, toothbrush and toothpaste provided" },
+        { icon: Home, label: "Smart Home Features", desc: "Light and AC switches are remotely operated sometimes" },
       ]
     },
     {
@@ -40,18 +43,20 @@ const Feauters = () => {
       gradient: "from-emerald-500 to-teal-500",
       bgGradient: "from-emerald-500/10 to-teal-500/10",
       items: [
-        { icon: Briefcase, label: "Dedicated Workspace", desc: "Comfortable work area" },
-        { icon: Zap, label: "Uninterrupted Power", desc: "PHCN with backup from 10kva Inverter and Generator" },
+        { icon: Briefcase, label: "Dedicated Workspace", desc: "Comfortable work area for remote work" },
+        { icon: Zap, label: "Constant Electricity", desc: "10Kva inverter, generator and PHCN (Band C with 12 hours minimum per day)" },
       ]
     },
     {
-      category: "Security & Access",
-      gradient: "from-slate-500 to-gray-600",
-      bgGradient: "from-slate-500/10 to-gray-600/10",
+      category: "Security & Safety",
+      gradient: "from-red-500 to-orange-500",
+      bgGradient: "from-red-500/10 to-orange-500/10",
       items: [
-        { icon: Shield, label: "24/7 Security System", desc: "Exterior CCTV surveillance & electric fencing" },
-        { icon: MapPin, label: "Contactless Check-in", desc: "Self check-in with secure key safe" },
-        { icon: Car, label: "Private Parking", desc: "Spacious compound with multiple spots" },
+        { icon: Shield, label: "Maximum Security", desc: "Exterior CCTVs, high and electric wire fencing" },
+        { icon: Lock, label: "Self Check-in", desc: "Contactless check-in with Key Safe" },
+        { icon: Flame, label: "Fire Extinguisher", desc: "Safety equipment on premises" },
+        { icon: Activity, label: "First Aid Box", desc: "Emergency medical supplies available" },
+        { icon: Car, label: "Spacious Parking", desc: "Compound with multiple parking spots" },
       ]
     },
   ];
@@ -89,10 +94,11 @@ const Feauters = () => {
                   <div className="h-1 w-16 bg-gradient-to-r from-amber-400 to-transparent rounded-full"></div>
                   <span className="text-amber-400 font-bold text-sm md:text-base uppercase tracking-wider">Premium Amenities</span>
                 </div>
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6 tracking-tight">
-                  World-Class<br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200">Facilities</span>
+                {/* UPDATED: Heading on single line */}
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200 mb-4 md:mb-6 tracking-tight">
+                  World-Class Facilities
                 </h1>
+                {/* UPDATED: Subtitle moved below */}
                 <p className="text-lg md:text-xl text-gray-300 max-w-2xl">
                   Every detail thoughtfully designed for your comfort and convenience
                 </p>
@@ -129,16 +135,14 @@ const Feauters = () => {
                       {/* Animated gradient blur on hover */}
                       <div className={`absolute inset-0 bg-gradient-to-br ${category.bgGradient} rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500`}></div>
                       
-                      <div className={`relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border-2 border-transparent hover:border-opacity-50 rounded-2xl p-6 md:p-8 transition-all duration-500 shadow-xl group-hover:shadow-2xl group-hover:-translate-y-2`}
-                           style={{borderImage: `linear-gradient(135deg, var(--tw-gradient-stops)) 1`, borderImageSlice: 1}}>
+                      <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border-2 border-amber-500/20 hover:border-amber-500/40 rounded-2xl p-6 md:p-8 transition-all duration-500 shadow-xl group-hover:shadow-2xl group-hover:-translate-y-2">
                         <div className="relative z-10">
                           <div className="mb-4 md:mb-5">
                             <div className={`inline-flex p-3 md:p-4 bg-gradient-to-br ${category.gradient} rounded-xl shadow-lg group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300`}>
                               <Icon className="w-5 h-5 md:w-6 md:h-6 text-white" strokeWidth={2} />
                             </div>
                           </div>
-                          <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r transition-all duration-300"
-                              style={{backgroundImage: `linear-gradient(135deg, var(--tw-gradient-stops))`}}>
+                          <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3 group-hover:text-amber-400 transition-all duration-300">
                             {item.label}
                           </h3>
                           <p className="text-gray-400 leading-relaxed text-sm md:text-base group-hover:text-gray-300 transition-colors duration-300">
@@ -157,8 +161,24 @@ const Feauters = () => {
           ))}
         </div>
       </section>
+
+      {/* Additional Info Banner */}
+      <section className="py-12 px-4">
+        <div className="max-w-5xl mx-auto">
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all"></div>
+            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border-2 border-amber-500/30 rounded-2xl p-8 shadow-2xl text-center">
+              <Sparkles className="w-12 h-12 text-amber-400 mx-auto mb-4" />
+              <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Experience Luxury Living</h3>
+              <p className="text-gray-300 leading-relaxed max-w-2xl mx-auto text-base md:text-lg">
+                From self-check-in convenience to 24/7 power supply, every facility has been carefully selected to ensure your stay is comfortable, secure, and memorable.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
-export default Feauters;
+export default Features;

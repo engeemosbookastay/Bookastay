@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Cigarette, Users, Clock, Lightbulb, Gamepad2, Zap, UtensilsCrossed, Trash2, AlertCircle, CheckCircle, ChevronDown, ChevronUp, Home as HomeIcon, Music, Eye, Key, Crown } from 'lucide-react';
+import { Shield, Cigarette, Users, Clock, Lightbulb, Gamepad2, Zap, UtensilsCrossed, Trash2, AlertCircle, CheckCircle, ChevronDown, ChevronUp, Home as HomeIcon, Music, Eye, Key, Crown, Thermometer, RefreshCw } from 'lucide-react';
 import Navbar from './Navbar';
 
 const Rules = () => {
@@ -39,7 +39,7 @@ const Rules = () => {
       title: "Number of Guests",
       category: "Occupancy",
       gradient: "from-emerald-500 to-teal-500",
-      content: "Kindly note that only the number of guests indicated during booking will be allowed to stay at the apartment. Where a booker indicated two guests during booking but arrive with three guests, not only will the extra guest be turned back, but the issue will also be reported to Airbnb. This extends to guests with kids. Please indicate this during booking so we can be fully prepared for your arrival. Your comfort and wellbeing is our priority!"
+      content: "Number of guests (including children) must be clearly indicated during booking as only number of guests so indicated will be allowed to stay at the apartment. Being precise in this regard ensures we can appropriately prepare the apartment for guests' arrival. Your comfort and wellbeing is our priority!"
     },
     {
       icon: Eye,
@@ -50,11 +50,11 @@ const Rules = () => {
     },
     {
       icon: Gamepad2,
-      title: "Entertainment",
+      title: "Entertainment and Games",
       category: "Amenities",
       gradient: "from-pink-500 to-rose-500",
-      content: "There is a 75\" smart TV in the apartment. Feel free to binge your favourite TV shows and movies on Netflix and/or Amazon Prime using our Android box. You can also stream videos on YouTube.",
-      extra: "Board games like snake-and-ladder, chess, ludo, and scrabble together with opon ayo (for those interested) are available and can be found inside the cabinet below the TV."
+      content: "There is a 75\" smart TV in the apartment. Feel free to binge your favourite TV shows and movies on Netflix and/or Amazon Prime. You can also stream videos on YouTube.",
+      extra: "Board games like snake-and-ladder, chess, ludo, and scrabble together with opon ayo are available and can be found inside the cabinet below the TV."
     },
     {
       icon: Lightbulb,
@@ -73,39 +73,46 @@ const Rules = () => {
       details: [
         {
           subtitle: "Inverter Schedule",
-          text: "The inverter (especially during summer period) supports heavy appliance usage (2 ACs, washing machine, iron, electric kettles, microwave, and lights) from around 8.30am to 3pm and support light appliance usage (TV and few lights) from 3.01pm to 7pm. The reduction in load capacity is due to an equivalent reduction in the sun's intensity from 3pm."
+          text: "The inverter (especially during summer period) supports heavy appliance usage (2 ACs, washing machine, iron, electric kettles, microwave, and lights) from around 8.30am to 3pm and support light appliance usage (TV and few lights) from 3.01pm to 7pm. The reduction in load capacity is due to an equivalent reduction in the sun's intensity from 3pm. To use microwave after 3pm, temporarily turn off TV and unused lights.",
+          extra: "During summer period, solar panels charge the inverter from 7.30am/8am, while during raining season, charging usually commences around 9am/9.30am. At both seasons, allow the inverter some time to charge before loading appliances on it. Inverter power is usually at its strongest from midday to 3pm."
         },
         {
           subtitle: "PHCN Connection",
-          text: "The house is also connected to PHCN. The pre-installed alarm in the gate house notify guests when PHCN is restored. A coloured bulb located in the small corridor to the rooms serves the same purpose – when this bulb is on, it means the house is operating on government light. We are in BAND C for electricity tariff purpose – this means we enjoy minimum of 12 hours of light per day."
+          text: "The house is connected to PHCN. The pre-installed alarm in the gate house notify guests when PHCN is restored. A coloured bulb located in the small corridor to the rooms serves the same purpose – when this bulb is on, the house is operating on government light. Although ACs and other appliances can be used when PHCN is available, kindly note that fair use policy applies especially to AC usage as the apartment runs on pre-paid meter.",
+          extra: "The apartment is located in a BAND C zone; there will therefore be light for a minimum of 12 hours on most days. The bulk of the 12 hours of light is made available over the night."
         },
         {
           subtitle: "Generator Usage",
-          text: "A 9kva generator is used to complement inverter and PHCN – usually from 7pm to 11.30pm (most times, PHCN is restored before 11.30pm). Please note that only 1 AC (maximum) can be used with the generator."
+          text: "A 9kva generator is used to complement inverter and PHCN – usually from 7pm to 11.30pm (most times, PHCN is restored before 11.30pm). Please note that only 1 AC can and should be used with the generator. TV and microwave can also be used, but to use microwave, temporarily switch off AC."
         },
         {
-          subtitle: "AC Configuration",
-          text: "Two (2) of the four (4) ACs in the apartment are connected to inverter – one (1) in the living room, one (1) in the rooms with water heater. Out of the four (4) ACs in the apartment, only two (2) are on the inverter; the rest can only be used with PHCN."
+          subtitle: "Changeover System",
+          text: "An automatic changeover system is in place. This automates changing of power source between PHCN, generator and inverter. Occasionally check the coloured bulb or listen for the sound alarm to know when the apartment is on government light."
+        },
+        {
+          subtitle: "Keeping Cool",
+          text: "There are 4 ACs in the apartment. All 4 work on government light but only 2 work with the inverter – 1 in the living room, 1 in the bedroom with water heater.",
+          extra: "For period when ACs cannot be used, 4 rechargeable fans are available for keeping cool. It is also safe to open the windows if necessary."
         },
         {
           subtitle: "Daily Schedule Summary",
           list: [
             "During the day (morning to 3pm) – Inverter (when there is no light)",
-            "From 3pm to 7.30pm – Inverter (but no AC use when there is no light)",
-            "From 7.30pm to 11.30pm - Generator (1 AC can be used)",
-            "From 11.30pm to morning – Inverter (no AC usage except PHCN light is restored)"
+            "From 3pm to 7pm – Inverter (but no AC use except government light is available)",
+            "From 7pm to 11.30pm – Generator (1 AC can be used)",
+            "From 11.30pm to morning – Inverter (no AC use except government light is restored)"
           ]
         },
         {
           subtitle: "Important Tips for 24/7 Power",
           list: [
-            "Use WASHING MACHINE during the day, preferably from 8.30am/9.30am but not later than 3pm",
+            "Use WASHING MACHINE during the day, preferably from 8.30am/9.30am but not later than 3pm. Consider using quick wash option (soft materials) and wool option (thick materials)",
             "IRON clothes during the day (from 8.30/9.30am to 3pm)",
             "DO NOT use the ACs after 3pm (except if PHCN is available)",
             "If you are home throughout the day, consider allowing the AC some resting time",
             "When going to bed, switch off the AC connected to the inverter with the remote",
-            "Four (4) rechargeable fans are in the apartment. Use them for ventilation during the night",
-            "Bathroom water heater is remotely activated around 6am every morning"
+            "Use the 4 rechargeable fans for ventilation outside the AC use period",
+            "Don't switching on/off the bathroom water heater as this is remotely operated around 6am every morning"
           ]
         }
       ]
@@ -115,16 +122,16 @@ const Rules = () => {
       title: "Kitchen",
       category: "Appliances",
       gradient: "from-green-500 to-emerald-500",
-      content: "There is gas cooker in the kitchen. Gas should be turned off once cooking is completed. If the gas in the connected cylinder finishes, please change to the back-up cylinder.",
+      content: "There is gas cooker in the kitchen. If you need help using this, let the House Manager know. Gas should be turned off once cooking is completed. If the gas in the connected cylinder finishes, please change to the back-up cylinder.",
       details: [
         {
-          text: "Electric kettle, toaster, microwave & blender are also in the kitchen. It is recommended that these appliances be used during the day (till 3pm) and when there is light."
+          text: "Electric kettle, toaster, microwave & blender are also in the kitchen. It is recommended that these appliances be used during the day (till 3pm) and when there is light. Microwave can, however, be used after 3pm, but make sure to turn off other TV temporarily."
         },
         {
           text: "Air fryer should be used with PHCN or, if with inverter, before 3pm. Plates and kitchen utensils are located in the cabinets/centre cabinet."
         },
         {
-          text: "Washing machine is in the kitchen balcony. Locate the switch at the back (see welcome video). Select the washing program that works best for you (quick wash or wool options). Detergent and clips/pegs are inside the unlocked shelf on top of the washing machine."
+          text: "Washing machine is in the kitchen balcony. Locate the switch at the back (see welcome video). Select the washing program that works best for you (quick wash or wool options). Press the start/pause button. Detergent and clips/pegs are inside the unlocked shelf on top of the washing machine. Clothes hanger is stationed in the balcony."
         }
       ]
     },
@@ -147,14 +154,14 @@ const Rules = () => {
       title: "Damage",
       category: "Responsibility",
       gradient: "from-red-500 to-pink-500",
-      content: "In the unlikely event that there is a damage to any of the items within the apartment, please make sure to report such damage/breakage in a timely manner. The hosts will not hesitate to make a claim from Airbnb."
+      content: "In the unlikely event that there is a damage to any of the items within the apartment, please make sure to report such damage/breakage in a timely manner. The host reserves their right to seek legal remedy from the booker in respect of such damage."
     },
     {
       icon: Key,
       title: "Before You Check Out",
       category: "Checkout",
       gradient: "from-purple-500 to-indigo-500",
-      content: "Check out time is 12pm. All keys must be returned into the Key Safe by this time.",
+      content: "Check out time is 12pm. All keys must be returned into the Key Safe by this time. Kindly notify the House Manager upon check-out.",
       details: [
         {
           subtitle: "Rubbish",
@@ -165,8 +172,8 @@ const Rules = () => {
           text: "Confirm all bulbs/lights and appliances have been turned off."
         },
         {
-          subtitle: "Return Keys",
-          text: "Kindly notify the House Manager upon check-out."
+          subtitle: "Return Keys into the Key Safe",
+          text: "Check out time is 12pm. All keys must be returned into the Key Safe by this time. Kindly notify the House Manager upon check-out."
         }
       ]
     }
@@ -204,7 +211,7 @@ const Rules = () => {
                   House <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200">Rules</span>
                 </h1>
                 <p className="text-lg md:text-xl text-gray-300 max-w-2xl">
-                  House Rules are put together to ensure guests are speedily familiarised with their new accommodation.
+                  Find below some of our most important House Rules. House Rules are put together to ensure guests are speedily familiarised with their new accommodation.
                 </p>
               </div>
             </div>
@@ -262,7 +269,7 @@ const Rules = () => {
 
                     {/* Expandable Details */}
                     {hasDetails && (
-                      <div className={`overflow-hidden transition-all duration-500 ${isExpanded ? 'max-h-[2000px] mt-6' : 'max-h-0'}`}>
+                      <div className={`overflow-hidden transition-all duration-500 ${isExpanded ? 'max-h-[3000px] mt-6' : 'max-h-0'}`}>
                         <div className="space-y-6 pt-6 border-t border-amber-500/20">
                           {rule.details.map((detail, idx) => (
                             <div key={idx} className="bg-slate-700/30 rounded-xl p-5 border border-amber-500/10">
@@ -271,6 +278,9 @@ const Rules = () => {
                               )}
                               {detail.text && (
                                 <p className="text-gray-300 leading-relaxed">{detail.text}</p>
+                              )}
+                              {detail.extra && (
+                                <p className="text-gray-300 leading-relaxed mt-3">{detail.extra}</p>
                               )}
                               {detail.list && (
                                 <ul className="space-y-2 mt-3">

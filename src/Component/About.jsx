@@ -28,9 +28,7 @@ const About = () => {
           <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-white mb-3 md:mb-6 tracking-tight">
             About <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200">Us</span>
           </h2>
-          <p className="text-sm md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            Where luxury hospitality meets exceptional comfort
-          </p>
+          {/* REMOVED: "Where luxury hospitality meets exceptional comfort" */}
         </div>
 
         {/* Main Prose Section */}
@@ -40,7 +38,7 @@ const About = () => {
             <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/20 rounded-2xl md:rounded-3xl p-8 md:p-12 shadow-2xl">
               <div className="prose prose-invert prose-lg md:prose-xl max-w-none">
                 <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6">
-                  <span className="text-amber-400 font-semibold text-lg md:text-xl">Engeemos Bookastay Ventures</span> is a registered business name. We currently oversee hosting services for <span className="text-amber-400 font-semibold">Oluwadarasimi Villa</span>—a block of flats boasting of modern facilities and aesthetically styled interior. Ensconced in a serene and secure part of Olomsore, Abeokuta, this property is close to Lafenwa, Ita-Oshin, Brewery, Ibara-Omida, Oke-Ilewo, and just about 20-25 minutes of driving to Kuto/Oke-Mosan area and Olusegun Obasanjo Presidential Library.
+                  <span className="text-amber-400 font-semibold text-lg md:text-xl">Engeemos Bookastay Ventures</span> is a registered business name. We currently oversee hosting services for <span className="text-amber-400 font-semibold">Oluwadarasimi Villa</span> a block of flats boasting of modern facilities and aesthetically styled interior. Ensconced in a serene and secure part of <span className="text-amber-400 font-semibold">Olomore</span>, Abeokuta, this property is close to Lafenwa, Ita-Oshin, Brewery, Ibara-Omida, Oke-Ilewo, and just about 20-25 minutes of driving to Kuto/Oke-Mosan area and Olusegun Obasanjo Presidential Library.
                 </p>
                 
                 <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6">
@@ -48,12 +46,13 @@ const About = () => {
                 </p>
                 
                 <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6">
-                  At <span className="text-amber-400 font-semibold">Engeemos Bookastay</span>, we put <span className="text-amber-400 font-semibold">guests' satisfaction and privacy</span> at the core of our service delivery, thus ensuring that guests never felt like they have left their homes—a feeling that is hard to come by at hotels where several hotel workers are always in guests' spaces.
+                  At <span className="text-amber-400 font-semibold">Engeemos Bookastay</span>, we put <span className="text-amber-400 font-semibold">guests' satisfaction and privacy</span> at the core of our service delivery, thus ensuring guests never felt like they have left their homes <span className="text-amber-400 font-semibold">a sharp contrast to the prevailing atmosphere at hotels</span>.
                 </p>
                 
                 <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                  As part of our future plan, we intend to bring on board more verified, comfortable and guests-centric short stay accommodations. <span className="text-amber-400 font-semibold italic">Watch this space!</span>
+                  As part of our future plan, we intend to bring on board more verified, comfortable and guests-centric short stay accommodations.
                 </p>
+                {/* REMOVED: "Watch this space!" */}
               </div>
             </div>
           </div>

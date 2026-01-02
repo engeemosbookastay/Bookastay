@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { backendUrl } from '../App';
-import { Users, Home, Bed, Star, ChevronLeft, ChevronRight, Upload, Wifi, Tv, Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Calendar, Sparkles } from 'lucide-react';
+import { Users, Home, Bed, Star, ChevronLeft, ChevronRight, Upload, Wifi, Tv, Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Calendar, Sparkles, FileText } from 'lucide-react';
 
 // Import actual images
 import Living from '../assets/Living.jpg';
@@ -21,6 +21,10 @@ const Rooms = () => {
   const [guestPhone, setGuestPhone] = useState('');
   const [idType, setIdType] = useState('');
   const [idFile, setIdFile] = useState(null);
+  
+  // Consent checkboxes state
+  const [privacyConsent, setPrivacyConsent] = useState(false);
+  const [cancellationConsent, setCancellationConsent] = useState(false);
   
   const [showBookingModal, setShowBookingModal] = useState(false);
 
@@ -149,6 +153,7 @@ const Rooms = () => {
       description: 'Your perfect retreat awaits! This beautifully designed 1-bedroom suite offers comfort and privacy with access to premium shared spaces. Ideal for solo travelers or couples seeking a peaceful escape with all the amenities you need.',
       basePrice: 60000,
       maxGuests: 2,
+      minNights: 2,
       accentColor: 'from-amber-500 to-amber-600',
       bgColor: 'from-slate-800 to-slate-900',
       amenities: [
@@ -212,6 +217,17 @@ const Rooms = () => {
       return;
     }
 
+    // Check consent checkboxes
+    if (!privacyConsent) {
+      alert('Please agree to the Privacy Policy to continue');
+      return;
+    }
+
+    if (!cancellationConsent) {
+      alert('Please agree to the Cancellation Policy to continue');
+      return;
+    }
+
     const txRef = `book_${Date.now()}`;
     const amount = price.total;
     const roomType = activeTab === '2bedroom' ? 'entire' : 'room1';
@@ -265,6 +281,8 @@ const Rooms = () => {
             setCheckOut(''); 
             setNumGuests(2);
             setAvailability(null);
+            setPrivacyConsent(false);
+            setCancellationConsent(false);
             setShowBookingModal(false);
             alert('Booking confirmed successfully!');
           })
@@ -389,10 +407,61 @@ const Rooms = () => {
                   </div>
                 </div>
 
+                {/* CONSENT CHECKBOXES */}
+                <div className="border-t-2 border-amber-500/20 pt-4 space-y-3">
+                  <p className="text-xs md:text-sm font-bold text-gray-300 mb-3">Required Agreements</p>
+                  
+                  {/* Privacy Policy Consent */}
+                  <div className="flex items-start gap-3">
+                    <input 
+                      type="checkbox" 
+                      id="privacy-consent"
+                      checked={privacyConsent}
+                      onChange={(e) => setPrivacyConsent(e.target.checked)}
+                      className="mt-1 w-4 h-4 md:w-5 md:h-5 rounded border-amber-500/30 bg-slate-700/50 text-amber-500 focus:ring-2 focus:ring-amber-500 cursor-pointer"
+                      required
+                    />
+                    <label htmlFor="privacy-consent" className="text-xs md:text-sm text-gray-300 cursor-pointer">
+                      I have read and agree to the{' '}
+                      <a 
+                        href="/privacy-policy" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-amber-400 hover:text-amber-300 underline font-semibold"
+                      >
+                        Privacy Policy
+                      </a>
+                    </label>
+                  </div>
+
+                  {/* Cancellation Policy Consent */}
+                  <div className="flex items-start gap-3">
+                    <input 
+                      type="checkbox" 
+                      id="cancellation-consent"
+                      checked={cancellationConsent}
+                      onChange={(e) => setCancellationConsent(e.target.checked)}
+                      className="mt-1 w-4 h-4 md:w-5 md:h-5 rounded border-amber-500/30 bg-slate-700/50 text-amber-500 focus:ring-2 focus:ring-amber-500 cursor-pointer"
+                      required
+                    />
+                    <label htmlFor="cancellation-consent" className="text-xs md:text-sm text-gray-300 cursor-pointer">
+                      I agree to Engeemos Bookastay Apartments'{' '}
+                      <a 
+                        href="/cancellation-policy" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-amber-400 hover:text-amber-300 underline font-semibold"
+                      >
+                        Cancellation Policy
+                      </a>
+                    </label>
+                  </div>
+                </div>
+
                 <button
                   onClick={handleProceedToPayment}
-                  disabled={!guestName || !guestEmail || !guestPhone || !idType || !idFile}
-                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3 md:py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 text-sm md:text-base"
+                  disabled={!guestName || !guestEmail || !guestPhone || !idType || !idFile || !privacyConsent || !cancellationConsent}
+                  className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3 md:py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 text-sm md:text-base mt-2"
                 >
                   Proceed to Payment
                 </button>
@@ -433,7 +502,10 @@ const Rooms = () => {
                 <div className="relative z-10">
                   <div className="text-3xl md:text-4xl mb-2 md:mb-3">{option.bedrooms === 2 ? '🏠' : '🛏️'}</div>
                   <div className={`font-bold text-lg md:text-2xl mb-1 md:mb-2 ${activeTab === key ? 'text-white' : 'text-gray-300'}`}>{option.title}</div>
-                  <div className={`text-xs md:text-sm ${activeTab === key ? 'text-amber-200' : 'text-gray-500'}`}>₦{option.basePrice.toLocaleString()}/night</div>
+                  <div className={`text-xs md:text-sm ${activeTab === key ? 'text-amber-200' : 'text-gray-500'}`}>
+                    ₦{option.basePrice.toLocaleString()}/night
+                    {option.minNights && <span className="block text-xs mt-1">(Min {option.minNights} nights)</span>}
+                  </div>
                 </div>
               </button>
             ))}
@@ -548,6 +620,9 @@ const Rooms = () => {
                       <span className="text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">₦{currentOption.basePrice.toLocaleString()}</span>
                       <span className="text-gray-400 font-medium text-sm md:text-base">/ night</span>
                     </div>
+                    {currentOption.minNights && (
+                      <p className="text-xs md:text-sm text-amber-400 mt-2 font-semibold">Minimum {currentOption.minNights} nights required</p>
+                    )}
                   </div>
 
                   <div className="space-y-3 md:space-y-4 mb-6 md:mb-8">
