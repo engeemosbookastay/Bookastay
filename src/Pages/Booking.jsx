@@ -27,6 +27,7 @@ const Rooms = () => {
   const [cancellationConsent, setCancellationConsent] = useState(false);
   
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [isUploadingId, setIsUploadingId] = useState(false);
 
   // Availability state
   const [availability, setAvailability] = useState(null);
@@ -206,7 +207,30 @@ const Rooms = () => {
   const nextImage = () => setCurrentImageIndex((currentImageIndex + 1) % currentOption.images.length);
   const prevImage = () => setCurrentImageIndex((currentImageIndex - 1 + currentOption.images.length) % currentOption.images.length);
 
-  const handleProceedToPayment = () => {
+  // Upload ID file to Cloudinary BEFORE payment
+  const uploadIdFile = async (file) => {
+    const formData = new FormData();
+    formData.append('id_file', file);
+
+    try {
+      const response = await fetch(`${backendUrl}/api/bookings/upload-id`, {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Failed to upload ID');
+      }
+
+      return data.url; // Returns Cloudinary URL
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleProceedToPayment = async () => {
     if (!canProceedToBooking()) {
       alert('Please wait for availability confirmation or select different dates');
       return;
@@ -228,6 +252,21 @@ const Rooms = () => {
       return;
     }
 
+    // STEP 1: Upload ID file BEFORE payment
+    let uploadedIdUrl;
+    setIsUploadingId(true);
+    try {
+      console.log('Uploading ID file...');
+      uploadedIdUrl = await uploadIdFile(idFile);
+      console.log('ID uploaded successfully:', uploadedIdUrl);
+    } catch (error) {
+      setIsUploadingId(false);
+      alert('Failed to upload ID file: ' + error.message);
+      return; // Stop - don't proceed to payment
+    }
+    setIsUploadingId(false);
+
+    // STEP 2: Proceed to payment (only if ID upload succeeded)
     const txRef = `book_${Date.now()}`;
     const amount = price.total;
     const roomType = activeTab === '2bedroom' ? 'entire' : 'room1';
@@ -242,13 +281,16 @@ const Rooms = () => {
       email: guestEmail,
       amount: Math.round(amount * 100),
       ref: txRef,
-      onClose: function() {},
+      onClose: function() {
+        console.log('Payment cancelled by user');
+      },
       callback: function(response) {
         const paymentRef = response?.reference || response?.txRef || null;
         if (!paymentRef) {
           return alert('Payment reference missing. Please contact support.');
         }
 
+        // STEP 3: Send confirmation with uploaded ID URL
         const form = new FormData();
         form.append('name', guestName);
         form.append('email', guestEmail);
@@ -261,7 +303,8 @@ const Rooms = () => {
         form.append('tx_ref', txRef);
         form.append('provider', 'paystack');
         form.append('id_type', idType);
-        if (idFile) form.append('id_file', idFile);
+        form.append('id_file_url', uploadedIdUrl); // Send the Cloudinary URL
+        form.append('guests', numGuests);
 
         fetch(`${backendUrl}/api/bookings/confirm`, {
           method: 'POST',
@@ -460,10 +503,10 @@ const Rooms = () => {
 
                 <button
                   onClick={handleProceedToPayment}
-                  disabled={!guestName || !guestEmail || !guestPhone || !idType || !idFile || !privacyConsent || !cancellationConsent}
+                  disabled={!guestName || !guestEmail || !guestPhone || !idType || !idFile || !privacyConsent || !cancellationConsent || isUploadingId}
                   className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3 md:py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 text-sm md:text-base mt-2"
                 >
-                  Proceed to Payment
+                  {isUploadingId ? 'Uploading ID...' : 'Proceed to Payment'}
                 </button>
 
                 <p className="text-xs text-center text-gray-400 font-medium">
