@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Calendar, Users, Search, Check, X, Cookie, Star, ExternalLink } from 'lucide-react';
 import { backendUrl } from '../App';
+// import { Link } from 'react-router-dom';
+
 
 import Living from '../assets/Living.jpg';
 import Dine from '../assets/Dine.jpg';
@@ -155,7 +157,7 @@ const Hero = () => {
     }
 
     if (availability === true) {
-      window.location.href = `/rooms?checkin=${checkIn}&checkout=${checkOut}&adults=${adults}&children=${children}`;
+      window.location.href = `/bookings`;
     }
   };
 
@@ -371,7 +373,9 @@ const Hero = () => {
                     ) : availability === true ? (
                       <>
                         <Check className="w-3 h-3 sm:w-4 sm:h-4" />
-                        <span>View Rooms</span>
+                        
+                          <span>View Rooms</span>
+                        
                       </>
                     ) : (
                       <>
@@ -428,7 +432,7 @@ const Hero = () => {
           
           {/* Airbnb Reviews */}
           <a
-            href="https://www.airbnb.com/users/show/YOUR_AIRBNB_ID"
+            href="https://www.airbnb.com.au/rooms/1062424467186970425?guests=1&adults=1&s=67&unique_share_id=d51d6c71-7873-48dc-a4c0-9b44f649a68d"
             target="_blank"
             rel="noopener noreferrer"
             className="group bg-gradient-to-br from-pink-50 to-red-50 border-2 border-pink-200 rounded-2xl p-8 hover:shadow-2xl transition-all transform hover:-translate-y-2"
@@ -450,7 +454,7 @@ const Hero = () => {
 
           {/* Google Reviews */}
           <a
-            href="https://g.page/r/YOUR_GOOGLE_PLACE_ID/review"
+            href="https://share.google/QfdxzRRnW6BXybshf"
             target="_blank"
             rel="noopener noreferrer"
             className="group bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-8 hover:shadow-2xl transition-all transform hover:-translate-y-2"

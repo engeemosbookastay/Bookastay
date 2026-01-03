@@ -112,7 +112,7 @@ const GettingAround = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
       {/* Hero Banner - Dark Blue & Gold */}
-      <section className="relative pt-28 md:pt-32 pb-16 md:pb-20 px-4 overflow-hidden">
+      <section className="relative pt-28 md:pt-32 pb-16 md:pb-10 px-4 overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{

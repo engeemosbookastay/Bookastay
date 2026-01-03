@@ -133,10 +133,10 @@ const Rooms = () => {
         { name: 'High-Speed WiFi', icon: Wifi, desc: '100 Mbps fiber' },
         { name: 'Full Kitchen', icon: Utensils, desc: 'Cooking essentials' },
         { name: 'Air Conditioning', icon: Wind, desc: 'Climate control' },
-        { name: 'Smart TV', icon: Tv, desc: 'Netflix & DSTV' },
+        { name: 'Smart TV', icon: Tv, desc: 'Netflix & Pime Video' },
         { name: 'Free Parking', icon: Car, desc: 'On-site parking' },
-        { name: 'Private Balcony', icon: DoorOpen, desc: 'City & garden views' },
-        { name: 'Self Check-in', icon: Shield, desc: 'Keyless entry' },
+        { name: 'Private Balcony', icon: DoorOpen, desc: 'City & Perfect for relaxation' },
+        { name: 'Self Check-in', icon: Shield, desc: 'Contactless entry' },
         { name: 'Workspace', icon: Home, desc: 'Dedicated desk' }
       ],
       images: [Living, LiveRoom, Bedroom, Bedroomss, Room, Dine]

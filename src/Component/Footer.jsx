@@ -11,7 +11,7 @@ const Footer = () => {
         
         {/* Logo & Brand - Centered at Top */}
         <div className="flex flex-col items-center text-center mb-12">
-          <div className="flex items-center gap-4 mb-3">
+          <div className="flex items-center gap-4 mb-1">
             <img
               src={Logo}
               alt="Engeemos Bookastay Apartments Logo"
@@ -21,9 +21,11 @@ const Footer = () => {
               Engeemos Bookastay Apartments
             </h3>
           </div>
-          <p className="text-sm text-teal-300 font-medium italic">...hosting temporary stay in exotic style</p>
+          {/* Changed text-center to text-left and removed centering */}
+          <p className="text-sm text-teal-300 font-medium italic ml-20">
+            ...hosting temporary stay in exotic style
+          </p>
         </div>
-
         {/* Three Column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
 
