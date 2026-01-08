@@ -22,7 +22,7 @@ const Footer = () => {
             </h3>
           </div>
           {/* Changed text-center to text-left and removed centering */}
-          <p className="text-sm text-teal-300 font-medium italic ml-20">
+          <p className="text-sm text-teal-300 font-medium italic ml-20 sm:ml-[-25px] mt-2 sm:mt-[-20px]">
             ...hosting temporary stay in exotic style
           </p>
         </div>
