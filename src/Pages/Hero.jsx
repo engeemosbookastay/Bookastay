@@ -1,49 +1,92 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Calendar, Users, Search, Check, X, Cookie, Star, ExternalLink } from 'lucide-react';
-import { backendUrl } from '../App';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import {
+  Calendar,
+  Users,
+  Search,
+  Check,
+  X,
+  Cookie,
+  Star,
+  ExternalLink,
+} from "lucide-react";
+import { backendUrl } from "../App";
 // import { Link } from 'react-router-dom';
 
-
-import Living from '../assets/Living.jpg';
-import Dine from '../assets/Dine.jpg';
-import LiveRoom from '../assets/LiveRoom.jpg';
-import Room from '../assets/Room.jpg';
-import Bedroom from '../assets/Bedroom.jpg';
-import Bedroomss from '../assets/Bedroomss.jpg';
-import Logo from '../assets/Logo.png';
+import Living from "../assets/Living.jpg";
+import Dine from "../assets/Dine.jpg";
+import LiveRoom from "../assets/LiveRoom.jpg";
+import Room from "../assets/Room.jpg";
+import Bedroom from "../assets/Bedroom.jpg";
+import Bedroomss from "../assets/Bedroomss.jpg";
+import Logo from "../assets/Logo.png";
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [checkIn, setCheckIn] = useState('');
-  const [checkOut, setCheckOut] = useState('');
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
-  
+
   // Cookie consent state
   const [showCookieConsent, setShowCookieConsent] = useState(false);
 
   // Availability state
   const [availability, setAvailability] = useState(null);
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
-  const [availabilityError, setAvailabilityError] = useState('');
+  const [availabilityError, setAvailabilityError] = useState("");
 
   // Debounce timer
   const availabilityTimer = useRef(null);
 
   // Updated images with italicized subtitles
   const images = [
-    { src: Living, caption: "Engeemos Bookastay", subtitle: "Hosting Temporary Stay In Exotic Style", transition: "fade" },
-    { src: LiveRoom, caption: "Modern Interiors", subtitle: "Designed For Your Comfort", transition: "slide" },
-    { src: Room, caption: "Peaceful Retreats", subtitle: "Your Home Away From Home", transition: "zoom" },
-    { src: Bedroomss, caption: "Luxury Living Spaces", subtitle: "Where Comfort Meets Elegance", transition: "slide" },
-    { src: Dine, caption: "Elegant Dining", subtitle: "Create Memorable Moments", transition: "fade" },
-    { src: Bedroom, caption: "Cozy Bedrooms", subtitle: "Restful Sleep Awaits", transition: "zoom" },
-    { src: Logo, caption: "Engeemos Bookastay", subtitle: "Hosting Temporary Stay In Exotic Style", transition: "fade" },
+    {
+      src: Living,
+      caption: "Engeemos Bookastay",
+      subtitle: "Hosting Temporary Stay In Exotic Style",
+      transition: "fade",
+    },
+    {
+      src: LiveRoom,
+      caption: "Modern Interiors",
+      subtitle: "Designed For Your Comfort",
+      transition: "slide",
+    },
+    {
+      src: Room,
+      caption: "Peaceful Retreats",
+      subtitle: "Your Home Away From Home",
+      transition: "zoom",
+    },
+    {
+      src: Bedroomss,
+      caption: "Luxury Living Spaces",
+      subtitle: "Where Comfort Meets Elegance",
+      transition: "slide",
+    },
+    {
+      src: Dine,
+      caption: "Elegant Dining",
+      subtitle: "Create Memorable Moments",
+      transition: "fade",
+    },
+    {
+      src: Bedroom,
+      caption: "Cozy Bedrooms",
+      subtitle: "Restful Sleep Awaits",
+      transition: "zoom",
+    },
+    {
+      src: Logo,
+      caption: "Engeemos Bookastay",
+      subtitle: "Hosting Temporary Stay In Exotic Style",
+      transition: "fade",
+    },
   ];
 
   // Check cookie consent on mount
   useEffect(() => {
-    const cookieConsent = localStorage.getItem('cookieConsent');
+    const cookieConsent = localStorage.getItem("cookieConsent");
     if (!cookieConsent) {
       setTimeout(() => setShowCookieConsent(true), 2000);
     }
@@ -51,8 +94,8 @@ const Hero = () => {
 
   // Handle cookie consent
   const handleCookieConsent = (accepted) => {
-    localStorage.setItem('cookieConsent', accepted ? 'accepted' : 'declined');
-    localStorage.setItem('cookieConsentDate', new Date().toISOString());
+    localStorage.setItem("cookieConsent", accepted ? "accepted" : "declined");
+    localStorage.setItem("cookieConsentDate", new Date().toISOString());
     setShowCookieConsent(false);
   };
 
@@ -65,70 +108,77 @@ const Hero = () => {
   }, [images.length]);
 
   // Central availability check function
-  const checkAvailability = useCallback(async (opts = {}) => {
-    const inDate = opts.checkIn ?? checkIn;
-    const outDate = opts.checkOut ?? checkOut;
+  const checkAvailability = useCallback(
+    async (opts = {}) => {
+      const inDate = opts.checkIn ?? checkIn;
+      const outDate = opts.checkOut ?? checkOut;
 
-    if (!inDate || !outDate) {
-      setAvailability(null);
-      setAvailabilityError('');
-      setAvailabilityLoading(false);
-      return;
-    }
-
-    const start = new Date(inDate);
-    const end = new Date(outDate);
-    if (end <= start) {
-      setAvailability(false);
-      setAvailabilityError('Check-out date must be after check-in date');
-      setAvailabilityLoading(false);
-      return;
-    }
-
-    if (availabilityTimer.current) clearTimeout(availabilityTimer.current);
-    
-    setAvailabilityLoading(true);
-    setAvailabilityError('');
-
-    availabilityTimer.current = setTimeout(async () => {
-      try {
-        const roomTypes = ['entire', 'room1', 'room2'];
-        const availabilityChecks = await Promise.all(
-          roomTypes.map(async (roomType) => {
-            const params = new URLSearchParams({
-              room_type: roomType,
-              check_in_date: inDate,
-              check_out_date: outDate,
-            });
-            
-            const resp = await fetch(`${backendUrl}/api/availability?${params.toString()}`);
-            const json = await resp.json().catch(() => ({}));
-            
-            return {
-              roomType,
-              available: resp.ok && json && json.success && json.available
-            };
-          })
-        );
-
-        const availableRooms = availabilityChecks.filter(check => check.available);
-        
-        if (availableRooms.length > 0) {
-          setAvailability(true);
-          setAvailabilityError('');
-        } else {
-          setAvailability(false);
-          setAvailabilityError('No rooms available for selected dates');
-        }
-      } catch (e) {
-        setAvailability(false);
-        setAvailabilityError('Network error checking availability');
-      } finally {
+      if (!inDate || !outDate) {
+        setAvailability(null);
+        setAvailabilityError("");
         setAvailabilityLoading(false);
-        availabilityTimer.current = null;
+        return;
       }
-    }, 600);
-  }, [checkIn, checkOut]);
+
+      const start = new Date(inDate);
+      const end = new Date(outDate);
+      if (end <= start) {
+        setAvailability(false);
+        setAvailabilityError("Check-out date must be after check-in date");
+        setAvailabilityLoading(false);
+        return;
+      }
+
+      if (availabilityTimer.current) clearTimeout(availabilityTimer.current);
+
+      setAvailabilityLoading(true);
+      setAvailabilityError("");
+
+      availabilityTimer.current = setTimeout(async () => {
+        try {
+          const roomTypes = ["entire", "room1", "room2"];
+          const availabilityChecks = await Promise.all(
+            roomTypes.map(async (roomType) => {
+              const params = new URLSearchParams({
+                room_type: roomType,
+                check_in_date: inDate,
+                check_out_date: outDate,
+              });
+
+              const resp = await fetch(
+                `${backendUrl}/api/availability?${params.toString()}`
+              );
+              const json = await resp.json().catch(() => ({}));
+
+              return {
+                roomType,
+                available: resp.ok && json && json.success && json.available,
+              };
+            })
+          );
+
+          const availableRooms = availabilityChecks.filter(
+            (check) => check.available
+          );
+
+          if (availableRooms.length > 0) {
+            setAvailability(true);
+            setAvailabilityError("");
+          } else {
+            setAvailability(false);
+            setAvailabilityError("No rooms available for selected dates");
+          }
+        } catch (e) {
+          setAvailability(false);
+          setAvailabilityError("Network error checking availability");
+        } finally {
+          setAvailabilityLoading(false);
+          availabilityTimer.current = null;
+        }
+      }, 600);
+    },
+    [checkIn, checkOut]
+  );
 
   useEffect(() => {
     checkAvailability();
@@ -142,17 +192,19 @@ const Hero = () => {
 
   const handleCheckAvailability = () => {
     if (!checkIn || !checkOut) {
-      alert('Please select check-in and check-out dates');
+      alert("Please select check-in and check-out dates");
       return;
     }
 
     if (availabilityLoading) {
-      alert('Please wait while we check availability');
+      alert("Please wait while we check availability");
       return;
     }
 
     if (availability === false) {
-      alert('No rooms available for selected dates. Please choose different dates.');
+      alert(
+        "No rooms available for selected dates. Please choose different dates."
+      );
       return;
     }
 
@@ -161,31 +213,26 @@ const Hero = () => {
     }
   };
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
 
   const getTransitionClass = (index, transition) => {
     const isActive = index === currentSlide;
-    
-    switch(transition) {
-      case 'slide':
-        return isActive 
-          ? 'opacity-100 scale-100 translate-x-0' 
-          : 'opacity-0 scale-100 translate-x-full';
-      case 'zoom':
-        return isActive 
-          ? 'opacity-100 scale-100' 
-          : 'opacity-0 scale-110';
-      case 'fade':
+
+    switch (transition) {
+      case "slide":
+        return isActive
+          ? "opacity-100 scale-100 translate-x-0"
+          : "opacity-0 scale-100 translate-x-full";
+      case "zoom":
+        return isActive ? "opacity-100 scale-100" : "opacity-0 scale-110";
+      case "fade":
       default:
-        return isActive 
-          ? 'opacity-100 scale-100' 
-          : 'opacity-0 scale-100';
+        return isActive ? "opacity-100 scale-100" : "opacity-0 scale-100";
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-900">
-      
       {/* Cookie Consent Banner */}
       {showCookieConsent && (
         <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-gradient-to-r from-blue-900 to-blue-800 border-t-4 border-amber-400 shadow-2xl animate-in slide-in-from-bottom duration-500">
@@ -193,9 +240,13 @@ const Hero = () => {
             <div className="flex items-start gap-3">
               <Cookie className="w-6 h-6 text-amber-400 flex-shrink-0 mt-1" />
               <div>
-                <p className="text-white font-semibold mb-1">We Value Your Privacy</p>
+                <p className="text-white font-semibold mb-1">
+                  We Value Your Privacy
+                </p>
                 <p className="text-blue-100 text-sm">
-                  We use cookies to enhance your browsing experience and analyze our traffic. By clicking "Accept", you consent to our use of cookies.
+                  We use cookies to enhance your browsing experience and analyze
+                  our traffic. By clicking "Accept", you consent to our use of
+                  cookies.
                 </p>
               </div>
             </div>
@@ -219,13 +270,15 @@ const Hero = () => {
 
       {/* Hero Section with Full-Screen Carousel */}
       <div className="relative h-screen overflow-hidden">
-        
         {/* Image Carousel Background */}
         <div className="absolute inset-0">
           {images.map((img, index) => (
             <div
               key={index}
-              className={`absolute inset-0 transition-all duration-[2000ms] ease-in-out ${getTransitionClass(index, img.transition)}`}
+              className={`absolute inset-0 transition-all duration-[2000ms] ease-in-out ${getTransitionClass(
+                index,
+                img.transition
+              )}`}
             >
               <img
                 src={img.src}
@@ -252,9 +305,9 @@ const Hero = () => {
             <div
               key={index}
               className={`transition-all duration-700 ${
-                index === currentSlide 
-                  ? 'opacity-100 translate-x-0' 
-                  : 'opacity-0 -translate-x-full absolute'
+                index === currentSlide
+                  ? "opacity-100 translate-x-0"
+                  : "opacity-0 -translate-x-full absolute"
               }`}
             >
               <div className="bg-white/95 backdrop-blur-sm shadow-xl px-3 py-2 sm:px-6 sm:py-3 rounded-r-full border-l-4 border-teal-500 animate-slide-in">
@@ -276,9 +329,9 @@ const Hero = () => {
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`h-2 sm:h-3 rounded-full transition-all duration-500 ${
-                index === currentSlide 
-                  ? 'w-10 sm:w-16 bg-white' 
-                  : 'w-2 sm:w-3 bg-white/50 hover:bg-white/70'
+                index === currentSlide
+                  ? "w-10 sm:w-16 bg-white"
+                  : "w-2 sm:w-3 bg-white/50 hover:bg-white/70"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />
@@ -289,12 +342,15 @@ const Hero = () => {
         <div className="absolute bottom-0 left-0 right-0 z-20 pb-3 sm:pb-6">
           <div className="max-w-6xl mx-auto px-2 sm:px-4">
             <div className="bg-white/10 backdrop-blur-xl rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/20 shadow-2xl">
-              <h2 className="text-sm sm:text-lg font-bold text-white text-center mb-2 sm:mb-4">Check Availability</h2>
-              
+              <h2 className="text-sm sm:text-lg font-bold text-white text-center mb-2 sm:mb-4">
+                Check Availability
+              </h2>
+
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4 mb-2 sm:mb-4">
-                
                 <div className="col-span-1">
-                  <label className="block text-white text-[10px] sm:text-xs font-medium mb-1 sm:mb-1.5">Check In</label>
+                  <label className="block text-white text-[10px] sm:text-xs font-medium mb-1 sm:mb-1.5">
+                    Check In
+                  </label>
                   <div className="relative">
                     <Calendar className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-teal-400 pointer-events-none z-10" />
                     <input
@@ -308,7 +364,9 @@ const Hero = () => {
                 </div>
 
                 <div className="col-span-1">
-                  <label className="block text-white text-[10px] sm:text-xs font-medium mb-1 sm:mb-1.5">Check Out</label>
+                  <label className="block text-white text-[10px] sm:text-xs font-medium mb-1 sm:mb-1.5">
+                    Check Out
+                  </label>
                   <div className="relative">
                     <Calendar className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-teal-400 pointer-events-none z-10" />
                     <input
@@ -322,7 +380,9 @@ const Hero = () => {
                 </div>
 
                 <div className="col-span-1">
-                  <label className="block text-white text-[10px] sm:text-xs font-medium mb-1 sm:mb-1.5">Adults</label>
+                  <label className="block text-white text-[10px] sm:text-xs font-medium mb-1 sm:mb-1.5">
+                    Adults
+                  </label>
                   <div className="relative">
                     <Users className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-teal-400 pointer-events-none z-10" />
                     <select
@@ -330,15 +390,19 @@ const Hero = () => {
                       onChange={(e) => setAdults(Number(e.target.value))}
                       className="w-full pl-7 sm:pl-10 pr-1 sm:pr-3 py-1.5 sm:py-2.5 bg-white/10 border border-white/30 rounded-md sm:rounded-lg text-white text-[10px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all appearance-none cursor-pointer"
                     >
-                      {[1, 2, 3, 4, 5, 6].map(num => (
-                        <option key={num} value={num} className="bg-slate-800">{num}</option>
+                      {[1, 2, 3, 4, 5, 6].map((num) => (
+                        <option key={num} value={num} className="bg-slate-800">
+                          {num}
+                        </option>
                       ))}
                     </select>
                   </div>
                 </div>
 
                 <div className="col-span-1">
-                  <label className="block text-white text-[10px] sm:text-xs font-medium mb-1 sm:mb-1.5">Children</label>
+                  <label className="block text-white text-[10px] sm:text-xs font-medium mb-1 sm:mb-1.5">
+                    Children
+                  </label>
                   <div className="relative">
                     <Users className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-teal-400 pointer-events-none z-10" />
                     <select
@@ -346,8 +410,10 @@ const Hero = () => {
                       onChange={(e) => setChildren(Number(e.target.value))}
                       className="w-full pl-7 sm:pl-10 pr-1 sm:pr-3 py-1.5 sm:py-2.5 bg-white/10 border border-white/30 rounded-md sm:rounded-lg text-white text-[10px] sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all appearance-none cursor-pointer"
                     >
-                      {[0, 1, 2, 3, 4].map(num => (
-                        <option key={num} value={num} className="bg-slate-800">{num}</option>
+                      {[0, 1, 2, 3, 4].map((num) => (
+                        <option key={num} value={num} className="bg-slate-800">
+                          {num}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -359,10 +425,10 @@ const Hero = () => {
                     disabled={availabilityLoading || !checkIn || !checkOut}
                     className={`w-full px-3 sm:px-6 py-1.5 sm:py-2.5 rounded-md sm:rounded-lg font-bold text-[10px] sm:text-sm transition-all shadow-lg flex items-center justify-center gap-1 sm:gap-2 ${
                       availabilityLoading || !checkIn || !checkOut
-                        ? 'bg-gray-500 text-gray-300 cursor-not-allowed'
+                        ? "bg-gray-500 text-gray-300 cursor-not-allowed"
                         : availability === true
-                        ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-400 hover:to-emerald-400 hover:shadow-green-500/50 hover:scale-105'
-                        : 'bg-gradient-to-r from-teal-500 to-cyan-500 text-white hover:from-teal-400 hover:to-cyan-400 hover:shadow-teal-500/50 hover:scale-105'
+                        ? "bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-400 hover:to-emerald-400 hover:shadow-green-500/50 hover:scale-105"
+                        : "bg-gradient-to-r from-teal-500 to-cyan-500 text-white hover:from-teal-400 hover:to-cyan-400 hover:shadow-teal-500/50 hover:scale-105"
                     }`}
                   >
                     {availabilityLoading ? (
@@ -373,9 +439,8 @@ const Hero = () => {
                     ) : availability === true ? (
                       <>
                         <Check className="w-3 h-3 sm:w-4 sm:h-4" />
-                        
-                          <span>View Rooms</span>
-                        
+
+                        <span>View Rooms</span>
                       </>
                     ) : (
                       <>
@@ -391,36 +456,52 @@ const Hero = () => {
                 <div className="mb-2 sm:mb-3 p-2 sm:p-3 bg-blue-500/20 border-2 border-blue-400/50 rounded-md sm:rounded-lg backdrop-blur-md">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 sm:w-4 sm:h-4 border-2 border-blue-300 border-t-transparent rounded-full animate-spin"></div>
-                    <p className="text-[10px] sm:text-xs font-bold text-blue-100">Checking availability...</p>
+                    <p className="text-[10px] sm:text-xs font-bold text-blue-100">
+                      Checking availability...
+                    </p>
                   </div>
                 </div>
               )}
 
-              {!availabilityLoading && availability === true && checkIn && checkOut && (
-                <div className="mb-2 sm:mb-3 p-2 sm:p-3 bg-green-500/20 border-2 border-green-400/50 rounded-md sm:rounded-lg backdrop-blur-md">
-                  <p className="text-[10px] sm:text-xs font-bold text-green-100 flex items-center gap-2">
-                    <Check size={14} className="text-green-300 hidden sm:inline" />
-                    Great news! We have rooms available for your dates
-                  </p>
-                </div>
-              )}
+              {!availabilityLoading &&
+                availability === true &&
+                checkIn &&
+                checkOut && (
+                  <div className="mb-2 sm:mb-3 p-2 sm:p-3 bg-green-500/20 border-2 border-green-400/50 rounded-md sm:rounded-lg backdrop-blur-md">
+                    <p className="text-[10px] sm:text-xs font-bold text-green-100 flex items-center gap-2">
+                      <Check
+                        size={14}
+                        className="text-green-300 hidden sm:inline"
+                      />
+                      Great news! We have rooms available for your dates
+                    </p>
+                  </div>
+                )}
 
-              {!availabilityLoading && availability === false && availabilityError && (
-                <div className="mb-2 sm:mb-3 p-2 sm:p-3 bg-red-500/20 border-2 border-red-400/50 rounded-md sm:rounded-lg backdrop-blur-md">
-                  <p className="text-[10px] sm:text-xs font-bold text-red-100 flex items-center gap-2">
-                    <X size={14} className="text-red-300 hidden sm:inline" />
-                    {availabilityError}
-                  </p>
-                  <p className="text-[10px] sm:text-xs text-red-200 mt-1">Please try different dates</p>
-                </div>
-              )}
+              {!availabilityLoading &&
+                availability === false &&
+                availabilityError && (
+                  <div className="mb-2 sm:mb-3 p-2 sm:p-3 bg-red-500/20 border-2 border-red-400/50 rounded-md sm:rounded-lg backdrop-blur-md">
+                    <p className="text-[10px] sm:text-xs font-bold text-red-100 flex items-center gap-2">
+                      <X size={14} className="text-red-300 hidden sm:inline" />
+                      {availabilityError}
+                    </p>
+                    <p className="text-[10px] sm:text-xs text-red-200 mt-1">
+                      Please try different dates
+                    </p>
+                  </div>
+                )}
 
-              <p className="text-center text-gray-300 text-[10px] sm:text-xs">
-                {availability === true 
-                  ? '✨ Rooms are available - Click "View Rooms" to see options and book'
-                  : 'Enter your dates and number of guests to check availability'
-                }
-              </p>
+              <div className="text-center text-gray-300 text-[10px] sm:text-xs space-y-1">
+                <p>
+                  {availability === true
+                    ? '✨ Rooms are available - Click "View Rooms" to see options and book'
+                    : "Enter your dates and number of guests to check availability"}
+                </p>
+                <p className="text-yellow-400">
+                   5% discount for 7+ days • 10% discount for 30+ days
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -429,7 +510,6 @@ const Hero = () => {
       {/* Review Boxes - Before About Us */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid md:grid-cols-2 gap-6">
-          
           {/* Airbnb Reviews */}
           <a
             href="https://www.airbnb.com.au/rooms/1062424467186970425?guests=1&adults=1&s=67&unique_share_id=d51d6c71-7873-48dc-a4c0-9b44f649a68d"
@@ -439,17 +519,24 @@ const Hero = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Airbnb Reviews</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  Airbnb Reviews
+                </h3>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-pink-500 text-pink-500" />
+                    <Star
+                      key={i}
+                      className="w-5 h-5 fill-pink-500 text-pink-500"
+                    />
                   ))}
                   <span className="ml-2 text-gray-700 font-semibold">5.0</span>
                 </div>
               </div>
               <ExternalLink className="w-6 h-6 text-pink-600 group-hover:scale-110 transition-transform" />
             </div>
-            <p className="text-gray-600">See what our guests say about their stay</p>
+            <p className="text-gray-600">
+              See what our guests say about their stay
+            </p>
           </a>
 
           {/* Google Reviews */}
@@ -461,10 +548,15 @@ const Hero = () => {
           >
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Google Reviews</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  Google Reviews
+                </h3>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-blue-500 text-blue-500" />
+                    <Star
+                      key={i}
+                      className="w-5 h-5 fill-blue-500 text-blue-500"
+                    />
                   ))}
                   <span className="ml-2 text-gray-700 font-semibold">5.0</span>
                 </div>
@@ -473,7 +565,6 @@ const Hero = () => {
             </div>
             <p className="text-gray-600">Read our guest reviews on Google</p>
           </a>
-
         </div>
       </div>
     </div>
