@@ -526,7 +526,7 @@ const Rooms = () => {
       ref: txRef,
       onClose: function () {
         console.log("Payment cancelled by user");
-      },
+      },            
       callback: function (response) {
         const paymentRef = response?.reference || response?.txRef || null;
         if (!paymentRef) {
