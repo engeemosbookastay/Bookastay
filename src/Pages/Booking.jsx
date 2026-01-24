@@ -63,6 +63,11 @@ const Booking = () => {
   const [availabilityError, setAvailabilityError] = useState("");
   const availabilityTimer = React.useRef(null);
 
+  // Booking success state
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // Get URL parameters on mount and check for verification redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -550,18 +555,36 @@ const Booking = () => {
         form.append("verification_reference", verificationReference);
         form.append("verification_status", "verified");
 
+        setIsSubmitting(true);
+
         fetch(`${backendUrl}/api/bookings/confirm`, {
           method: "POST",
           body: form,
         })
           .then(async (r) => {
             const data = await r.json().catch(() => ({}));
+            setIsSubmitting(false);
+
             if (!r.ok || data.error) {
               return alert(
                 "Booking failed: " +
                   (data?.error || data?.message || "Unknown error")
               );
             }
+
+            // Store booking details for success modal
+            setBookingDetails({
+              transactionRef: paymentRef,
+              name: guestName,
+              email: guestEmail,
+              roomType: roomType === "entire" ? "Entire Apartment" : "Private Room",
+              checkIn: checkIn,
+              checkOut: checkOut,
+              guests: numGuests,
+              total: amount,
+            });
+
+            // Reset form fields
             setGuestName("");
             setGuestEmail("");
             setGuestPhone("");
@@ -579,9 +602,12 @@ const Booking = () => {
             setIsVerified(false);
             setVerificationReference(null);
             setVerificationUrl(null);
-            alert("Booking confirmed successfully!");
+
+            // Show success modal
+            setBookingSuccess(true);
           })
           .catch((err) => {
+            setIsSubmitting(false);
             alert("Confirmation failed: " + err.message);
           });
       },
@@ -602,6 +628,74 @@ const Booking = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+      {/* Booking Success Modal */}
+      {bookingSuccess && bookingDetails && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl md:rounded-3xl shadow-2xl border border-green-500/30 max-w-md w-full">
+            <div className="p-6 md:p-8 text-center">
+              {/* Success Icon */}
+              <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center">
+                <Check size={40} className="text-white" />
+              </div>
+
+              <h2 className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-300 mb-2">
+                Booking Confirmed!
+              </h2>
+              <p className="text-gray-400 text-sm mb-6">
+                Your reservation has been successfully confirmed. A confirmation email has been sent to {bookingDetails.email}
+              </p>
+
+              {/* Booking Summary */}
+              <div className="bg-slate-700/50 rounded-xl p-4 mb-6 text-left">
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Booking ID:</span>
+                    <span className="text-amber-400 font-mono text-xs">{bookingDetails.transactionRef}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Room:</span>
+                    <span className="text-white">{bookingDetails.roomType}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Check-in:</span>
+                    <span className="text-white">{new Date(bookingDetails.checkIn).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Check-out:</span>
+                    <span className="text-white">{new Date(bookingDetails.checkOut).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Guests:</span>
+                    <span className="text-white">{bookingDetails.guests}</span>
+                  </div>
+                  <div className="flex justify-between border-t border-slate-600 pt-2 mt-2">
+                    <span className="text-gray-300 font-semibold">Total Paid:</span>
+                    <span className="text-green-400 font-bold">N{Number(bookingDetails.total).toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Important Info */}
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 mb-6 text-left">
+                <p className="text-amber-400 text-xs font-semibold mb-1">Important:</p>
+                <p className="text-gray-300 text-xs">Check-in: 2:00 PM | Check-out: 12:00 PM</p>
+                <p className="text-gray-300 text-xs">Please bring a valid ID for verification</p>
+              </div>
+
+              <button
+                onClick={() => {
+                  setBookingSuccess(false);
+                  setBookingDetails(null);
+                }}
+                className="w-full py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 font-bold rounded-xl hover:from-amber-400 hover:to-yellow-400 transition"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Booking Modal */}
       {showBookingModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
