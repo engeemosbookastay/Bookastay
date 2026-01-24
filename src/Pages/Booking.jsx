@@ -31,7 +31,7 @@ import Room from "../assets/Room.jpg";
 import Bedroom from "../assets/Bedroom.jpg";
 import Bedroomss from "../assets/Bedroomss.jpg";
 
-const Rooms = () => {
+const Booking = () => {
   const [activeTab, setActiveTab] = useState("2bedroom");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
@@ -1293,4 +1293,4 @@ const Rooms = () => {
   );
 };
 
-export default Rooms;
+export default Booking;
