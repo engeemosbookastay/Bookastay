@@ -10,8 +10,12 @@ export default defineConfig({
     tailwindcss(),
   ],
    server: {
-    port: 5174,
-    strictPort: true
+    port: 5177,
+    strictPort: true,
+      allowedHosts: [
+      'london-segments-responding-brother.trycloudflare.com', // your tunnel URL
+      'localhost'
+    ],
   }
   
 })

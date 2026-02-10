@@ -175,7 +175,7 @@ const GettingAround = () => {
             
             <div className="h-[400px] md:h-[500px]">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3958.0123456789!2d3.3445678!3d7.1234567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zN8KwMDcnMjQuNSJOIDPCsDIwJzQwLjQiRQ!5e0!3m2!1sen!2sng!4v1234567890123!5m2!1sen!2sng"
+                src="https://www.google.com/maps/dir/-33.6852814,150.8787468/Engeemos+Bookastay+Apartments,+No+5+Adesola+Babarinde+Close,+Prof.+Adewunmi+Abioye+Avenue,+off+Professor,+Abeokuta+111105,+Ogun+State/@7.1524544,3.3089527,19.52z/data=!4m8!4m7!1m0!1m5!1m1!1s0x103a4de7a0780729:0xc99aa48565531ca7!2m2!1d3.3096681!2d7.1528767?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
