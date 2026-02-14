@@ -154,7 +154,7 @@ const GettingAround = () => {
         </div>
       </section>
 
-      {/* Location */}
+      {/* Location - Airbnb Style (General Area Only) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="relative group mb-12">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-blue-900/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all"></div>
@@ -165,36 +165,42 @@ const GettingAround = () => {
                   <MapPin className="w-6 h-6 text-slate-900" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-2">Our Location</h2>
+                  <h2 className="text-2xl font-bold text-white mb-2">Where you'll be</h2>
                   <p className="text-gray-300 text-lg">
-                    <strong>No 5, Adesola Babarinde Close</strong>, Off Professor Adewunmi Abioye Avenue, Olomore, Abeokuta
+                    Olomore, Abeokuta, Ogun State, Nigeria
                   </p>
                 </div>
               </div>
             </div>
-            
-            <div className="h-[400px] md:h-[500px]">
+
+            {/* Map with area circle overlay */}
+            <div className="relative h-[400px] md:h-[500px]">
               <iframe
-                src="https://maps.app.goo.gl/7HfaFm48ysqrTZWa7"
+                src="https://maps.google.com/maps?q=Olomore,+Abeokuta,+Ogun+State&t=m&z=14&output=embed&iwloc=near"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen=""
                 loading="lazy"
-                title="Location"
+                title="General area - Olomore, Abeokuta"
               />
+              {/* Airbnb-style circle overlay to indicate general area */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="w-48 h-48 md:w-64 md:h-64 rounded-full bg-amber-500/15 border-2 border-amber-500/40 backdrop-blur-[1px]"></div>
+              </div>
             </div>
-            
+
+            {/* Exact location notice */}
             <div className="p-6 md:p-8 bg-slate-800/50">
-              <a
-                href="https://maps.app.goo.gl/WNAr99EDRRyCWmDU9"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 px-6 py-3 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition-all shadow-lg hover:shadow-amber-500/50 hover:scale-105"
-              >
-                <Navigation className="w-5 h-5" />
-                Open in Google Maps
-              </a>
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-white font-semibold text-base">Exact location provided after booking</p>
+                  <p className="text-gray-400 text-sm mt-1">
+                    The property is located in the Olomore area of Abeokuta. You'll receive the full address and directions once your booking is confirmed.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
