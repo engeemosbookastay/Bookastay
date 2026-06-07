@@ -493,10 +493,15 @@ const Hero = () => {
                 )}
 
               <div className="text-center text-gray-300 text-[10px] sm:text-xs space-y-1">
-                <p>
-                  {availability === true
-                    ? '✨ Rooms are available - Click "View Rooms" to see options and book'
-                    : "Enter your dates and number of guests to check availability"}
+                <p className="flex items-center justify-center gap-1">
+                  {availability === true ? (
+                    <>
+                      <Check size={12} className="text-green-400 shrink-0" />
+                      {'Rooms are available - Click "View Rooms" to see options and book'}
+                    </>
+                  ) : (
+                    "Enter your dates and number of guests to check availability"
+                  )}
                 </p>
                 <p className="text-yellow-400">
                    5% discount for 7+ days • 10% discount for 30+ days

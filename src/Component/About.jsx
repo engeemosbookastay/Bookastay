@@ -1,7 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, Shield, Crown, Sparkles, Award, Heart, Star } from 'lucide-react';
+import { backendUrl } from '../App';
+
+const DEFAULT_PARAGRAPHS = [
+  `<strong>Engeemos Bookastay Ventures</strong> is a registered business name. We currently oversee hosting services for <strong>Oluwadarasimi Villa</strong> a block of flats boasting of modern facilities and aesthetically styled interior. Ensconced in a serene and secure part of <strong>Olomore</strong>, Abeokuta, this property is close to Lafenwa, Ita-Oshin, Brewery, Ibara-Omida, Oke-Ilewo, and just about 20-25 minutes of driving to Kuto/Oke-Mosan area and Olusegun Obasanjo Presidential Library.`,
+  `Rare find tourist attraction centres like the recently revamped Olumo Rock, the Kuti Heritage Museum and the Adire Mall, Itoku are just few minutes of driving away.`,
+  `At <strong>Engeemos Bookastay</strong>, we put <strong>guests' satisfaction and privacy</strong> at the core of our service delivery, thus ensuring guests never felt like they have left their homes <strong>-a sharp contrast to the prevailing atmosphere at hotels</strong>.`,
+  `As part of our future plan, we intend to bring on board more verified, comfortable and guests-centric short stay accommodations.`,
+];
 
 const About = () => {
+  const [paragraphs, setParagraphs] = useState(DEFAULT_PARAGRAPHS);
+
+  useEffect(() => {
+    fetch(`${backendUrl}/api/content/about`)
+      .then(r => r.json())
+      .then(d => {
+        if (d.success && d.content?.value?.paragraphs?.length) {
+          setParagraphs(d.content.value.paragraphs);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="relative py-20 md:py-32 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       
@@ -37,22 +58,10 @@ const About = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-blue-900/20 rounded-2xl md:rounded-3xl blur-xl md:blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
             <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/20 rounded-2xl md:rounded-3xl p-8 md:p-12 shadow-2xl">
               <div className="prose prose-invert prose-lg md:prose-xl max-w-none">
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6">
-                  <span className="text-amber-400 font-semibold text-lg md:text-xl">Engeemos Bookastay Ventures</span> is a registered business name. We currently oversee hosting services for <span className="text-amber-400 font-semibold">Oluwadarasimi Villa</span> a block of flats boasting of modern facilities and aesthetically styled interior. Ensconced in a serene and secure part of <span className="text-amber-400 font-semibold">Olomore</span>, Abeokuta, this property is close to Lafenwa, Ita-Oshin, Brewery, Ibara-Omida, Oke-Ilewo, and just about 20-25 minutes of driving to Kuto/Oke-Mosan area and Olusegun Obasanjo Presidential Library.
-                </p>
-                
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6">
-                  Rare find tourist attraction centres like the recently revamped Olumo Rock, the Kuti Heritage Museum and the Adire Mall, Itoku are just few minutes of driving away.
-                </p>
-                
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6">
-                  At <span className="text-amber-400 font-semibold">Engeemos Bookastay</span>, we put <span className="text-amber-400 font-semibold">guests' satisfaction and privacy</span> at the core of our service delivery, thus ensuring guests never felt like they have left their homes <span className="text-amber-400 font-semibold">-a sharp contrast to the prevailing atmosphere at hotels</span>.
-                </p>
-                
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed">
-                  As part of our future plan, we intend to bring on board more verified, comfortable and guests-centric short stay accommodations.
-                </p>
-                {/* REMOVED: "Watch this space!" */}
+                {paragraphs.map((para, i) => (
+                  <p key={i} className="text-gray-300 text-base md:text-lg leading-relaxed mb-6"
+                    dangerouslySetInnerHTML={{ __html: para }} />
+                ))}
               </div>
             </div>
           </div>

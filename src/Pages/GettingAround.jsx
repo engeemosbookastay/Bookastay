@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapPin, ShoppingCart, Utensils, Camera, Music, DollarSign, Fuel, Navigation, Clock, ExternalLink, Crown, Train } from 'lucide-react';
+import { backendUrl } from '../App';
 
-const GettingAround = () => {
-  const [activeCategory, setActiveCategory] = useState('all');
+const categoryMeta = {
+  tourism:   { icon: Camera,       gradient: 'from-blue-500 to-cyan-500',      bgGradient: 'from-blue-500/10 to-cyan-500/10' },
+  food:      { icon: Utensils,     gradient: 'from-orange-500 to-amber-500',   bgGradient: 'from-orange-500/10 to-amber-500/10' },
+  nightlife: { icon: Music,        gradient: 'from-pink-500 to-rose-500',      bgGradient: 'from-pink-500/10 to-rose-500/10' },
+  shopping:  { icon: ShoppingCart, gradient: 'from-purple-500 to-pink-500',    bgGradient: 'from-purple-500/10 to-pink-500/10' },
+  transport: { icon: Train,        gradient: 'from-green-500 to-teal-500',     bgGradient: 'from-green-500/10 to-teal-500/10' },
+  markets:   { icon: ShoppingCart, gradient: 'from-purple-500 to-pink-500',    bgGradient: 'from-purple-500/10 to-pink-500/10' },
+};
 
-  const categories = {
+const FALLBACK_CATEGORIES = {
     tourism: {
       icon: Camera,
       title: 'Tourism, Play & Games',
@@ -108,6 +115,32 @@ const GettingAround = () => {
       ]
     }
   };
+
+  const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
+
+  useEffect(() => {
+    fetch(`${backendUrl}/api/content/getting_around`)
+      .then(r => r.json())
+      .then(d => {
+        if (d.success && d.content?.value?.categories?.length) {
+          const dynamic = {};
+          d.content.value.categories.forEach(cat => {
+            const meta = categoryMeta[cat.key] || categoryMeta.tourism;
+            dynamic[cat.key] = {
+              ...meta,
+              title: cat.title,
+              items: (cat.items || []).map(item => ({
+                name: item.name,
+                time: item.time,
+                link: item.link || null,
+              })),
+            };
+          });
+          setCategories(dynamic);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
@@ -259,24 +292,30 @@ const GettingAround = () => {
                     </div>
                     
                     <div className="p-4 space-y-2">
-                      {category.items.map((item, idx) => (
-                        <a
-                          key={idx}
-                          href={item.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-700/50 transition-all group/item"
-                        >
-                          <div className="flex-1">
-                            <p className="font-medium text-white text-sm">{item.name}</p>
-                            <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
-                              <Clock className="w-3 h-3" />
-                              {item.time}
+                      {category.items.map((item, idx) => {
+                        const Inner = (
+                          <>
+                            <div className="flex-1">
+                              <p className="font-medium text-white text-sm">{item.name}</p>
+                              <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
+                                <Clock className="w-3 h-3" />
+                                {item.time}
+                              </div>
                             </div>
+                            {item.link && <ExternalLink className="w-4 h-4 text-gray-500 group-hover/item:text-amber-400 transition-colors" />}
+                          </>
+                        );
+                        return item.link ? (
+                          <a key={idx} href={item.link} target="_blank" rel="noopener noreferrer"
+                            className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-700/50 transition-all group/item">
+                            {Inner}
+                          </a>
+                        ) : (
+                          <div key={idx} className="flex items-center justify-between p-3 rounded-lg group/item">
+                            {Inner}
                           </div>
-                          <ExternalLink className="w-4 h-4 text-gray-500 group-hover/item:text-amber-400 transition-colors" />
-                        </a>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
