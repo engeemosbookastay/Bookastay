@@ -20,6 +20,7 @@ import PrivacyPolicy from "./Pages/PrivacyPolicy";
 import Cancellation from "./Pages/Cancellation";
 import Blog from "./Pages/Blog";
 import BlogPost from "./Pages/BlogPost";
+import Rooms from "./Pages/Rooms";
 import VerificationComplete from "./Component/Verificationcomplete";
 // Support multiple possible env names and a safe localhost default
 export const backendUrl = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:4000';
@@ -46,6 +47,7 @@ const App = () => {
         <Route path="/cancellation-policy" element={<Cancellation />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/rooms" element={<Rooms />} />
       </Routes>
       <Footer />
     </>

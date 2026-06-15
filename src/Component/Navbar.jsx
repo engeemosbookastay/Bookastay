@@ -83,20 +83,12 @@ const Navbar = () => {
                 <ChevronDown size={16} className="group-hover:rotate-180 transition-transform" />
               </button>
               <div className="absolute top-full left-0 mt-2 w-56 bg-white backdrop-blur-lg rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-gray-200 overflow-hidden">
-                <Link 
-                  to="/bookings?type=2bedroom" 
+                <Link
+                  to="/rooms"
                   className="block px-5 py-3 text-gray-700 hover:text-blue-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-amber-50 transition-all"
                 >
-                  <div className="font-semibold">2 Bedroom Apartment</div>
-                  <div className="text-xs text-amber-600 mt-0.5">Entire Place</div>
-                </Link>
-                <div className="border-t border-gray-200"></div>
-                <Link 
-                  to="/bookings?type=1bedroom" 
-                  className="block px-5 py-3 text-gray-700 hover:text-blue-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-amber-50 transition-all"
-                >
-                  <div className="font-semibold">1 Bedroom Suite</div>
-                  <div className="text-xs text-amber-600 mt-0.5">Private Room</div>
+                  <div className="font-semibold">View All Rooms</div>
+                  <div className="text-xs text-amber-600 mt-0.5">See all available suites</div>
                 </Link>
               </div>
             </div>
@@ -208,21 +200,13 @@ const Navbar = () => {
               </button>
               <div className={`overflow-hidden transition-all duration-300 ${roomsOpen ? 'max-h-48' : 'max-h-0'}`}>
                 <div className="ml-4 mt-1 space-y-1 pb-1">
-                  <Link 
-                    to="/bookings?type=2bedroom" 
+                  <Link
+                    to="/rooms"
                     className="block px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-amber-50 rounded-lg transition-all"
                     onClick={() => setIsOpen(false)}
                   >
-                    <div className="font-semibold">2 Bedroom Apartment</div>
-                    <div className="text-xs text-amber-600 mt-0.5">Entire Place</div>
-                  </Link>
-                  <Link 
-                    to="/bookings?type=1bedroom" 
-                    className="block px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-gradient-to-r hover:from-blue-50 hover:to-amber-50 rounded-lg transition-all"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <div className="font-semibold">1 Bedroom Suite</div>
-                    <div className="text-xs text-amber-600 mt-0.5">Private Room</div>
+                    <div className="font-semibold">View All Rooms</div>
+                    <div className="text-xs text-amber-600 mt-0.5">See all available suites</div>
                   </Link>
                 </div>
               </div>

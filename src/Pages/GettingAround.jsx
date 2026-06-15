@@ -116,6 +116,8 @@ const FALLBACK_CATEGORIES = {
     }
   };
 
+const GettingAround = () => {
+  const [activeCategory, setActiveCategory] = useState('all');
   const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
 
   useEffect(() => {

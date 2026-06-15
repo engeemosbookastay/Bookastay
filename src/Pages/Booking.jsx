@@ -111,6 +111,9 @@ const Booking = () => {
   const [bookingDetails, setBookingDetails] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // ── Scroll ref for room details
+  const detailsRef = useRef(null);
+
   // ── Availability
   const [availability, setAvailability] = useState(null);
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
@@ -584,22 +587,13 @@ const Booking = () => {
                     </div>
                   </div>
 
-                  {/* Discount code */}
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">Discount Code (optional)</label>
-                    <div className="flex gap-2">
-                      <input value={discountCode} onChange={e => { setDiscountCode(e.target.value); setDiscountResult(null); setDiscountError(""); }}
-                        placeholder="e.g. WELCOME10" className="flex-1 px-4 py-2.5 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 text-sm" />
-                      <button onClick={validateDiscountCode} disabled={!discountCode || discountLoading}
-                        className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 rounded-xl font-bold text-sm disabled:opacity-50">
-                        {discountLoading ? "..." : <Tag size={16} />}
-                      </button>
+                  {/* Applied discount confirmation */}
+                  {discountResult?.valid && price.discountCode > 0 && (
+                    <div className="bg-pink-500/10 border border-pink-500/30 rounded-xl p-3 flex justify-between items-center text-sm">
+                      <span className="text-pink-300 flex items-center gap-1"><Check size={14} /> Code: <strong>{discountCode}</strong></span>
+                      <span className="text-pink-400 font-bold">-₦{price.discountCode.toLocaleString()}</span>
                     </div>
-                    {discountResult?.valid && (
-                      <p className="text-green-400 text-xs mt-1 flex items-center gap-1"><Check size={12} /> {discountResult.message}</p>
-                    )}
-                    {discountError && <p className="text-red-400 text-xs mt-1">{discountError}</p>}
-                  </div>
+                  )}
 
                   {/* Agreements */}
                   <div className="border-t-2 border-amber-500/20 pt-4 space-y-3">
@@ -724,7 +718,7 @@ const Booking = () => {
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 text-center">Select Your Suite</h2>
           <div className="flex gap-4 md:gap-6 justify-center flex-wrap">
             {Object.entries(rooms).map(([key, option]) => (
-              <button key={key} onClick={() => { setActiveTab(key); setCurrentImageIndex(0); setNumGuests(2); setAvailability(null); }}
+              <button key={key} onClick={() => { setActiveTab(key); setCurrentImageIndex(0); setNumGuests(2); setAvailability(null); setTimeout(() => detailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); }}
                 className={`relative group px-8 md:px-12 py-6 md:py-8 rounded-2xl font-semibold transition-all transform hover:scale-105 overflow-hidden ${activeTab === key ? "shadow-2xl shadow-amber-500/50" : "bg-slate-800/50 border-2 border-slate-700 hover:border-amber-500/50"}`}>
                 <div className={`absolute inset-0 bg-gradient-to-r ${option.accentColor || "from-blue-900 to-blue-800"} ${activeTab === key ? "opacity-100" : "opacity-0"} transition-opacity`}></div>
                 <div className="relative z-10">
@@ -744,7 +738,7 @@ const Booking = () => {
       </div>
 
       {/* Main content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+      <div ref={detailsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
         <div className="grid lg:grid-cols-5 gap-8 md:gap-12">
           {/* Left: details */}
           <div className="lg:col-span-3 space-y-8">
@@ -910,7 +904,31 @@ const Booking = () => {
                         </div>
                       )}
                     </div>
+                    {/* Discount code */}
+                    <div className="mb-4">
+                      <label className="block text-xs font-bold text-gray-300 uppercase mb-1.5">Discount Code</label>
+                      <div className="flex gap-2">
+                        <input value={discountCode} onChange={e => { setDiscountCode(e.target.value); setDiscountResult(null); setDiscountError(""); }}
+                          placeholder="e.g. WELCOME10"
+                          className="flex-1 px-3 py-2 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 text-xs" />
+                        <button onClick={validateDiscountCode} disabled={!discountCode.trim() || discountLoading}
+                          className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 rounded-xl font-bold text-xs disabled:opacity-50 whitespace-nowrap">
+                          {discountLoading ? "..." : "Apply"}
+                        </button>
+                      </div>
+                      {discountResult?.valid && (
+                        <p className="text-green-400 text-xs mt-1 flex items-center gap-1"><Check size={12} /> {discountResult.message}</p>
+                      )}
+                      {discountError && <p className="text-red-400 text-xs mt-1">{discountError}</p>}
+                    </div>
+
                     <div className="mb-6 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 p-4 rounded-xl border-2 border-amber-500/30">
+                      {price.discountCode > 0 && (
+                        <div className="flex justify-between text-pink-400 font-semibold text-sm mb-2">
+                          <span>Code ({discountCode})</span>
+                          <span>-₦{price.discountCode.toLocaleString()}</span>
+                        </div>
+                      )}
                       <div className="flex justify-between text-xl font-bold">
                         <span className="text-white">Total</span>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">₦{price.total.toLocaleString()}</span>
