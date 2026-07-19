@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { backendUrl } from "../App";
 import {
-  Users, Home, Bed, Star, ChevronLeft, ChevronRight, Upload, Wifi, Tv,
+  Users, Home, Bed, Star, ChevronLeft, ChevronRight, Wifi, Tv,
   Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Calendar,
   Sparkles, FileText, Clock, Tag, CreditCard, Percent,
 } from "lucide-react";
@@ -85,9 +85,13 @@ const Booking = () => {
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
-  const [idType, setIdType] = useState("");
-  const [idFile, setIdFile] = useState(null);
-  const [idFileUrl, setIdFileUrl] = useState("");
+
+  // ── Email OTP verification
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpCode, setOtpCode] = useState("");
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState("");
 
   // ── Discount code
   const [discountCode, setDiscountCode] = useState("");
@@ -106,7 +110,7 @@ const Booking = () => {
 
   // ── Modal / flow state
   const [showBookingModal, setShowBookingModal] = useState(false);
-  const [uploadStep, setUploadStep] = useState("form"); // form | uploading | done
+  const [uploadStep, setUploadStep] = useState("form"); // form | done
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [bookingDetails, setBookingDetails] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -234,6 +238,48 @@ const Booking = () => {
 
   const price = calculatePrice();
 
+  // ── Email OTP verification
+  const sendOtp = async () => {
+    if (!guestEmail.trim()) { setOtpError("Enter your email address first"); return; }
+    setOtpLoading(true); setOtpError("");
+    try {
+      const res = await fetch(`${backendUrl}/api/otp/send`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: guestEmail }),
+      });
+      const d = await res.json();
+      if (d.success) { setOtpSent(true); setOtpCode(""); }
+      else setOtpError(d.message || "Failed to send code");
+    } catch { setOtpError("Network error. Please try again."); }
+    finally { setOtpLoading(false); }
+  };
+
+  const verifyOtp = async () => {
+    if (!otpCode.trim()) { setOtpError("Enter the 6-digit code sent to your email"); return; }
+    setOtpLoading(true); setOtpError("");
+    try {
+      const res = await fetch(`${backendUrl}/api/otp/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: guestEmail, code: otpCode }),
+      });
+      const d = await res.json();
+      if (d.success && d.verified) { setEmailVerified(true); setOtpError(""); }
+      else setOtpError(d.message || "Incorrect code");
+    } catch { setOtpError("Network error. Please try again."); }
+    finally { setOtpLoading(false); }
+  };
+
+  // Reset email verification when email changes
+  const handleEmailChange = (value) => {
+    setGuestEmail(value);
+    if (emailVerified) { setEmailVerified(false); setOtpSent(false); setOtpCode(""); setOtpError(""); }
+  };
+
+  // Phone formatted for backend storage
+  const fullPhone = guestPhone ? `+234${guestPhone}` : '';
+
   // ── Image nav
   const nextImage = () => setCurrentImageIndex((currentImageIndex + 1) % (currentOption?.images?.length || 1));
   const prevImage = () => setCurrentImageIndex((currentImageIndex - 1 + (currentOption?.images?.length || 1)) % (currentOption?.images?.length || 1));
@@ -260,30 +306,21 @@ const Booking = () => {
     finally { setDiscountLoading(false); }
   };
 
-  // ── Upload ID document only (no ShuftiPro)
-  const handleUploadAndProceed = async () => {
-    if (!guestName || !guestEmail || !guestPhone || !idType || !idFile) {
-      alert("Please fill in all fields and upload your ID document");
+  // ── Confirm details, move to payment (ID is checked physically at check-in)
+  const handleContinueToPayment = () => {
+    if (!guestName || !guestEmail || !guestPhone) {
+      alert("Please fill in all fields including your phone number");
+      return;
+    }
+    if (!emailVerified) {
+      alert("Please verify your email address before proceeding");
       return;
     }
     if (!privacyConsent || !cancellationConsent) {
       alert("Please agree to both the Privacy Policy and Cancellation Policy");
       return;
     }
-
-    setUploadStep("uploading");
-    try {
-      const formData = new FormData();
-      formData.append("id_file", idFile);
-      const response = await fetch(`${backendUrl}/api/bookings/upload-id`, { method: "POST", body: formData });
-      const data = await response.json();
-      if (!response.ok || !data.success) throw new Error(data.message || "Upload failed");
-      setIdFileUrl(data.url);
-      setUploadStep("done");
-    } catch (error) {
-      alert("Failed to upload ID: " + error.message);
-      setUploadStep("form");
-    }
+    setUploadStep("done");
   };
 
   // ── Paystack payment
@@ -311,28 +348,39 @@ const Booking = () => {
 
   // ── Klump payment
   const handleKlumpPayment = () => {
-    if (!window.Klump) return alert("Klump payment library failed to load. Please refresh and try again.");
     const klumpKey = import.meta.env.VITE_KLUMP_PUBLIC_KEY || "";
     if (!klumpKey) return alert("Klump is not configured for this site.");
 
-    const amount = price.depositAmount;
-    const pay = new window.Klump({
-      publicKey: klumpKey,
-      data: {
-        amount: amount,
-        shipping_fee: 0,
-        currency: "NGN",
-        merchant_reference: `book_${Date.now()}`,
-        meta_data: { name: guestName, email: guestEmail, phone: guestPhone },
-        items: [{ image_url: "", item_url: "", name: `BookAStay - ${currentOption.title}`, unit_price: amount, quantity: 1 }],
-      },
-      onSuccess: (data) => submitBooking("klump", data.data?.merchant_reference || data.merchant_reference, amount),
-      onError: (err) => alert("Klump payment error: " + (err?.message || "Unknown error")),
-      onLoad: () => {},
-      onOpen: () => {},
-      onClose: () => {},
-    });
-    pay.show();
+    const launchKlump = () => {
+      if (!window.Klump) return alert("Klump payment library failed to load. Please try a different payment method.");
+      const amount = price.depositAmount;
+      const pay = new window.Klump({
+        publicKey: klumpKey,
+        data: {
+          amount,
+          shipping_fee: 0,
+          currency: "NGN",
+          merchant_reference: `book_${Date.now()}`,
+          meta_data: { name: guestName, email: guestEmail, phone: fullPhone },
+          items: [{ image_url: "", item_url: "", name: `BookAStay - ${currentOption.title}`, unit_price: amount, quantity: 1 }],
+        },
+        onSuccess: (data) => submitBooking("klump", data.data?.merchant_reference || data.merchant_reference, amount),
+        onError: (err) => alert("Klump payment error: " + (err?.message || "Unknown error")),
+        onLoad: () => {}, onOpen: () => {}, onClose: () => {},
+      });
+      pay.show();
+    };
+
+    if (window.Klump) {
+      launchKlump();
+    } else {
+      // Load SDK dynamically
+      const script = document.createElement('script');
+      script.src = 'https://js.getklump.io/klump.js';
+      script.onload = launchKlump;
+      script.onerror = () => alert("Could not load Klump. Please check your internet connection or use a different payment method.");
+      document.body.appendChild(script);
+    }
   };
 
   // ── PayPal payment
@@ -386,10 +434,10 @@ const Booking = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               orderID: data.orderID,
-              name: guestName, email: guestEmail, phone: guestPhone,
+              name: guestName, email: guestEmail, phone: fullPhone,
               room_type: currentRoomKey, check_in_date: checkIn, check_out_date: checkOut,
               price: price.depositAmount, original_price: price.total,
-              guests: numGuests, id_type: idType, id_file_url: idFileUrl,
+              guests: numGuests,
               discount_code: discountResult ? discountCode : null,
               discount_amount: price.discountCode,
               payment_type: paymentType, deposit_percentage: depositPct,
@@ -422,7 +470,7 @@ const Booking = () => {
     const form = new FormData();
     form.append("name", guestName);
     form.append("email", guestEmail);
-    form.append("phone", guestPhone);
+    form.append("phone", fullPhone);
     form.append("room_type", currentRoomKey);
     form.append("check_in_date", checkIn);
     form.append("check_out_date", checkOut);
@@ -430,8 +478,6 @@ const Booking = () => {
     form.append("original_price", price.total);
     form.append("payment_reference", paymentRef);
     form.append("provider", provider);
-    form.append("id_type", idType);
-    form.append("id_file_url", idFileUrl);
     form.append("guests", numGuests);
     form.append("payment_type", paymentType);
     form.append("deposit_percentage", depositPct);
@@ -458,19 +504,18 @@ const Booking = () => {
   };
 
   const resetForm = () => {
-    setGuestName(""); setGuestEmail(""); setGuestPhone(""); setIdType(""); setIdFile(null); setIdFileUrl("");
+    setGuestName(""); setGuestEmail(""); setGuestPhone("");
     setCheckIn(""); setCheckOut(""); setNumGuests(2); setAvailability(null);
     setPrivacyConsent(false); setCancellationConsent(false);
     setShowBookingModal(false); setUploadStep("form");
     setDiscountCode(""); setDiscountResult(null); setDiscountError("");
     setPaymentType("full"); setPaymentProvider("paystack");
+    setOtpSent(false); setOtpCode(""); setEmailVerified(false); setOtpError("");
   };
 
   const handleProceedToPayment = () => {
-    if (!idFileUrl) { alert("Please upload your ID document first"); return; }
     if (paymentProvider === "paystack") handlePaystackPayment();
     else if (paymentProvider === "klump") handleKlumpPayment();
-    else if (paymentProvider === "paypal") handlePayPalPayment();
   };
 
   const today = new Date().toISOString().split("T")[0];
@@ -528,10 +573,10 @@ const Booking = () => {
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">
-                    {uploadStep === "form" ? "Complete Booking" : uploadStep === "uploading" ? "Uploading..." : "Choose Payment"}
+                    {uploadStep === "form" ? "Complete Booking" : "Choose Payment"}
                   </h2>
                   <p className="text-gray-400 text-sm mt-1">
-                    {uploadStep === "form" ? "Enter your details" : uploadStep === "uploading" ? "Uploading your ID securely..." : "Your ID is verified — select how to pay"}
+                    {uploadStep === "form" ? "Enter your details" : "Select how to pay"}
                   </p>
                 </div>
                 <button onClick={() => { setShowBookingModal(false); setUploadStep("form"); }}
@@ -543,47 +588,56 @@ const Booking = () => {
               {/* STEP 1 — Guest details + ID upload */}
               {uploadStep === "form" && (
                 <div className="space-y-4">
-                  {[
-                    { label: "Full Name", value: guestName, setter: setGuestName, type: "text", placeholder: "John Doe" },
-                    { label: "Email Address", value: guestEmail, setter: setGuestEmail, type: "email", placeholder: "you@example.com" },
-                    { label: "Phone Number", value: guestPhone, setter: setGuestPhone, type: "tel", placeholder: "+234 800 000 0000" },
-                  ].map(({ label, value, setter, type, placeholder }) => (
-                    <div key={label}>
-                      <label className="block text-xs font-semibold text-gray-300 mb-1">{label}</label>
-                      <input type={type} value={value} onChange={e => setter(e.target.value)} placeholder={placeholder}
-                        className="w-full px-4 py-2.5 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 text-sm" />
-                    </div>
-                  ))}
-
+                  {/* Full Name */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">ID Type</label>
-                    <select value={idType} onChange={e => setIdType(e.target.value)}
-                      className="w-full px-4 py-2.5 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white focus:ring-2 focus:ring-amber-500 text-sm">
-                      <option value="">Select ID type</option>
-                      <option value="nin">NIN</option>
-                      <option value="passport">International Passport</option>
-                      <option value="license">Driver's License</option>
-                    </select>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">Full Name</label>
+                    <input type="text" value={guestName} onChange={e => setGuestName(e.target.value)} placeholder="John Doe"
+                      className="w-full px-4 py-2.5 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 text-sm" />
                   </div>
 
+                  {/* Email + OTP */}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-300 mb-1">Upload ID Document</label>
-                    <div className="border-2 border-dashed border-amber-500/30 rounded-xl p-4 text-center hover:border-amber-500/50 hover:bg-slate-700/30 transition cursor-pointer">
-                      <input type="file" accept="image/*,.pdf" onChange={e => setIdFile(e.target.files[0])} className="hidden" id="id-upload-modal" />
-                      <label htmlFor="id-upload-modal" className="cursor-pointer">
-                        {idFile ? (
-                          <div className="flex items-center justify-center gap-2 text-white">
-                            <Check size={18} className="text-green-400" />
-                            <span className="font-bold text-sm">{idFile.name}</span>
-                          </div>
-                        ) : (
-                          <>
-                            <Upload className="w-8 h-8 mx-auto mb-2 text-amber-400" />
-                            <p className="font-bold text-white text-sm">Click to upload</p>
-                            <p className="text-xs text-gray-400 mt-1">PNG, JPG or PDF</p>
-                          </>
-                        )}
-                      </label>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">Email Address</label>
+                    <div className="flex gap-2">
+                      <input type="email" value={guestEmail} onChange={e => handleEmailChange(e.target.value)}
+                        placeholder="you@example.com" disabled={emailVerified}
+                        className={`flex-1 px-4 py-2.5 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 text-sm ${emailVerified ? 'opacity-60 cursor-not-allowed' : ''}`} />
+                      {!emailVerified && (
+                        <button onClick={sendOtp} disabled={!guestEmail.includes('@') || otpLoading}
+                          className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 rounded-xl font-bold text-xs disabled:opacity-50 whitespace-nowrap">
+                          {otpLoading && !otpSent ? "..." : otpSent ? "Resend" : "Send Code"}
+                        </button>
+                      )}
+                    </div>
+                    {emailVerified && (
+                      <p className="text-green-400 text-xs mt-1 flex items-center gap-1"><Check size={12} /> Email verified</p>
+                    )}
+                    {otpSent && !emailVerified && (
+                      <div className="mt-2 flex gap-2">
+                        <input type="text" value={otpCode} onChange={e => setOtpCode(e.target.value)}
+                          placeholder="Enter 6-digit code" maxLength={6}
+                          className="flex-1 px-4 py-2.5 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 text-sm tracking-widest" />
+                        <button onClick={verifyOtp} disabled={otpCode.trim().length < 6 || otpLoading}
+                          className="px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-xl font-bold text-xs disabled:opacity-50 whitespace-nowrap">
+                          {otpLoading ? "..." : "Verify"}
+                        </button>
+                      </div>
+                    )}
+                    {otpSent && !emailVerified && (
+                      <p className="text-gray-500 text-xs mt-1">Check your inbox (and spam folder) for the 6-digit code</p>
+                    )}
+                    {otpError && <p className="text-red-400 text-xs mt-1">{otpError}</p>}
+                  </div>
+
+                  {/* Phone — plain contact field, no OTP */}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-300 mb-1">Phone Number</label>
+                    <div className="flex border rounded-xl overflow-hidden border-amber-500/20 bg-slate-700/50 focus-within:ring-2 focus-within:ring-amber-500">
+                      <span className="px-3 flex items-center text-amber-400 font-bold text-sm border-r border-amber-500/20 bg-slate-700 select-none">+234</span>
+                      <input type="tel" value={guestPhone}
+                        onChange={e => { let d = e.target.value.replace(/\D/g, ''); if (d.startsWith('234')) d = d.slice(3); if (d.startsWith('0')) d = d.slice(1); setGuestPhone(d); }}
+                        placeholder="8012345678" maxLength={10}
+                        className="flex-1 px-3 py-2.5 bg-transparent text-white placeholder-gray-500 text-sm focus:outline-none" />
                     </div>
                   </div>
 
@@ -613,34 +667,18 @@ const Booking = () => {
                     ))}
                   </div>
 
-                  <button onClick={handleUploadAndProceed}
-                    disabled={!guestName || !guestEmail || !guestPhone || !idType || !idFile || !privacyConsent || !cancellationConsent}
+                  <button onClick={handleContinueToPayment}
+                    disabled={!guestName || !guestEmail || !guestPhone || !emailVerified || !privacyConsent || !cancellationConsent}
                     className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-xl font-bold hover:from-blue-400 hover:to-blue-500 transition disabled:opacity-50 disabled:cursor-not-allowed mt-2 text-sm">
-                    Upload ID & Continue to Payment
+                    Continue to Payment
                   </button>
-                  <p className="text-xs text-center text-gray-400">Your ID is stored securely on our servers</p>
+                  <p className="text-xs text-center text-gray-400">Please bring a valid ID for verification at check-in</p>
                 </div>
               )}
 
-              {/* STEP 2 — Uploading */}
-              {uploadStep === "uploading" && (
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 border-4 border-amber-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <h3 className="text-xl font-bold text-white mb-2">Uploading ID Document</h3>
-                  <p className="text-gray-400">Please wait while we securely upload your ID...</p>
-                </div>
-              )}
-
-              {/* STEP 3 — Payment options */}
+              {/* STEP 2 — Payment options */}
               {uploadStep === "done" && (
                 <div className="space-y-5">
-                  {/* ID confirmed */}
-                  <div className="bg-green-500/20 border-2 border-green-400/50 rounded-xl p-4 text-center">
-                    <div className="flex items-center justify-center gap-2 text-green-400 font-bold">
-                      <Check size={20} /> ID Document Uploaded
-                    </div>
-                  </div>
-
                   {/* Booking summary */}
                   <div className="bg-slate-700/50 rounded-xl p-4 space-y-2 text-sm">
                     <div className="flex justify-between text-gray-300"><span>Room:</span><span className="text-white">{currentOption.title}</span></div>
@@ -658,15 +696,15 @@ const Booking = () => {
                     <p className="text-xs font-semibold text-gray-300 mb-2">Payment Option</p>
                     <div className="space-y-2">
                       <label className="flex items-center gap-3 cursor-pointer">
-                        <input type="radio" name="paymentType" checked={paymentType === "full"} onChange={() => setPaymentType("full")} className="text-amber-500" />
+                        <input type="radio" name="paymentType" checked={paymentType === "full"} onChange={() => { setPaymentType("full"); setPaymentProvider("paystack"); }} className="text-amber-500" />
                         <span className="text-white text-sm">Pay in full — ₦{price.total.toLocaleString()}</span>
                       </label>
                       <label className="flex items-center gap-3 cursor-pointer">
-                        <input type="radio" name="paymentType" checked={paymentType === "deposit" && depositPct === 20} onChange={() => { setPaymentType("deposit"); setDepositPct(20); }} className="text-amber-500" />
+                        <input type="radio" name="paymentType" checked={paymentType === "deposit" && depositPct === 20} onChange={() => { setPaymentType("deposit"); setDepositPct(20); setPaymentProvider("klump"); }} className="text-amber-500" />
                         <span className="text-white text-sm">Pay 20% deposit — ₦{Math.round(price.total * 0.2).toLocaleString()} <span className="text-gray-400">(₦{Math.round(price.total * 0.8).toLocaleString()} at property)</span></span>
                       </label>
                       <label className="flex items-center gap-3 cursor-pointer">
-                        <input type="radio" name="paymentType" checked={paymentType === "deposit" && depositPct === 10} onChange={() => { setPaymentType("deposit"); setDepositPct(10); }} className="text-amber-500" />
+                        <input type="radio" name="paymentType" checked={paymentType === "deposit" && depositPct === 10} onChange={() => { setPaymentType("deposit"); setDepositPct(10); setPaymentProvider("klump"); }} className="text-amber-500" />
                         <span className="text-white text-sm">Pay 10% deposit — ₦{Math.round(price.total * 0.1).toLocaleString()} <span className="text-gray-400">(₦{Math.round(price.total * 0.9).toLocaleString()} at property)</span></span>
                       </label>
                     </div>
@@ -684,8 +722,7 @@ const Booking = () => {
                     <div className="space-y-2">
                       {[
                         { value: "paystack", label: "Paystack", desc: "Cards, bank transfer, USSD" },
-                        { value: "klump", label: "Klump", desc: "Buy now, pay later" },
-                        { value: "paypal", label: "PayPal", desc: "Pay in USD (approx.)" },
+                        { value: "klump", label: "Klump", desc: "Buy now, pay later in instalments" },
                       ].map(({ value, label, desc }) => (
                         <label key={value} className={`flex items-center gap-3 cursor-pointer p-3 rounded-xl border transition ${paymentProvider === value ? 'border-amber-500 bg-amber-500/10' : 'border-white/10 bg-white/5 hover:border-white/30'}`}>
                           <input type="radio" name="paymentProvider" checked={paymentProvider === value} onChange={() => setPaymentProvider(value)} className="text-amber-500" />
