@@ -48,28 +48,31 @@ const Contact = () => {
     {
       icon: Phone,
       title: 'Phone',
-      details: '+234 xxx xxx xxxx',
+      details: '+234 816 693 9592',
+      href: 'tel:+2348166939592',
       description: 'Mon-Sun, 8AM - 10PM',
       color: 'from-blue-500 to-cyan-500'
     },
     {
       icon: Mail,
       title: 'Email',
-      details: 'hello@bookastay.com',
+      details: 'engeemosbookastay@gmail.com',
+      href: 'mailto:engeemosbookastay@gmail.com',
       description: 'We reply within 24 hours',
       color: 'from-purple-500 to-pink-500'
     },
     {
       icon: MapPin,
       title: 'Location',
-  details: 'Abeokuta',
+      details: 'Abeokuta',
       description: 'Nigeria',
       color: 'from-emerald-500 to-teal-500'
     },
     {
       icon: MessageCircle,
       title: 'WhatsApp',
-      details: '+234 xxx xxx xxxx',
+      details: '+234 806 621 5431',
+      href: 'https://wa.me/2348066215431',
       description: 'Quick response',
       color: 'from-green-500 to-emerald-500'
     }
@@ -97,7 +100,18 @@ const Contact = () => {
                   <Icon className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-900 font-semibold mb-1">{item.details}</p>
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    target={item.href.startsWith('http') ? '_blank' : undefined}
+                    rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className="text-gray-900 font-semibold mb-1 block break-words hover:text-blue-600 transition-colors"
+                  >
+                    {item.details}
+                  </a>
+                ) : (
+                  <p className="text-gray-900 font-semibold mb-1 break-words">{item.details}</p>
+                )}
                 <p className="text-sm text-gray-600">{item.description}</p>
               </div>
             );

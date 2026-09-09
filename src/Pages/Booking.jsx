@@ -3,70 +3,10 @@ import { backendUrl } from "../App";
 import {
   Users, Home, Bed, Star, ChevronLeft, ChevronRight, Wifi, Tv,
   Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Calendar,
-  Sparkles, FileText, Clock, Tag, CreditCard, Percent,
+  Sparkles, FileText, Clock, Tag, CreditCard, Percent, Loader2,
 } from "lucide-react";
 
 import Living from "../assets/Living.jpg";
-import Dine from "../assets/Dine.jpg";
-import LiveRoom from "../assets/LiveRoom.jpg";
-import Room from "../assets/Room.jpg";
-import Bedroom from "../assets/Bedroom.jpg";
-import Bedroomss from "../assets/Bedroomss.jpg";
-
-const FALLBACK_ROOMS = {
-  entire: {
-    room_key: "entire",
-    id: "2bedroom",
-    tabKey: "2bedroom",
-    title: "2 Bedroom Apartment",
-    subtitle: "Spacious luxury apartment perfect for families",
-    category: "Entire Apartment",
-    guests: 4,
-    bedrooms: 2,
-    beds: 2,
-    bathrooms: 2,
-    description:
-      "Experience luxury in our spacious 2-bedroom apartment. Featuring modern amenities, a fully equipped kitchen, elegant living spaces, and stunning balconies with breathtaking views.",
-    base_price: 100000,
-    max_guests: 4,
-    min_nights: 1,
-    accentColor: "from-blue-900 to-blue-800",
-    amenities: [
-      { name: "High-Speed WiFi", desc: "100 Mbps fiber" },
-      { name: "Full Kitchen", desc: "Cooking essentials" },
-      { name: "Air Conditioning", desc: "Climate control" },
-      { name: "Smart TV", desc: "Netflix & Prime Video" },
-      { name: "Free Parking", desc: "On-site parking" },
-      { name: "Private Balcony", desc: "City views" },
-    ],
-    images: [Living, LiveRoom, Bedroom, Bedroomss, Room, Dine],
-  },
-  room1: {
-    room_key: "room1",
-    id: "1bedroom",
-    tabKey: "1bedroom",
-    title: "1 Bedroom Suite",
-    subtitle: "Cozy and elegant for solo travelers or couples",
-    category: "Private Room",
-    guests: 2,
-    bedrooms: 1,
-    beds: 1,
-    bathrooms: 1,
-    description:
-      "Your perfect retreat awaits! This beautifully designed 1-bedroom suite offers comfort and privacy with access to premium shared spaces.",
-    base_price: 60000,
-    max_guests: 2,
-    min_nights: 2,
-    accentColor: "from-amber-500 to-amber-600",
-    amenities: [
-      { name: "High-Speed WiFi", desc: "100 Mbps fiber" },
-      { name: "Shared Kitchen", desc: "Full access" },
-      { name: "Air Conditioning", desc: "In room" },
-      { name: "Private Bathroom", desc: "En-suite" },
-    ],
-    images: [Bedroom, Room, Living, Dine],
-  },
-};
 
 const amenityIcons = [Wifi, Utensils, Wind, Tv, Car, DoorOpen, Shield, Home];
 
@@ -99,10 +39,8 @@ const Booking = () => {
   const [discountLoading, setDiscountLoading] = useState(false);
   const [discountError, setDiscountError] = useState("");
 
-  // ── Payment options
-  const [paymentType, setPaymentType] = useState("full"); // full | deposit
-  const [depositPct, setDepositPct] = useState(20); // 10 | 20
-  const [paymentProvider, setPaymentProvider] = useState("paystack"); // paystack | paypal | klump
+  // ── Payment — Paystack only; every booking is paid in full
+  const paymentType = "full";
 
   // ── Consent
   const [privacyConsent, setPrivacyConsent] = useState(false);
@@ -124,13 +62,13 @@ const Booking = () => {
   const [availabilityError, setAvailabilityError] = useState("");
   const availabilityTimer = useRef(null);
 
-  // ── Load properties from backend
+  // ── Load properties from backend (admin-managed only; no hardcoded fallback)
   useEffect(() => {
     fetch(`${backendUrl}/api/properties`)
       .then(r => r.json())
       .then(d => {
-        if (d.success && d.properties.length > 0) {
-          const map = {};
+        const map = {};
+        if (d.success && Array.isArray(d.properties)) {
           d.properties.forEach(p => {
             const tabKey = p.room_key === "entire" ? "2bedroom" : p.room_key === "room1" ? "1bedroom" : p.room_key;
             map[tabKey] = {
@@ -142,22 +80,23 @@ const Booking = () => {
               min_nights: Number(p.min_nights),
               bedrooms: Number(p.bedrooms),
               bathrooms: Number(p.bathrooms),
-              images: p.images && p.images.length > 0 ? p.images : (FALLBACK_ROOMS[p.room_key]?.images || [Living]),
+              images: p.images && p.images.length > 0 ? p.images : [Living],
               accentColor: p.room_key === "entire" ? "from-blue-900 to-blue-800" : "from-amber-500 to-amber-600",
             };
           });
-          setRoomOptions(map);
-          setActiveTab(Object.keys(map)[0]);
         }
+        setRoomOptions(map);
+        const keys = Object.keys(map);
+        if (keys.length > 0) setActiveTab(keys[0]);
       })
-      .catch(() => {}); // silently fall through to fallback
+      .catch(() => setRoomOptions({})); // loaded but empty — show empty state, never demo rooms
   }, []);
 
-  const rooms = roomOptions || {
-    "2bedroom": { ...FALLBACK_ROOMS.entire, tabKey: "2bedroom" },
-    "1bedroom": { ...FALLBACK_ROOMS.room1, tabKey: "1bedroom" },
-  };
-  const currentOption = rooms[activeTab] || Object.values(rooms)[0];
+  const rooms = roomOptions || {};
+  const roomKeys = Object.keys(rooms);
+  const roomsLoading = roomOptions === null;   // null = still fetching
+  const hasRooms = roomKeys.length > 0;
+  const currentOption = rooms[activeTab] || rooms[roomKeys[0]];
   const currentRoomKey = currentOption?.room_key || (activeTab === "2bedroom" ? "entire" : "room1");
 
   // ── URL params on mount
@@ -205,7 +144,7 @@ const Booking = () => {
       } catch { setAvailability(false); setAvailabilityError("Network error checking availability"); }
       finally { setAvailabilityLoading(false); availabilityTimer.current = null; }
     }, 400);
-  }, [activeTab, checkIn, checkOut, currentRoomKey]);
+  }, [checkIn, checkOut, currentRoomKey]);
 
   useEffect(() => {
     checkAvailability();
@@ -231,7 +170,7 @@ const Booking = () => {
     const subtotal = basePrice - discount + extraGuestCharge;
     const codeDiscount = discountResult?.discount?.discount_amount || 0;
     const total = Math.max(0, subtotal - codeDiscount);
-    const depositAmount = paymentType === "deposit" ? Math.round(total * (depositPct / 100)) : total;
+    const depositAmount = total; // always paid in full
 
     return { base: basePrice, discount, discountType, extraGuest: extraGuestCharge, discountCode: codeDiscount, total, nights, depositAmount };
   };
@@ -346,126 +285,7 @@ const Booking = () => {
     handler.openIframe();
   };
 
-  // ── Klump payment
-  const handleKlumpPayment = () => {
-    const klumpKey = import.meta.env.VITE_KLUMP_PUBLIC_KEY || "";
-    if (!klumpKey) return alert("Klump is not configured for this site.");
-
-    const launchKlump = () => {
-      if (!window.Klump) return alert("Klump payment library failed to load. Please try a different payment method.");
-      const amount = price.depositAmount;
-      const pay = new window.Klump({
-        publicKey: klumpKey,
-        data: {
-          amount,
-          shipping_fee: 0,
-          currency: "NGN",
-          merchant_reference: `book_${Date.now()}`,
-          meta_data: { name: guestName, email: guestEmail, phone: fullPhone },
-          items: [{ image_url: "", item_url: "", name: `BookAStay - ${currentOption.title}`, unit_price: amount, quantity: 1 }],
-        },
-        onSuccess: (data) => submitBooking("klump", data.data?.merchant_reference || data.merchant_reference, amount),
-        onError: (err) => alert("Klump payment error: " + (err?.message || "Unknown error")),
-        onLoad: () => {}, onOpen: () => {}, onClose: () => {},
-      });
-      pay.show();
-    };
-
-    if (window.Klump) {
-      launchKlump();
-    } else {
-      // Load SDK dynamically
-      const script = document.createElement('script');
-      script.src = 'https://js.getklump.io/klump.js';
-      script.onload = launchKlump;
-      script.onerror = () => alert("Could not load Klump. Please check your internet connection or use a different payment method.");
-      document.body.appendChild(script);
-    }
-  };
-
-  // ── PayPal payment
-  const handlePayPalPayment = async () => {
-    const amount = price.depositAmount;
-    // Convert NGN to USD (approximate; ideally use live rate)
-    const usdAmount = (amount / 1500).toFixed(2);
-
-    try {
-      const createRes = await fetch(`${backendUrl}/api/bookings/paypal/create-order`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: usdAmount, currency: "USD" }),
-      });
-      const createData = await createRes.json();
-      if (!createData.success) return alert("Failed to create PayPal order: " + createData.error);
-
-      const orderID = createData.orderID;
-
-      // Load PayPal SDK if not already loaded
-      const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID || "";
-      if (!PAYPAL_CLIENT_ID) return alert("PayPal is not configured.");
-
-      if (!document.querySelector('script[data-paypal-sdk]')) {
-        await new Promise((resolve, reject) => {
-          const s = document.createElement("script");
-          s.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
-          s.setAttribute("data-paypal-sdk", "true");
-          s.onload = resolve; s.onerror = reject;
-          document.body.appendChild(s);
-        });
-      }
-
-      // Render PayPal buttons in a modal
-      const container = document.createElement("div");
-      container.id = "paypal-button-container-modal";
-      container.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:9999";
-      const inner = document.createElement("div");
-      inner.style.cssText = "background:white;padding:32px;border-radius:16px;min-width:320px";
-      inner.innerHTML = '<p style="margin-bottom:16px;font-weight:bold;text-align:center">Complete PayPal Payment</p><div id="paypal-btns"></div><button id="close-paypal" style="margin-top:16px;width:100%;padding:8px;cursor:pointer">Cancel</button>';
-      container.appendChild(inner);
-      document.body.appendChild(container);
-      document.getElementById("close-paypal").onclick = () => container.remove();
-
-      window.paypal.Buttons({
-        order: () => orderID,
-        onApprove: async (data) => {
-          container.remove();
-          const captureRes = await fetch(`${backendUrl}/api/bookings/paypal/capture-order`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              orderID: data.orderID,
-              name: guestName, email: guestEmail, phone: fullPhone,
-              room_type: currentRoomKey, check_in_date: checkIn, check_out_date: checkOut,
-              price: price.depositAmount, original_price: price.total,
-              guests: numGuests,
-              discount_code: discountResult ? discountCode : null,
-              discount_amount: price.discountCode,
-              payment_type: paymentType, deposit_percentage: depositPct,
-              provider: "paypal",
-            }),
-          });
-          const captureData = await captureRes.json();
-          if (captureData.success) {
-            setBookingDetails({
-              transactionRef: data.orderID, name: guestName, email: guestEmail,
-              roomType: currentOption.title, checkIn, checkOut, guests: numGuests,
-              total: price.depositAmount, balanceDue: captureData.balance_due,
-              paymentType,
-            });
-            resetForm();
-            setBookingSuccess(true);
-          } else {
-            alert("PayPal capture failed: " + captureData.error);
-          }
-        },
-        onError: (err) => { container.remove(); alert("PayPal error: " + err); },
-      }).render("#paypal-btns");
-    } catch (err) {
-      alert("PayPal payment error: " + err.message);
-    }
-  };
-
-  // ── Submit booking (Paystack / Klump)
+  // ── Submit booking (Paystack)
   const submitBooking = (provider, paymentRef, paidAmount) => {
     const form = new FormData();
     form.append("name", guestName);
@@ -474,13 +294,13 @@ const Booking = () => {
     form.append("room_type", currentRoomKey);
     form.append("check_in_date", checkIn);
     form.append("check_out_date", checkOut);
-    form.append("price", price.depositAmount);
+    form.append("price", paidAmount); // amount actually charged by the provider (re-verified server-side)
     form.append("original_price", price.total);
     form.append("payment_reference", paymentRef);
     form.append("provider", provider);
     form.append("guests", numGuests);
     form.append("payment_type", paymentType);
-    form.append("deposit_percentage", depositPct);
+    form.append("deposit_percentage", 0);
     if (discountResult) {
       form.append("discount_code", discountCode);
       form.append("discount_amount", price.discountCode);
@@ -509,13 +329,11 @@ const Booking = () => {
     setPrivacyConsent(false); setCancellationConsent(false);
     setShowBookingModal(false); setUploadStep("form");
     setDiscountCode(""); setDiscountResult(null); setDiscountError("");
-    setPaymentType("full"); setPaymentProvider("paystack");
     setOtpSent(false); setOtpCode(""); setEmailVerified(false); setOtpError("");
   };
 
   const handleProceedToPayment = () => {
-    if (paymentProvider === "paystack") handlePaystackPayment();
-    else if (paymentProvider === "klump") handleKlumpPayment();
+    handlePaystackPayment();
   };
 
   const today = new Date().toISOString().split("T")[0];
@@ -604,8 +422,10 @@ const Booking = () => {
                         className={`flex-1 px-4 py-2.5 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 text-sm ${emailVerified ? 'opacity-60 cursor-not-allowed' : ''}`} />
                       {!emailVerified && (
                         <button onClick={sendOtp} disabled={!guestEmail.includes('@') || otpLoading}
-                          className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 rounded-xl font-bold text-xs disabled:opacity-50 whitespace-nowrap">
-                          {otpLoading && !otpSent ? "..." : otpSent ? "Resend" : "Send Code"}
+                          className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 rounded-xl font-bold text-xs disabled:opacity-50 whitespace-nowrap flex items-center gap-1.5 justify-center min-w-[92px]">
+                          {otpLoading && !otpSent
+                            ? (<><Loader2 size={14} className="animate-spin" /> Sending…</>)
+                            : otpSent ? "Resend" : "Send Code"}
                         </button>
                       )}
                     </div>
@@ -618,8 +438,10 @@ const Booking = () => {
                           placeholder="Enter 6-digit code" maxLength={6}
                           className="flex-1 px-4 py-2.5 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 text-sm tracking-widest" />
                         <button onClick={verifyOtp} disabled={otpCode.trim().length < 6 || otpLoading}
-                          className="px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-xl font-bold text-xs disabled:opacity-50 whitespace-nowrap">
-                          {otpLoading ? "..." : "Verify"}
+                          className="px-3 py-2 bg-green-600 hover:bg-green-500 text-white rounded-xl font-bold text-xs disabled:opacity-50 whitespace-nowrap flex items-center gap-1.5 justify-center min-w-[80px]">
+                          {otpLoading
+                            ? (<><Loader2 size={14} className="animate-spin" /> Verifying…</>)
+                            : "Verify"}
                         </button>
                       </div>
                     )}
@@ -691,55 +513,17 @@ const Booking = () => {
                     </div>
                   </div>
 
-                  {/* Payment type: full or deposit */}
-                  <div>
-                    <p className="text-xs font-semibold text-gray-300 mb-2">Payment Option</p>
-                    <div className="space-y-2">
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input type="radio" name="paymentType" checked={paymentType === "full"} onChange={() => { setPaymentType("full"); setPaymentProvider("paystack"); }} className="text-amber-500" />
-                        <span className="text-white text-sm">Pay in full — ₦{price.total.toLocaleString()}</span>
-                      </label>
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input type="radio" name="paymentType" checked={paymentType === "deposit" && depositPct === 20} onChange={() => { setPaymentType("deposit"); setDepositPct(20); setPaymentProvider("klump"); }} className="text-amber-500" />
-                        <span className="text-white text-sm">Pay 20% deposit — ₦{Math.round(price.total * 0.2).toLocaleString()} <span className="text-gray-400">(₦{Math.round(price.total * 0.8).toLocaleString()} at property)</span></span>
-                      </label>
-                      <label className="flex items-center gap-3 cursor-pointer">
-                        <input type="radio" name="paymentType" checked={paymentType === "deposit" && depositPct === 10} onChange={() => { setPaymentType("deposit"); setDepositPct(10); setPaymentProvider("klump"); }} className="text-amber-500" />
-                        <span className="text-white text-sm">Pay 10% deposit — ₦{Math.round(price.total * 0.1).toLocaleString()} <span className="text-gray-400">(₦{Math.round(price.total * 0.9).toLocaleString()} at property)</span></span>
-                      </label>
-                    </div>
-                  </div>
-
                   {/* Amount to pay now */}
                   <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-center">
                     <p className="text-gray-300 text-xs">Amount to pay now</p>
                     <p className="text-amber-400 font-bold text-2xl">₦{price.depositAmount.toLocaleString()}</p>
                   </div>
 
-                  {/* Payment provider */}
-                  <div>
-                    <p className="text-xs font-semibold text-gray-300 mb-2">Payment Method</p>
-                    <div className="space-y-2">
-                      {[
-                        { value: "paystack", label: "Paystack", desc: "Cards, bank transfer, USSD" },
-                        { value: "klump", label: "Klump", desc: "Buy now, pay later in instalments" },
-                      ].map(({ value, label, desc }) => (
-                        <label key={value} className={`flex items-center gap-3 cursor-pointer p-3 rounded-xl border transition ${paymentProvider === value ? 'border-amber-500 bg-amber-500/10' : 'border-white/10 bg-white/5 hover:border-white/30'}`}>
-                          <input type="radio" name="paymentProvider" checked={paymentProvider === value} onChange={() => setPaymentProvider(value)} className="text-amber-500" />
-                          <div>
-                            <span className="text-white font-semibold text-sm">{label}</span>
-                            <span className="text-gray-400 text-xs ml-2">{desc}</span>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
                   <button onClick={handleProceedToPayment} disabled={isSubmitting}
                     className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 text-sm">
-                    {isSubmitting ? "Processing..." : `Pay ₦${price.depositAmount.toLocaleString()} with ${paymentProvider.charAt(0).toUpperCase() + paymentProvider.slice(1)}`}
+                    {isSubmitting ? "Processing..." : `Pay ₦${price.depositAmount.toLocaleString()} with Paystack`}
                   </button>
-                  <p className="text-xs text-center text-gray-400">Secure payment</p>
+                  <p className="text-xs text-center text-gray-400">Secured by Paystack · Cards, bank transfer &amp; USSD</p>
                 </div>
               )}
             </div>
@@ -748,6 +532,29 @@ const Booking = () => {
       )}
 
       <div className="h-16 lg:h-20"></div>
+
+      {/* Rooms are managed exclusively from the admin panel — no hardcoded fallback */}
+      {roomsLoading ? (
+        <div className="max-w-7xl mx-auto px-4 py-32 flex flex-col items-center justify-center text-center">
+          <Loader2 className="w-10 h-10 text-amber-400 animate-spin mb-4" />
+          <p className="text-gray-400">Loading available suites…</p>
+        </div>
+      ) : !hasRooms ? (
+        <div className="max-w-2xl mx-auto px-4 py-24 md:py-32 text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-slate-800/70 border border-amber-500/20 mb-6">
+            <Home className="w-9 h-9 text-amber-400" />
+          </div>
+          <h2 className="text-2xl md:text-4xl font-bold text-white mb-3">No suites available right now</h2>
+          <p className="text-gray-400 text-base md:text-lg mb-8">
+            Our rooms are being updated. Please check back soon, or reach out and we&apos;ll help arrange your stay.
+          </p>
+          <a href="/contact"
+            className="inline-block bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 px-6 py-3 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg">
+            Contact us
+          </a>
+        </div>
+      ) : (
+        <>
 
       {/* Room selector tabs */}
       <div className="border-b border-amber-500/20 bg-gradient-to-r from-slate-800/50 to-slate-900/50 backdrop-blur-md">
@@ -970,13 +777,13 @@ const Booking = () => {
                         <span className="text-white">Total</span>
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">₦{price.total.toLocaleString()}</span>
                       </div>
-                      <p className="text-xs text-gray-400 mt-1">Deposit or full payment options available at checkout</p>
+                      <p className="text-xs text-gray-400 mt-1">Pay securely in full at checkout</p>
                     </div>
                     <button onClick={() => canProceed() && setShowBookingModal(true)} disabled={!canProceed()}
                       className={`w-full py-4 rounded-xl font-bold text-base transition transform ${!canProceed() ? "bg-gray-700 text-gray-500 cursor-not-allowed opacity-60" : "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 hover:from-amber-400 hover:to-amber-500 shadow-lg shadow-amber-500/50 hover:scale-105"}`}>
                       {availabilityLoading ? "Checking..." : canProceed() ? "Reserve Now" : "Not Available"}
                     </button>
-                    <p className="text-xs text-center text-gray-400 mt-3">Secure booking • Deposit option available</p>
+                    <p className="text-xs text-center text-gray-400 mt-3">Secure booking • Pay in full</p>
                   </>
                 )}
 
@@ -992,6 +799,8 @@ const Booking = () => {
           </div>
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 };

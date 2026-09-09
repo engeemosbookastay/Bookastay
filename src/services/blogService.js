@@ -1,7 +1,4 @@
-const SHEET_ID = import.meta.env.VITE_GOOGLE_SHEET_ID;
-const SHEET_URL = SHEET_ID
-  ? `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Posts`
-  : null;
+import { backendUrl } from '../App';
 
 // Generate a URL-friendly slug from a title
 export const generateSlug = (title) => {
@@ -15,41 +12,7 @@ export const generateSlug = (title) => {
     .slice(0, 80);
 };
 
-// Parse Google Sheets JSONP response into post objects
-const parseSheetData = (text) => {
-  const jsonStr = text.match(
-    /google\.visualization\.Query\.setResponse\(([\s\S]*)\);?/
-  );
-  if (!jsonStr || !jsonStr[1]) return [];
-
-  const data = JSON.parse(jsonStr[1]);
-  const headers = data.table.cols.map((col) =>
-    col.label?.toLowerCase().trim()
-  );
-  const rows = data.table.rows;
-
-  return rows
-    .map((row) => {
-      const post = {};
-      row.c.forEach((cell, i) => {
-        const key = headers[i];
-        if (key) {
-          post[key] = cell ? cell.v : "";
-        }
-      });
-      // Auto-generate slug from title
-      post.slug = generateSlug(post.title);
-      return post;
-    })
-    .filter(
-      (post) =>
-        post.published === true ||
-        post.published === "TRUE" ||
-        post.published === "true"
-    );
-};
-
-// Fetch all published blog posts
+// Fetch all published blog posts from the backend
 let cachedPosts = null;
 let cacheTime = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
@@ -60,12 +23,10 @@ export const fetchBlogPosts = async () => {
     return cachedPosts;
   }
 
-  if (!SHEET_URL) return [];
-
   try {
-    const res = await fetch(SHEET_URL);
-    const text = await res.text();
-    cachedPosts = parseSheetData(text);
+    const res = await fetch(`${backendUrl}/api/blog`);
+    const d = await res.json();
+    cachedPosts = d.success ? (d.posts || []) : [];
     cacheTime = Date.now();
     return cachedPosts;
   } catch (err) {

@@ -46,6 +46,8 @@ const App = () => {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/rooms" element={<Rooms />} />
+        {/* Unknown URLs fall back to Home instead of a blank page */}
+        <Route path="*" element={<Home />} />
       </Routes>
       <Footer />
     </>

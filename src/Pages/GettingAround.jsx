@@ -116,29 +116,62 @@ const FALLBACK_CATEGORIES = {
     }
   };
 
+// Serializable defaults (no icon component refs) — shared with the admin editor
+// so it can seed and edit this content. Keys map back to categoryMeta for styling.
+export const RAW_GETTING_AROUND = Object.entries(FALLBACK_CATEGORIES).map(([key, c]) => ({
+  key,
+  title: c.title,
+  items: c.items.map(({ name, time, link }) => ({ name, time, link: link || null })),
+}));
+
+// name -> link map, used to restore location links an admin override may have dropped (#11)
+const DEFAULT_LINK_BY_NAME = {};
+RAW_GETTING_AROUND.forEach(cat => cat.items.forEach(it => {
+  if (it.link) DEFAULT_LINK_BY_NAME[(it.name || '').trim().toLowerCase()] = it.link;
+}));
+
+const withMeta = (key, title, items) => {
+  const meta = categoryMeta[key] || categoryMeta.tourism;
+  return {
+    ...meta,
+    title: title || FALLBACK_CATEGORIES[key]?.title || key,
+    items: (items || []).map(item => ({
+      name: item.name,
+      time: item.time,
+      // restore the default link when the admin override didn't carry one (#11)
+      link: item.link || DEFAULT_LINK_BY_NAME[(item.name || '').trim().toLowerCase()] || null,
+    })),
+  };
+};
+
+// Merge admin categories over the defaults: an edited category replaces that
+// category's items (links backfilled), untouched default categories remain (#11).
+const GA_CACHE_KEY = 'content_cache_getting_around';
+const readGaCache = () => { try { return JSON.parse(localStorage.getItem(GA_CACHE_KEY)); } catch { return null; } };
+const mergeCategories = (override) => {
+  const merged = {};
+  Object.entries(FALLBACK_CATEGORIES).forEach(([k, v]) => { merged[k] = withMeta(k, v.title, v.items); });
+  if (override && Array.isArray(override.categories)) {
+    override.categories.forEach(cat => {
+      if (!cat || !cat.key) return;
+      merged[cat.key] = withMeta(cat.key, cat.title, cat.items);
+    });
+  }
+  return merged;
+};
+
 const GettingAround = () => {
   const [activeCategory, setActiveCategory] = useState('all');
-  const [categories, setCategories] = useState(FALLBACK_CATEGORIES);
+  // Hydrate from the last-known content first so a refresh doesn't flash before the fetch (#11).
+  const [categories, setCategories] = useState(() => mergeCategories(readGaCache()));
 
   useEffect(() => {
     fetch(`${backendUrl}/api/content/getting_around`)
       .then(r => r.json())
       .then(d => {
-        if (d.success && d.content?.value?.categories?.length) {
-          const dynamic = {};
-          d.content.value.categories.forEach(cat => {
-            const meta = categoryMeta[cat.key] || categoryMeta.tourism;
-            dynamic[cat.key] = {
-              ...meta,
-              title: cat.title,
-              items: (cat.items || []).map(item => ({
-                name: item.name,
-                time: item.time,
-                link: item.link || null,
-              })),
-            };
-          });
-          setCategories(dynamic);
+        if (d.success && d.content?.value) {
+          localStorage.setItem(GA_CACHE_KEY, JSON.stringify(d.content.value));
+          setCategories(mergeCategories(d.content.value));
         }
       })
       .catch(() => {});

@@ -13,7 +13,7 @@ const AuthCallback = () => {
     if (access_token) localStorage.setItem('access_token', access_token);
     if (refresh_token) localStorage.setItem('refresh_token', refresh_token);
     // navigate to booking or home
-    navigate('/booking');
+    navigate('/bookings');
   }, [navigate]);
 
   return <div className="min-h-screen flex items-center justify-center">Processing login...</div>;

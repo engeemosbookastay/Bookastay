@@ -512,6 +512,16 @@ const Hero = () => {
         </div>
       </div>
 
+      {/* Trust Badges - Verified. Trusted. Loved. */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
+        <img
+          src="/Trust.jpeg"
+          alt="Engeemos Bookastay — Verified, Trusted, Loved. Rated across Airbnb, Booking.com and Google. CAC Verified."
+          className="w-full h-auto rounded-3xl shadow-lg"
+          loading="lazy"
+        />
+      </div>
+
       {/* Review Boxes - Before About Us */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid md:grid-cols-2 gap-6">

@@ -92,30 +92,43 @@ const Blog = () => {
           </div>
         )}
 
-        {/* Loading State */}
+        {/* Loading State — skeleton cards that mirror the real post layout */}
         {loading && (
-          <div className="flex flex-col items-center justify-center py-20">
-            <div className="w-12 h-12 border-4 border-amber-500/30 border-t-amber-500 rounded-full animate-spin mb-4"></div>
-            <p className="text-gray-400">Loading posts...</p>
-          </div>
-        )}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/20 rounded-2xl shadow-xl overflow-hidden h-full flex flex-col animate-pulse"
+              >
+                {/* Image placeholder */}
+                <div className="h-48 bg-slate-700/50"></div>
 
-        {/* Empty State */}
-        {!loading && posts.length === 0 && (
-          <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-blue-900/10 rounded-3xl blur-xl"></div>
-            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/20 rounded-3xl p-12 md:p-16 text-center shadow-xl">
-              <div className="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                <BookOpen className="w-10 h-10 text-slate-900" />
+                {/* Content placeholder */}
+                <div className="p-5 flex-1 flex flex-col">
+                  {/* Meta row (date · author) */}
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="h-3 w-20 bg-slate-700/50 rounded"></div>
+                    <div className="h-3 w-16 bg-slate-700/50 rounded"></div>
+                  </div>
+
+                  {/* Title (2 lines) */}
+                  <div className="h-5 w-full bg-slate-700/50 rounded mb-2"></div>
+                  <div className="h-5 w-3/4 bg-slate-700/50 rounded mb-4"></div>
+
+                  {/* Excerpt (3 lines) */}
+                  <div className="space-y-2 flex-1">
+                    <div className="h-3 w-full bg-slate-700/40 rounded"></div>
+                    <div className="h-3 w-full bg-slate-700/40 rounded"></div>
+                    <div className="h-3 w-2/3 bg-slate-700/40 rounded"></div>
+                  </div>
+
+                  {/* Footer (read more) */}
+                  <div className="mt-auto pt-3 border-t border-slate-700/50">
+                    <div className="h-3 w-24 bg-slate-700/50 rounded"></div>
+                  </div>
+                </div>
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-                Coming Soon
-              </h2>
-              <p className="text-gray-400 text-lg max-w-md mx-auto">
-                We're working on exciting content about Abeokuta, travel tips,
-                and guest experiences. Check back soon!
-              </p>
-            </div>
+            ))}
           </div>
         )}
 

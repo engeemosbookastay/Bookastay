@@ -56,7 +56,7 @@ const Login = () => {
       }
 
       alert(`Welcome back, ${name || formData.email}!`)
-      navigate('/booking')
+      navigate('/bookings')
     } catch (err) {
       alert(err.message || 'Login failed')
     } finally {
