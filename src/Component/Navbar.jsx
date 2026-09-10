@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronDown, Home, Bed, Building, Navigation, BookOpen, FileText } from 'lucide-react';
+import { Menu, X, ChevronDown, Home, Bed, Building, Navigation, BookOpen, FileText, Info } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from '../assets/Logo.png';
 
@@ -58,27 +58,27 @@ const Navbar = () => {
           </Link>
 
          
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-0.5 xl:gap-1">
             <Link 
               to="/" 
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
                 !scrolled && isHomePage
                   ? 'text-white hover:bg-white/20'
                   : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
               }`}
             >
-              <Home size={18} />
+              <Home className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
               <span>Home</span>
             </Link>
             
             {/* Rooms Dropdown */}
             <div className="relative group">
-              <button className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              <button className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
                 !scrolled && isHomePage
                   ? 'text-white hover:bg-white/20'
                   : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
               }`}>
-                <Bed size={18} />
+                <Bed className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
                 <span>Rooms</span>
                 <ChevronDown size={16} className="group-hover:rotate-180 transition-transform" />
               </button>
@@ -95,55 +95,67 @@ const Navbar = () => {
 
             <Link
               to="/facilities" 
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
                 !scrolled && isHomePage
                   ? 'text-white hover:bg-white/20'
                   : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
               }`}
             >
-              <Building size={18} />
+              <Building className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
               <span>Facilities</span>
             </Link>
             
             <Link 
               to="/getting-around" 
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+              className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
                 !scrolled && isHomePage
                   ? 'text-white hover:bg-white/20'
                   : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
               }`}
             >
-              <Navigation size={18} />
+              <Navigation className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
               <span>Getting Around</span>
             </Link>
 
-            <Link 
-              to="/rules" 
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            <Link
+              to="/rules"
+              className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
                 !scrolled && isHomePage
                   ? 'text-white hover:bg-white/20'
                   : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
               }`}
             >
-              <FileText size={18} />
+              <FileText className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
               <span>House Rules</span>
             </Link>
-            
-            <Link 
-              to="/blog" 
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
+
+            <Link
+              to="/about"
+              className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
                 !scrolled && isHomePage
                   ? 'text-white hover:bg-white/20'
                   : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
               }`}
             >
-              <BookOpen size={18} />
+              <Info className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
+              <span>About</span>
+            </Link>
+
+            <Link 
+              to="/blog" 
+              className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
+                !scrolled && isHomePage
+                  ? 'text-white hover:bg-white/20'
+                  : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
+              }`}
+            >
+              <BookOpen className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
               <span>Blog</span>
             </Link>
             
             <Link  
               to="/bookings" 
-              className="ml-4 px-6 py-2.5 bg-gradient-to-r from-blue-900 to-blue-800 text-white rounded-full font-bold hover:from-blue-800 hover:to-blue-700 transition-all shadow-lg hover:shadow-blue-900/50 hover:scale-105"
+              className="ml-1 xl:ml-4 px-4 xl:px-6 py-2.5 bg-gradient-to-r from-blue-900 to-blue-800 text-white rounded-full font-bold text-sm xl:text-base whitespace-nowrap hover:from-blue-800 hover:to-blue-700 transition-all shadow-lg hover:shadow-blue-900/50 hover:scale-105"
             >
              BOOK
             </Link>
@@ -179,7 +191,7 @@ const Navbar = () => {
           <div className="px-4 py-4 space-y-1">
             <Link 
               to="/" 
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium transition-all"
+              className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium whitespace-nowrap transition-all"
               onClick={() => setIsOpen(false)}
             >
               <Home size={20} />
@@ -190,7 +202,7 @@ const Navbar = () => {
             <div>
               <button 
                 onClick={() => setRoomsOpen(!roomsOpen)}
-                className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium transition-all"
+                className="w-full flex items-center justify-between px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium transition-all"
               >
                 <div className="flex items-center gap-3">
                   <Bed size={20} />
@@ -214,7 +226,7 @@ const Navbar = () => {
 
             <Link 
               to="/facilities" 
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium transition-all"
+              className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium whitespace-nowrap transition-all"
               onClick={() => setIsOpen(false)}
             >
               <Building size={20} />
@@ -223,25 +235,34 @@ const Navbar = () => {
             
             <Link 
               to="/getting-around" 
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium transition-all"
+              className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium whitespace-nowrap transition-all"
               onClick={() => setIsOpen(false)}
             >
               <Navigation size={20} />
               <span>Getting Around</span>
             </Link>
 
-            <Link 
-              to="/rules" 
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium transition-all"
+            <Link
+              to="/rules"
+              className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium whitespace-nowrap transition-all"
               onClick={() => setIsOpen(false)}
             >
               <FileText size={20} />
               <span>House Rules</span>
             </Link>
-            
+
+            <Link
+              to="/about"
+              className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium whitespace-nowrap transition-all"
+              onClick={() => setIsOpen(false)}
+            >
+              <Info size={20} />
+              <span>About</span>
+            </Link>
+
             <Link 
               to="/blog" 
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium transition-all"
+              className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium whitespace-nowrap transition-all"
               onClick={() => setIsOpen(false)}
             >
               <BookOpen size={20} />

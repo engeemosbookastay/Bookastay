@@ -32,6 +32,7 @@ const Booking = () => {
   const [emailVerified, setEmailVerified] = useState(false);
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpError, setOtpError] = useState("");
+  const [resendCooldown, setResendCooldown] = useState(0); // seconds until Resend is allowed again
 
   // ── Discount code
   const [discountCode, setDiscountCode] = useState("");
@@ -188,8 +189,12 @@ const Booking = () => {
         body: JSON.stringify({ email: guestEmail }),
       });
       const d = await res.json();
-      if (d.success) { setOtpSent(true); setOtpCode(""); }
-      else setOtpError(d.message || "Failed to send code");
+      if (d.success) { setOtpSent(true); setOtpCode(""); setResendCooldown(45); }
+      else {
+        setOtpError(d.message || "Failed to send code");
+        // Backend enforces a resend cooldown and returns how long to wait.
+        if (res.status === 429 && d.retryAfter) setResendCooldown(d.retryAfter);
+      }
     } catch { setOtpError("Network error. Please try again."); }
     finally { setOtpLoading(false); }
   };
@@ -215,6 +220,13 @@ const Booking = () => {
     setGuestEmail(value);
     if (emailVerified) { setEmailVerified(false); setOtpSent(false); setOtpCode(""); setOtpError(""); }
   };
+
+  // Tick the resend cooldown down to zero, one second at a time.
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const t = setInterval(() => setResendCooldown((s) => (s <= 1 ? 0 : s - 1)), 1000);
+    return () => clearInterval(t);
+  }, [resendCooldown]);
 
   // Phone formatted for backend storage
   const fullPhone = guestPhone ? `+234${guestPhone}` : '';
@@ -421,11 +433,13 @@ const Booking = () => {
                         placeholder="you@example.com" disabled={emailVerified}
                         className={`flex-1 px-4 py-2.5 bg-slate-700/50 border border-amber-500/20 rounded-xl text-white placeholder-gray-500 focus:ring-2 focus:ring-amber-500 text-sm ${emailVerified ? 'opacity-60 cursor-not-allowed' : ''}`} />
                       {!emailVerified && (
-                        <button onClick={sendOtp} disabled={!guestEmail.includes('@') || otpLoading}
+                        <button onClick={sendOtp} disabled={!guestEmail.includes('@') || otpLoading || resendCooldown > 0}
                           className="px-3 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 rounded-xl font-bold text-xs disabled:opacity-50 whitespace-nowrap flex items-center gap-1.5 justify-center min-w-[92px]">
                           {otpLoading && !otpSent
                             ? (<><Loader2 size={14} className="animate-spin" /> Sending…</>)
-                            : otpSent ? "Resend" : "Send Code"}
+                            : resendCooldown > 0
+                              ? `Resend in ${resendCooldown}s`
+                              : otpSent ? "Resend" : "Send Code"}
                         </button>
                       )}
                     </div>
@@ -523,7 +537,10 @@ const Booking = () => {
                     className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 text-sm">
                     {isSubmitting ? "Processing..." : `Pay ₦${price.depositAmount.toLocaleString()} with Paystack`}
                   </button>
-                  <p className="text-xs text-center text-gray-400">Secured by Paystack · Cards, bank transfer &amp; USSD</p>
+                  <p className="text-xs text-center text-gray-400 flex items-center justify-center gap-1.5">
+                    <Shield size={13} className="text-green-400" />
+                    Payment secured by <span className="font-semibold text-gray-300">Paystack</span> · Cards, bank transfer &amp; USSD
+                  </p>
                 </div>
               )}
             </div>

@@ -1,14 +1,12 @@
 import React from 'react'
-import Feauters from '../Component/Feauters'
 import Hero from './Hero'
-import About from '../Component/About'
+import Comparison from '../Component/Comparison'
 
 const Home = () => {
   return (
     <div>
         <Hero/>
-        <About/>
-      {/* <Feauters/> */}
+        <Comparison/>
     </div>
   )
 }

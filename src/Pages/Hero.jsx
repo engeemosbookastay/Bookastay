@@ -38,8 +38,8 @@ const Hero = () => {
   // Debounce timer
   const availabilityTimer = useRef(null);
 
-  // Updated images with italicized subtitles
-  const images = [
+  // Homepage carousel — admin-managed (home_hero), with these bundled images as the fallback
+  const DEFAULT_IMAGES = [
     {
       src: Living,
       caption: "Engeemos Bookastay",
@@ -83,6 +83,33 @@ const Hero = () => {
       transition: "fade",
     },
   ];
+
+  const [images, setImages] = useState(DEFAULT_IMAGES);
+
+  // Pull admin-managed carousel slides; fall back to the bundled images if none are set.
+  useEffect(() => {
+    fetch(`${backendUrl}/api/content/home_hero`)
+      .then((r) => r.json())
+      .then((d) => {
+        const slides = d?.content?.value?.slides;
+        if (d?.success && Array.isArray(slides) && slides.length) {
+          const transitions = ["fade", "slide", "zoom"];
+          const mapped = slides
+            .filter((s) => s && s.url)
+            .map((s, i) => ({
+              src: s.url,
+              caption: s.caption || "",
+              subtitle: s.subtitle || "",
+              transition: transitions[i % transitions.length],
+            }));
+          if (mapped.length) {
+            setImages(mapped);
+            setCurrentSlide(0);
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Check cookie consent on mount
   useEffect(() => {
