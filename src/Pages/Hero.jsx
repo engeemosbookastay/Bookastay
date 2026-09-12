@@ -6,8 +6,6 @@ import {
   Check,
   X,
   Cookie,
-  Star,
-  ExternalLink,
 } from "lucide-react";
 import { backendUrl } from "../App";
 // import { Link } from 'react-router-dom';
@@ -547,67 +545,6 @@ const Hero = () => {
           className="w-full h-auto rounded-3xl shadow-lg"
           loading="lazy"
         />
-      </div>
-
-      {/* Review Boxes - Before About Us */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid md:grid-cols-2 gap-6">
-          {/* Airbnb Reviews */}
-          <a
-            href="https://www.airbnb.com.au/rooms/1062424467186970425?guests=1&adults=1&s=67&unique_share_id=d51d6c71-7873-48dc-a4c0-9b44f649a68d"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group bg-gradient-to-br from-pink-50 to-red-50 border-2 border-pink-200 rounded-2xl p-8 hover:shadow-2xl transition-all transform hover:-translate-y-2"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  Airbnb Reviews
-                </h3>
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-5 h-5 fill-pink-500 text-pink-500"
-                    />
-                  ))}
-                  <span className="ml-2 text-gray-700 font-semibold">5.0</span>
-                </div>
-              </div>
-              <ExternalLink className="w-6 h-6 text-pink-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <p className="text-gray-600">
-              See what our guests say about their stay
-            </p>
-          </a>
-
-          {/* Google Reviews */}
-          <a
-            href="https://share.google/QfdxzRRnW6BXybshf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-8 hover:shadow-2xl transition-all transform hover:-translate-y-2"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  Google Reviews
-                </h3>
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-5 h-5 fill-blue-500 text-blue-500"
-                    />
-                  ))}
-                  <span className="ml-2 text-gray-700 font-semibold">5.0</span>
-                </div>
-              </div>
-              <ExternalLink className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform" />
-            </div>
-            <p className="text-gray-600">Read our guest reviews on Google</p>
-          </a>
-        </div>
       </div>
     </div>
   );

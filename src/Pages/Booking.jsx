@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { backendUrl } from "../App";
 import {
   Users, Home, Bed, Star, ChevronLeft, ChevronRight, Wifi, Tv,
-  Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Calendar,
+  Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Lock, Calendar,
   Sparkles, FileText, Clock, Tag, CreditCard, Percent, Loader2,
 } from "lucide-react";
 
@@ -534,7 +534,8 @@ const Booking = () => {
                   </div>
 
                   <button onClick={handleProceedToPayment} disabled={isSubmitting}
-                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 text-sm">
+                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 py-3.5 rounded-xl font-bold hover:from-amber-400 hover:to-amber-500 transition shadow-lg hover:shadow-amber-500/50 disabled:opacity-50 text-sm flex items-center justify-center gap-2">
+                    <Lock size={16} className="shrink-0" />
                     {isSubmitting ? "Processing..." : `Pay ₦${price.depositAmount.toLocaleString()} with Paystack`}
                   </button>
                   <p className="text-xs text-center text-gray-400 flex items-center justify-center gap-1.5">

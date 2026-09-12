@@ -70,7 +70,19 @@ const Navbar = () => {
               <Home className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
               <span>Home</span>
             </Link>
-            
+
+            <Link
+              to="/about"
+              className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
+                !scrolled && isHomePage
+                  ? 'text-white hover:bg-white/20'
+                  : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
+              }`}
+            >
+              <Info className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
+              <span>About Us</span>
+            </Link>
+
             {/* Rooms Dropdown */}
             <div className="relative group">
               <button className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
@@ -130,19 +142,7 @@ const Navbar = () => {
             </Link>
 
             <Link
-              to="/about"
-              className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
-                !scrolled && isHomePage
-                  ? 'text-white hover:bg-white/20'
-                  : 'text-gray-700 hover:text-blue-900 hover:bg-blue-50'
-              }`}
-            >
-              <Info className="hidden xl:block xl:w-[18px] xl:h-[18px] shrink-0" />
-              <span>About</span>
-            </Link>
-
-            <Link 
-              to="/blog" 
+              to="/blog"
               className={`flex items-center gap-1 xl:gap-2 px-2 xl:px-4 py-2 rounded-lg font-medium text-sm xl:text-[15px] whitespace-nowrap transition-all ${
                 !scrolled && isHomePage
                   ? 'text-white hover:bg-white/20'
@@ -197,7 +197,16 @@ const Navbar = () => {
               <Home size={20} />
               <span>Home</span>
             </Link>
-            
+
+            <Link
+              to="/about"
+              className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium whitespace-nowrap transition-all"
+              onClick={() => setIsOpen(false)}
+            >
+              <Info size={20} />
+              <span>About Us</span>
+            </Link>
+
             {/* Mobile Rooms Section */}
             <div>
               <button 
@@ -252,16 +261,7 @@ const Navbar = () => {
             </Link>
 
             <Link
-              to="/about"
-              className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium whitespace-nowrap transition-all"
-              onClick={() => setIsOpen(false)}
-            >
-              <Info size={20} />
-              <span>About</span>
-            </Link>
-
-            <Link 
-              to="/blog" 
+              to="/blog"
               className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:text-blue-900 hover:bg-blue-50 rounded-xl font-medium whitespace-nowrap transition-all"
               onClick={() => setIsOpen(false)}
             >
