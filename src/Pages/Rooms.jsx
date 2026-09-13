@@ -63,7 +63,7 @@ export default function Rooms() {
         {/* Header */}
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1.5 bg-amber-500/20 text-amber-400 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
-            Engeemos Bookastay Apartments · Abeokuta
+            Engeemos Bookastay Apartments, Abeokuta
           </span>
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">Our Suites &amp; Rooms</h1>
           <p className="text-gray-400 text-lg max-w-xl mx-auto">

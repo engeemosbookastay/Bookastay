@@ -7,8 +7,9 @@ import {
   X,
   Cookie,
   ShieldCheck,
-  ExternalLink,
 } from "lucide-react";
+import { SiAirbnb, SiBookingdotcom } from "react-icons/si";
+import { FcGoogle } from "react-icons/fc";
 import { backendUrl } from "../App";
 // import { Link } from 'react-router-dom';
 
@@ -552,7 +553,7 @@ const Hero = () => {
         />
       </div>
 
-      {/* Find us on — listings & reviews (no scores; reviews change over time) */}
+      {/* Find us on — listings & reviews (logos only; no scores, reviews change over time) */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <p className="text-center text-gray-300 text-sm font-semibold uppercase tracking-widest mb-4">Find Us On</p>
         <div className="grid grid-cols-3 gap-2 sm:gap-3">
@@ -560,25 +561,25 @@ const Hero = () => {
             href="https://www.airbnb.com.au/rooms/1062424467186970425?unique_share_id=c9aa215f-446d-4c9d-a6d3-1fce905e6b10&viralityEntryPoint=1&s=76"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
+            className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
           >
-            Airbnb <ExternalLink size={13} className="shrink-0 opacity-70" />
+            <SiAirbnb size={20} className="shrink-0 text-[#FF5A5F]" /> Airbnb
           </a>
           <a
             href="https://www.booking.com/Share-HeF21JK"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
+            className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
           >
-            Booking.com <ExternalLink size={13} className="shrink-0 opacity-70" />
+            <SiBookingdotcom size={20} className="shrink-0 text-[#4a9eea]" /> Booking.com
           </a>
           <a
             href="https://share.google/nC3dMSMnvF1DdkuK0"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1.5 px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
+            className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
           >
-            Google Profile <ExternalLink size={13} className="shrink-0 opacity-70" />
+            <FcGoogle size={20} className="shrink-0" /> Google Profile
           </a>
         </div>
 
