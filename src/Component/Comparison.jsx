@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Check, X, Crown, ShieldCheck } from 'lucide-react';
+import { Check, Crown, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { backendUrl } from '../App';
 
@@ -15,15 +15,8 @@ const DEFAULTS = {
     { label: 'Payment', ours: 'Secure Paystack', theirs: 'Third-party processor' },
     { label: 'Support', ours: 'Direct with host', theirs: 'Call centre' },
   ],
-  footnote: 'Prices are illustrative — edit these rows in the admin panel.',
+  footnote: 'Why pay more? Book directly with us and save on every single stay.',
 };
-
-// A cell reads as "positive" (green check) when it clearly favours booking
-// direct, and "negative" (muted X) for the third-party column. We keep this
-// purely visual — the text always comes from the admin content.
-const NEGATIVE_HINTS = ['higher', 'up to', 'fee', 'third', 'call', 'none of', 'limited'];
-const isNegative = (text = '') =>
-  NEGATIVE_HINTS.some((h) => String(text).toLowerCase().includes(h));
 
 const Comparison = () => {
   const [data, setData] = useState(DEFAULTS);
@@ -87,7 +80,7 @@ const Comparison = () => {
                 </div>
               </div>
               <div className="p-4 md:p-6 text-center">
-                <span className="text-sm md:text-lg font-semibold text-gray-400 leading-tight">
+                <span className="text-sm md:text-lg font-bold text-gray-200 leading-tight">
                   {data.columns.theirs}
                 </span>
               </div>
@@ -112,10 +105,7 @@ const Comparison = () => {
                 </div>
                 <div className="p-4 md:p-6 text-center">
                   <div className="flex items-center justify-center gap-1.5 md:gap-2">
-                    {isNegative(row.theirs) && (
-                      <X className="w-4 h-4 md:w-5 md:h-5 text-rose-400/70 shrink-0" />
-                    )}
-                    <span className="text-sm md:text-base text-gray-400">{row.theirs}</span>
+                    <span className="text-sm md:text-base font-semibold text-gray-200">{row.theirs}</span>
                   </div>
                 </div>
               </div>
@@ -125,7 +115,9 @@ const Comparison = () => {
 
         {/* Footnote + CTA */}
         {data.footnote && (
-          <p className="text-center text-gray-500 text-xs md:text-sm mt-4">{data.footnote}</p>
+          <p className="text-center mt-6 text-lg md:text-2xl font-extrabold italic tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 drop-shadow-[0_2px_10px_rgba(245,158,11,0.25)]">
+            {data.footnote}
+          </p>
         )}
         <div className="text-center mt-8">
           <Link

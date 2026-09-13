@@ -6,6 +6,8 @@ import {
   Check,
   X,
   Cookie,
+  ShieldCheck,
+  ExternalLink,
 } from "lucide-react";
 import { backendUrl } from "../App";
 // import { Link } from 'react-router-dom';
@@ -528,8 +530,11 @@ const Hero = () => {
                     "Enter your dates and number of guests to check availability"
                   )}
                 </p>
-                <p className="text-yellow-400">
-                   5% discount for 7+ days • 10% discount for 30+ days
+                <p className="text-yellow-400 font-semibold">
+                   10% off for 7+ nights • 15% off for 30+ nights — applied automatically
+                </p>
+                <p className="flex items-center justify-center gap-1 text-emerald-300">
+                  <ShieldCheck size={12} className="shrink-0" /> Secured by Paystack — we never see your card details
                 </p>
               </div>
             </div>
@@ -545,6 +550,45 @@ const Hero = () => {
           className="w-full h-auto rounded-3xl shadow-lg"
           loading="lazy"
         />
+      </div>
+
+      {/* Find us on — listings & reviews (no scores; reviews change over time) */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <p className="text-center text-gray-300 text-sm font-semibold uppercase tracking-widest mb-4">Find Us On</p>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          <a
+            href="https://www.airbnb.com.au/rooms/1062424467186970425?unique_share_id=c9aa215f-446d-4c9d-a6d3-1fce905e6b10&viralityEntryPoint=1&s=76"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
+          >
+            Airbnb <ExternalLink size={13} className="shrink-0 opacity-70" />
+          </a>
+          <a
+            href="https://www.booking.com/Share-HeF21JK"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
+          >
+            Booking.com <ExternalLink size={13} className="shrink-0 opacity-70" />
+          </a>
+          <a
+            href="https://share.google/nC3dMSMnvF1DdkuK0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-1.5 px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
+          >
+            Google Profile <ExternalLink size={13} className="shrink-0 opacity-70" />
+          </a>
+        </div>
+
+        {/* Payment security — Paystack */}
+        <div className="mt-6 flex items-start sm:items-center justify-center gap-2 px-4 py-3 bg-emerald-500/10 border border-emerald-400/30 rounded-xl">
+          <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5 sm:mt-0" />
+          <p className="text-emerald-100 text-xs sm:text-sm text-center">
+            <span className="font-bold">Secured by Paystack</span> — we never see your card details. Bank-level encryption, PCI-DSS compliant.
+          </p>
+        </div>
       </div>
     </div>
   );

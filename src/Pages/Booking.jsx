@@ -163,8 +163,8 @@ const Booking = () => {
 
     const basePrice = currentOption.base_price * nights;
     let discountRate = 0, discountType = "";
-    if (nights >= 30) { discountRate = 0.1; discountType = "10% Monthly Discount"; }
-    else if (nights >= 7) { discountRate = 0.05; discountType = "5% Weekly Discount"; }
+    if (nights >= 30) { discountRate = 0.15; discountType = "15% Monthly Discount (auto-applied)"; }
+    else if (nights >= 7) { discountRate = 0.10; discountType = "10% Weekly Discount (auto-applied)"; }
     const discount = Math.round(basePrice * discountRate);
 
     const extraGuestCharge = currentRoomKey === "entire" && numGuests > 2 ? (numGuests - 2) * 5000 * nights : 0;
@@ -704,16 +704,16 @@ const Booking = () => {
                 </div>
 
                 <div className="space-y-3 mb-6">
-                  <div className="grid grid-cols-2 gap-0 border-2 border-amber-500/30 rounded-xl overflow-hidden">
-                    <div className="p-3 border-r-2 border-amber-500/30 bg-slate-700/30">
-                      <label className="block text-xs font-bold text-gray-300 uppercase mb-1">Check-in</label>
+                  <div className="grid grid-cols-2 gap-0 border-2 border-amber-500/50 rounded-xl overflow-hidden bg-slate-900/40">
+                    <div className="p-3 border-r-2 border-amber-500/50 bg-slate-700/40">
+                      <label className="flex items-center gap-1.5 text-xs font-bold text-amber-400 uppercase mb-1.5"><Calendar size={14} className="text-amber-400" /> Check-in</label>
                       <input type="date" value={checkIn} min={today} onChange={e => setCheckIn(e.target.value)}
-                        className="w-full text-xs text-white focus:outline-none bg-transparent font-semibold" />
+                        className="w-full text-sm text-white focus:outline-none bg-transparent font-bold cursor-pointer [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:scale-125 [&::-webkit-calendar-picker-indicator]:opacity-90 [&::-webkit-calendar-picker-indicator]:hover:opacity-100" />
                     </div>
-                    <div className="p-3 bg-slate-700/30">
-                      <label className="block text-xs font-bold text-gray-300 uppercase mb-1">Checkout</label>
+                    <div className="p-3 bg-slate-700/40">
+                      <label className="flex items-center gap-1.5 text-xs font-bold text-amber-400 uppercase mb-1.5"><Calendar size={14} className="text-amber-400" /> Checkout</label>
                       <input type="date" value={checkOut} min={checkIn || today} onChange={e => setCheckOut(e.target.value)}
-                        className="w-full text-xs text-white focus:outline-none bg-transparent font-semibold" />
+                        className="w-full text-sm text-white focus:outline-none bg-transparent font-bold cursor-pointer [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:scale-125 [&::-webkit-calendar-picker-indicator]:opacity-90 [&::-webkit-calendar-picker-indicator]:hover:opacity-100" />
                     </div>
                   </div>
                   <div className="border-2 border-amber-500/30 rounded-xl p-3 bg-slate-700/30">
@@ -801,14 +801,15 @@ const Booking = () => {
                       className={`w-full py-4 rounded-xl font-bold text-base transition transform ${!canProceed() ? "bg-gray-700 text-gray-500 cursor-not-allowed opacity-60" : "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 hover:from-amber-400 hover:to-amber-500 shadow-lg shadow-amber-500/50 hover:scale-105"}`}>
                       {availabilityLoading ? "Checking..." : canProceed() ? "Reserve Now" : "Not Available"}
                     </button>
-                    <p className="text-xs text-center text-gray-400 mt-3">Secure booking • Pay in full</p>
+                    <p className="flex items-center justify-center gap-1.5 text-xs text-center text-emerald-300 mt-3"><Lock size={12} className="shrink-0" /> Secured by Paystack — we never see your card details</p>
                   </>
                 )}
 
                 {(!checkIn || !checkOut) && (
                   <div className="text-center py-10">
                     <Calendar className="w-14 h-14 mx-auto mb-3 text-amber-400" />
-                    <p className="text-yellow-400 text-sm">5% off for 7+ days • 10% off for 30+ days</p>
+                    <p className="text-yellow-400 text-sm font-bold">10% off for 7+ nights • 15% off for 30+ nights</p>
+                    <p className="text-emerald-300 text-xs mt-1">✓ Applied automatically — no code needed</p>
                     <p className="text-gray-400 text-sm mt-1">Select dates to view pricing</p>
                   </div>
                 )}
