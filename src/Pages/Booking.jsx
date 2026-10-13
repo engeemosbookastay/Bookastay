@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { backendUrl } from "../App";
+import { minCheckInDate, LEAD_TIME_MESSAGE } from "../utils/leadTime";
 import {
   Users, Home, Bed, Star, ChevronLeft, ChevronRight, Wifi, Tv,
   Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Lock, Calendar,
@@ -348,7 +349,7 @@ const Booking = () => {
     handlePaystackPayment();
   };
 
-  const today = new Date().toISOString().split("T")[0];
+  const minCheckIn = minCheckInDate();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
@@ -707,14 +708,18 @@ const Booking = () => {
                   <div className="grid grid-cols-2 gap-0 border-2 border-amber-500/50 rounded-xl overflow-hidden bg-slate-900/40">
                     <div className="p-3 border-r-2 border-amber-500/50 bg-slate-700/40">
                       <label className="flex items-center gap-1.5 text-xs font-bold text-amber-400 uppercase mb-1.5"><Calendar size={14} className="text-amber-400" /> Check-in</label>
-                      <input type="date" value={checkIn} min={today} onChange={e => setCheckIn(e.target.value)}
+                      <input type="date" value={checkIn} min={minCheckIn} onChange={e => setCheckIn(e.target.value)}
                         className="w-full text-sm text-white focus:outline-none bg-transparent font-bold cursor-pointer [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:scale-125 [&::-webkit-calendar-picker-indicator]:opacity-90 [&::-webkit-calendar-picker-indicator]:hover:opacity-100" />
                     </div>
                     <div className="p-3 bg-slate-700/40">
                       <label className="flex items-center gap-1.5 text-xs font-bold text-amber-400 uppercase mb-1.5"><Calendar size={14} className="text-amber-400" /> Checkout</label>
-                      <input type="date" value={checkOut} min={checkIn || today} onChange={e => setCheckOut(e.target.value)}
+                      <input type="date" value={checkOut} min={checkIn || minCheckIn} onChange={e => setCheckOut(e.target.value)}
                         className="w-full text-sm text-white focus:outline-none bg-transparent font-bold cursor-pointer [color-scheme:dark] [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-calendar-picker-indicator]:scale-125 [&::-webkit-calendar-picker-indicator]:opacity-90 [&::-webkit-calendar-picker-indicator]:hover:opacity-100" />
                     </div>
+                  </div>
+                  <div className="flex items-start gap-2 p-3 rounded-xl bg-amber-500/15 border-2 border-amber-500/40">
+                    <Clock size={16} className="text-amber-300 shrink-0 mt-0.5" />
+                    <p className="text-xs font-semibold text-amber-100 leading-snug">{LEAD_TIME_MESSAGE}</p>
                   </div>
                   <div className="border-2 border-amber-500/30 rounded-xl p-3 bg-slate-700/30">
                     <label className="block text-xs font-bold text-gray-300 uppercase mb-1">Guests</label>

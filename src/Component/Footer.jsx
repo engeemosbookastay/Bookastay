@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Phone, Mail, MapPin, Instagram, Facebook, Twitter, ChevronRight, MessageCircle, Lock } from "lucide-react";
 import { FaTiktok } from "react-icons/fa";
 import Logo from '../assets/Logo.png';
-import { backendUrl } from "../App";
+import useSiteContent, { pickContent } from '../utils/useSiteContent';
 
 // Current hardcoded values act as the fallback so nothing breaks before the
 // `footer` content row is seeded/edited from the admin panel.
@@ -31,30 +31,20 @@ const igHandle = (url = "") => {
 };
 
 const Footer = () => {
-  const [footer, setFooter] = useState(DEFAULTS);
-
-  useEffect(() => {
-    fetch(`${backendUrl}/api/content/footer`)
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success && d.content?.value && Object.keys(d.content.value).length) {
-          const v = d.content.value;
-          setFooter({
-            phones: Array.isArray(v.phones) && v.phones.length ? v.phones : DEFAULTS.phones,
-            email: v.email || DEFAULTS.email,
-            address: v.address || DEFAULTS.address,
-            // Merge so a missing key falls back, but an explicitly blank URL hides that social.
-            socials: { ...DEFAULTS.socials, ...(v.socials || {}) },
-          });
-        }
-      })
-      .catch(() => {});
-  }, []);
+  // Saved footer is used as-is: a cleared phone/email/social stays cleared.
+  // Defaults only show if the footer has never been saved.
+  const v = pickContent(useSiteContent('footer'), DEFAULTS, { phones: [], email: '', address: '', socials: {} }) || {};
+  const footer = {
+    phones: Array.isArray(v.phones) ? v.phones : [],
+    email: v.email || '',
+    address: v.address || '',
+    socials: v.socials || {},
+  };
 
   const s = footer.socials || {};
-  const whatsappLink =
-    s.whatsapp ||
-    waHref((footer.phones.find((p) => isWhatsApp(p.label)) || {}).number || "2348066215431");
+  // Floating chat button follows the admin's footer data; hidden if none is set.
+  const waNumber = (footer.phones.find((p) => isWhatsApp(p.label)) || {}).number;
+  const whatsappLink = s.whatsapp || (waNumber ? waHref(waNumber) : "");
 
   // Only render socials that have a URL (blank = hidden). Full literal class
   // strings keep Tailwind from purging the hover variants.
@@ -304,6 +294,7 @@ const Footer = () => {
       </div>
 
       {/* WhatsApp Floating Chat Button */}
+      {whatsappLink && (
       <a
         href={whatsappLink}
         target="_blank"
@@ -315,6 +306,7 @@ const Footer = () => {
         <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping"></span>
         <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
       </a>
+      )}
     </footer>
   );
 };

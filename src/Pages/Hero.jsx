@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import {
   Calendar,
   Users,
@@ -7,10 +7,14 @@ import {
   X,
   Cookie,
   ShieldCheck,
+  Clock,
 } from "lucide-react";
-import { SiAirbnb, SiBookingdotcom } from "react-icons/si";
+import { SiAirbnb } from "react-icons/si";
+import { TbBrandBooking } from "react-icons/tb";
 import { FcGoogle } from "react-icons/fc";
 import { backendUrl } from "../App";
+import { minCheckInDate, LEAD_TIME_MESSAGE } from "../utils/leadTime";
+import useSiteContent, { pickContent } from "../utils/useSiteContent";
 // import { Link } from 'react-router-dom';
 
 import Living from "../assets/Living.jpg";
@@ -85,32 +89,28 @@ const Hero = () => {
     },
   ];
 
-  const [images, setImages] = useState(DEFAULT_IMAGES);
+  // Admin-managed slides are used exactly (deleted slides stay deleted); the
+  // bundled images only show if the carousel has never been saved.
+  const heroContent = useSiteContent("home_hero");
+  const savedSlides = pickContent(heroContent, null, { slides: [] })?.slides;
+  const images = useMemo(() => {
+    if (!Array.isArray(savedSlides)) return DEFAULT_IMAGES;
+    const transitions = ["fade", "slide", "zoom"];
+    return savedSlides
+      .filter((s) => s && s.url)
+      .map((s, i) => ({
+        src: s.url,
+        caption: s.caption || "",
+        subtitle: s.subtitle || "",
+        transition: transitions[i % transitions.length],
+      }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(savedSlides)]);
 
-  // Pull admin-managed carousel slides; fall back to the bundled images if none are set.
+  // Keep the active slide in range when the slide list changes.
   useEffect(() => {
-    fetch(`${backendUrl}/api/content/home_hero`)
-      .then((r) => r.json())
-      .then((d) => {
-        const slides = d?.content?.value?.slides;
-        if (d?.success && Array.isArray(slides) && slides.length) {
-          const transitions = ["fade", "slide", "zoom"];
-          const mapped = slides
-            .filter((s) => s && s.url)
-            .map((s, i) => ({
-              src: s.url,
-              caption: s.caption || "",
-              subtitle: s.subtitle || "",
-              transition: transitions[i % transitions.length],
-            }));
-          if (mapped.length) {
-            setImages(mapped);
-            setCurrentSlide(0);
-          }
-        }
-      })
-      .catch(() => {});
-  }, []);
+    setCurrentSlide((prev) => (prev < images.length ? prev : 0));
+  }, [images.length]);
 
   // Check cookie consent on mount
   useEffect(() => {
@@ -129,6 +129,7 @@ const Hero = () => {
 
   // Auto-slide every 6 seconds
   useEffect(() => {
+    if (images.length < 2) return;
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % images.length);
     }, 6000);
@@ -241,7 +242,7 @@ const Hero = () => {
     }
   };
 
-  const today = new Date().toISOString().split("T")[0];
+  const minCheckIn = minCheckInDate();
 
   const getTransitionClass = (index, transition) => {
     const isActive = index === currentSlide;
@@ -384,7 +385,7 @@ const Hero = () => {
                     <input
                       type="date"
                       value={checkIn}
-                      min={today}
+                      min={minCheckIn}
                       onChange={(e) => setCheckIn(e.target.value)}
                       className="w-full pl-7 sm:pl-10 pr-1 sm:pr-3 py-1.5 sm:py-2.5 bg-white/10 border border-white/30 rounded-md sm:rounded-lg text-white text-[10px] sm:text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all"
                     />
@@ -400,7 +401,7 @@ const Hero = () => {
                     <input
                       type="date"
                       value={checkOut}
-                      min={checkIn || today}
+                      min={checkIn || minCheckIn}
                       onChange={(e) => setCheckOut(e.target.value)}
                       className="w-full pl-7 sm:pl-10 pr-1 sm:pr-3 py-1.5 sm:py-2.5 bg-white/10 border border-white/30 rounded-md sm:rounded-lg text-white text-[10px] sm:text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all"
                     />
@@ -478,6 +479,13 @@ const Hero = () => {
                     )}
                   </button>
                 </div>
+              </div>
+
+              <div className="flex items-start gap-2 mb-2 sm:mb-3 p-2 sm:p-3 bg-amber-500/15 border-2 border-amber-400/40 rounded-md sm:rounded-lg backdrop-blur-md">
+                <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-amber-300 shrink-0 mt-0.5" />
+                <p className="text-[10px] sm:text-xs font-semibold text-amber-100 leading-snug">
+                  {LEAD_TIME_MESSAGE}
+                </p>
               </div>
 
               {availabilityLoading && checkIn && checkOut && (
@@ -571,7 +579,7 @@ const Hero = () => {
             rel="noopener noreferrer"
             className="flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-white font-semibold text-xs sm:text-sm transition-all"
           >
-            <SiBookingdotcom size={20} className="shrink-0 text-[#4a9eea]" /> Booking.com
+            <TbBrandBooking size={20} className="shrink-0 text-[#4a9eea]" /> Booking.com
           </a>
           <a
             href="https://share.google/nC3dMSMnvF1DdkuK0"

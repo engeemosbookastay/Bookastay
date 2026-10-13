@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { MapPin, ShoppingCart, Utensils, Camera, Music, DollarSign, Fuel, Navigation, Clock, ExternalLink, Crown, Train } from 'lucide-react';
-import { backendUrl } from '../App';
+import useSiteContent, { pickContent } from '../utils/useSiteContent';
 
 const categoryMeta = {
   tourism:   { icon: Camera,       gradient: 'from-blue-500 to-cyan-500',      bgGradient: 'from-blue-500/10 to-cyan-500/10' },
@@ -144,38 +144,22 @@ const withMeta = (key, title, items) => {
   };
 };
 
-// Merge admin categories over the defaults: an edited category replaces that
-// category's items (links backfilled), untouched default categories remain (#11).
-const GA_CACHE_KEY = 'content_cache_getting_around';
-const readGaCache = () => { try { return JSON.parse(localStorage.getItem(GA_CACHE_KEY)); } catch { return null; } };
-const mergeCategories = (override) => {
+// Build the page from exactly what the admin saved, in the admin's order —
+// deleted categories/places stay deleted. Bundled defaults only show if this
+// section has never been saved.
+const buildCategories = (value) => {
   const merged = {};
-  Object.entries(FALLBACK_CATEGORIES).forEach(([k, v]) => { merged[k] = withMeta(k, v.title, v.items); });
-  if (override && Array.isArray(override.categories)) {
-    override.categories.forEach(cat => {
-      if (!cat || !cat.key) return;
-      merged[cat.key] = withMeta(cat.key, cat.title, cat.items);
-    });
-  }
+  (Array.isArray(value?.categories) ? value.categories : []).forEach(cat => {
+    if (!cat || !cat.key) return;
+    merged[cat.key] = withMeta(cat.key, cat.title, cat.items);
+  });
   return merged;
 };
 
 const GettingAround = () => {
   const [activeCategory, setActiveCategory] = useState('all');
-  // Hydrate from the last-known content first so a refresh doesn't flash before the fetch (#11).
-  const [categories, setCategories] = useState(() => mergeCategories(readGaCache()));
-
-  useEffect(() => {
-    fetch(`${backendUrl}/api/content/getting_around`)
-      .then(r => r.json())
-      .then(d => {
-        if (d.success && d.content?.value) {
-          localStorage.setItem(GA_CACHE_KEY, JSON.stringify(d.content.value));
-          setCategories(mergeCategories(d.content.value));
-        }
-      })
-      .catch(() => {});
-  }, []);
+  const saved = pickContent(useSiteContent('getting_around'), { categories: RAW_GETTING_AROUND }, { categories: [] });
+  const categories = buildCategories(saved);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">

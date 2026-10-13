@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { MapPin, Shield, Crown, Sparkles, Award, Heart, Star } from 'lucide-react';
-import { backendUrl } from '../App';
+import useSiteContent, { pickContent } from '../utils/useSiteContent';
 
 const DEFAULT_PARAGRAPHS = [
   `<strong>Engeemos Bookastay Ventures</strong> is a registered business name. We currently oversee hosting services for <strong>Engeemos Bookastay Apartments</strong> a block of flats boasting of modern facilities and aesthetically styled interior. Ensconced in a serene and secure part of <strong>Olomore</strong>, Abeokuta, this property is close to Lafenwa, Ita-Oshin, Brewery, Ibara-Omida, Oke-Ilewo, and just about 20-25 minutes of driving to Kuto/Oke-Mosan area and Olusegun Obasanjo Presidential Library.`,
@@ -10,18 +10,8 @@ const DEFAULT_PARAGRAPHS = [
 ];
 
 const About = () => {
-  const [paragraphs, setParagraphs] = useState(DEFAULT_PARAGRAPHS);
-
-  useEffect(() => {
-    fetch(`${backendUrl}/api/content/about`)
-      .then(r => r.json())
-      .then(d => {
-        if (d.success && d.content?.value?.paragraphs?.length) {
-          setParagraphs(d.content.value.paragraphs);
-        }
-      })
-      .catch(() => {});
-  }, []);
+  const saved = pickContent(useSiteContent('about'), { paragraphs: DEFAULT_PARAGRAPHS }, { paragraphs: [] });
+  const paragraphs = Array.isArray(saved?.paragraphs) ? saved.paragraphs : [];
 
   return (
     <section className="relative py-20 md:py-32 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 overflow-hidden">

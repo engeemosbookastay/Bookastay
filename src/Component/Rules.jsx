@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Shield, Cigarette, Users, Clock, Lightbulb, Gamepad2, Zap, UtensilsCrossed, Trash2, AlertCircle, CheckCircle, ChevronDown, ChevronUp, Home as HomeIcon, Music, Eye, Key, Crown, Thermometer, RefreshCw } from 'lucide-react';
 import Navbar from './Navbar';
-import { backendUrl } from '../App';
+import useSiteContent, { pickContent } from '../utils/useSiteContent';
 
 // Fixed icon/gradient rotation — admin-edited rule content gets styled by
 // position since icons/colors aren't part of the editable content.
@@ -151,40 +151,12 @@ export const RAW_HOUSE_RULES = [
   }
 ];
 
-// Merge admin overrides into the defaults by title so edits "join the list"
-// instead of replacing it, and an edited rule overrides the matching default (#10).
-const CACHE_KEY = 'content_cache_house_rules';
-const readCache = () => { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } };
-const mergeRules = (override) => {
-  const base = RAW_HOUSE_RULES.map(r => ({ ...r }));
-  if (override && Array.isArray(override.rules) && override.rules.length) {
-    const idx = new Map(base.map((r, i) => [(r.title || '').trim().toLowerCase(), i]));
-    override.rules.forEach(ar => {
-      const k = (ar.title || '').trim().toLowerCase();
-      if (idx.has(k)) base[idx.get(k)] = { ...base[idx.get(k)], ...ar };
-      else base.push(ar);
-    });
-  }
-  return applyIconPalette(base);
-};
-
 const Rules = () => {
   const [expandedSections, setExpandedSections] = useState({});
-  // Hydrate from the last-known content first so a refresh doesn't flash the
-  // stale defaults before the network responds (#10).
-  const [rules, setRules] = useState(() => mergeRules(readCache()));
-
-  useEffect(() => {
-    fetch(`${backendUrl}/api/content/house_rules`)
-      .then(r => r.json())
-      .then(d => {
-        if (d.success && d.content?.value) {
-          localStorage.setItem(CACHE_KEY, JSON.stringify(d.content.value));
-          setRules(mergeRules(d.content.value));
-        }
-      })
-      .catch(() => {});
-  }, []);
+  // Exactly what the admin saved, in the admin's order. Defaults only show if
+  // House Rules have never been saved.
+  const saved = pickContent(useSiteContent('house_rules'), { rules: RAW_HOUSE_RULES }, { rules: [] });
+  const rules = applyIconPalette(Array.isArray(saved?.rules) ? saved.rules : []);
 
   const toggleSection = (index) => {
     setExpandedSections(prev => ({
@@ -279,6 +251,26 @@ const Rules = () => {
                       <p className="text-gray-300 text-base md:text-lg leading-relaxed mt-4">
                         {rule.extra}
                       </p>
+                    )}
+
+                    {(rule.paragraphs || []).filter(p => p && p.trim()).map((para, pIdx) => (
+                      <p key={pIdx} className="text-gray-300 text-base md:text-lg leading-relaxed mt-4 whitespace-pre-line">
+                        {para}
+                      </p>
+                    ))}
+
+                    {/* Explicit "read more" prompt so guests know these blurbs have
+                        more info to open (the header chevron alone wasn't obvious). */}
+                    {hasDetails && (
+                      <button
+                        type="button"
+                        onClick={() => toggleSection(index)}
+                        aria-expanded={isExpanded}
+                        className="mt-5 inline-flex items-center gap-2 rounded-full border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-sm md:text-base font-semibold text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/60 transition-all"
+                      >
+                        <span>{isExpanded ? 'Show less' : 'Click here to expand'}</span>
+                        {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                      </button>
                     )}
 
                     {/* Expandable Details */}

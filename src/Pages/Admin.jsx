@@ -174,10 +174,11 @@ function Admin() {
         fetch(`${backendUrl}/api/content/house_rules`).then(r => r.json()).catch(() => ({})),
         fetch(`${backendUrl}/api/content/getting_around`).then(r => r.json()).catch(() => ({})),
       ]);
-      setRulesDraft(hr?.content?.value?.rules?.length
+      // Defaults only if never saved, so deleted items don't come back on save.
+      setRulesDraft(Array.isArray(hr?.content?.value?.rules)
         ? hr.content.value.rules.map(r => ({ ...r }))
         : RAW_HOUSE_RULES.map(r => ({ ...r })));
-      setGaDraft(ga?.content?.value?.categories?.length
+      setGaDraft(Array.isArray(ga?.content?.value?.categories)
         ? ga.content.value.categories.map(c => ({ ...c, items: (c.items || []).map(i => ({ ...i })) }))
         : RAW_GETTING_AROUND.map(c => ({ ...c, items: c.items.map(i => ({ ...i })) })));
     } catch { setContentMsg('Could not load content'); }

@@ -1,9 +1,12 @@
 import React from 'react';
 import { MdShield, MdLock, MdVisibility, MdDescription, MdWarning, MdCheckCircle, MdEmail, MdPhone } from 'react-icons/md';
 import Navbar from '../Component//Navbar';
+import useSiteContent, { pickContent } from '../utils/useSiteContent';
 
-const PrivacyPolicy = () => {
-  const sections = [
+// The card icon is chosen by position, so the admin only edits the wording
+// (title + paragraphs). This list is also the fallback shown until the editable
+// copy loads from the backend.
+const DEFAULT_SECTIONS = [
     {
       icon: MdDescription,
       title: "Personal Data Collection",
@@ -85,7 +88,22 @@ const PrivacyPolicy = () => {
         "We may update this Privacy Policy to reflect changes in laws or how we process data. The most recent version will always be available on our website."
       ]
     }
-  ];
+];
+
+// Cycle the bundled icons across however many sections the admin saves.
+const PRIVACY_ICONS = DEFAULT_SECTIONS.map(s => s.icon);
+
+const PrivacyPolicy = () => {
+  const saved = useSiteContent('privacy_policy');
+  const items = pickContent(saved, null, { items: [] })?.items;
+  // Saved items are used exactly (deletions stick); defaults only if never saved.
+  const sections = Array.isArray(items)
+    ? items.map((it, i) => ({
+        title: it.title || '',
+        content: Array.isArray(it.content) ? it.content : [it.content].filter(Boolean),
+        icon: PRIVACY_ICONS[i % PRIVACY_ICONS.length],
+      }))
+    : DEFAULT_SECTIONS;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">

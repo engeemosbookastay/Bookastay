@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Check, Crown, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { backendUrl } from '../App';
+import useSiteContent, { pickContent } from '../utils/useSiteContent';
 
 // Defaults mirror the seeded `comparison` row in site_content, so the section
 // renders correctly even before the admin edits (or seeds) it.
@@ -19,28 +19,16 @@ const DEFAULTS = {
 };
 
 const Comparison = () => {
-  const [data, setData] = useState(DEFAULTS);
-
-  useEffect(() => {
-    fetch(`${backendUrl}/api/content/comparison`)
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success && d.content?.value) {
-          const v = d.content.value;
-          setData({
-            heading: v.heading || DEFAULTS.heading,
-            subheading: v.subheading || DEFAULTS.subheading,
-            columns: {
-              ours: v.columns?.ours || DEFAULTS.columns.ours,
-              theirs: v.columns?.theirs || DEFAULTS.columns.theirs,
-            },
-            rows: Array.isArray(v.rows) && v.rows.length ? v.rows : DEFAULTS.rows,
-            footnote: v.footnote ?? DEFAULTS.footnote,
-          });
-        }
-      })
-      .catch(() => {});
-  }, []);
+  // Saved content is used as-is (deleted rows stay deleted); defaults only
+  // show if this section has never been saved.
+  const v = pickContent(useSiteContent('comparison'), DEFAULTS, { rows: [] }) || {};
+  const data = {
+    heading: v.heading || '',
+    subheading: v.subheading || '',
+    columns: { ours: v.columns?.ours || '', theirs: v.columns?.theirs || '' },
+    rows: Array.isArray(v.rows) ? v.rows : [],
+    footnote: v.footnote || '',
+  };
 
   return (
     <section className="relative py-16 md:py-24 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 overflow-hidden">

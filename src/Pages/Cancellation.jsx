@@ -1,9 +1,12 @@
 import React from 'react';
 import { MdCalendarToday, MdCancel, MdWarning, MdCheckCircle, MdRefresh, MdAttachMoney, MdSchedule, MdShield, MdEmail, MdPhone } from 'react-icons/md';
 import Navbar from '../Component//Navbar';
+import useSiteContent, { pickContent } from '../utils/useSiteContent';
 
-const Cancellation = () => {
-  const policies = [
+// The card icon + colour are chosen by position, so the admin only edits the
+// wording (title + paragraphs). This list is also the fallback shown until the
+// editable copy loads from the backend.
+const DEFAULT_POLICIES = [
     {
       icon: MdCheckCircle,
       title: "Reservation Confirmation",
@@ -85,7 +88,24 @@ const Cancellation = () => {
       content: ["We reserve the right to update or amend this Cancellation Policy at any time. The version in effect at the time of booking shall apply."],
       color: "from-amber-500 to-yellow-500"
     }
-  ];
+];
+
+// Cycle the bundled icons/colours across however many sections the admin saves.
+const CANCEL_ICONS = DEFAULT_POLICIES.map(p => p.icon);
+const CANCEL_COLORS = DEFAULT_POLICIES.map(p => p.color);
+
+const Cancellation = () => {
+  const saved = useSiteContent('cancellation_policy');
+  const items = pickContent(saved, null, { items: [] })?.items;
+  // Saved items are used exactly (deletions stick); defaults only if never saved.
+  const policies = Array.isArray(items)
+    ? items.map((it, i) => ({
+        title: it.title || '',
+        content: Array.isArray(it.content) ? it.content : [it.content].filter(Boolean),
+        icon: CANCEL_ICONS[i % CANCEL_ICONS.length],
+        color: CANCEL_COLORS[i % CANCEL_COLORS.length],
+      }))
+    : DEFAULT_POLICIES;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
