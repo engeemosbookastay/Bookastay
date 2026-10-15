@@ -47,6 +47,7 @@ const Booking = () => {
   // ── Consent
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [cancellationConsent, setCancellationConsent] = useState(false);
+  const [rulesConsent, setRulesConsent] = useState(false);
 
   // ── Modal / flow state
   const [showBookingModal, setShowBookingModal] = useState(false);
@@ -268,8 +269,8 @@ const Booking = () => {
       alert("Please verify your email address before proceeding");
       return;
     }
-    if (!privacyConsent || !cancellationConsent) {
-      alert("Please agree to both the Privacy Policy and Cancellation Policy");
+    if (!rulesConsent || !privacyConsent || !cancellationConsent) {
+      alert("Please confirm you have read and agreed to the House Rules, Privacy Policy and Cancellation Policy");
       return;
     }
     setUploadStep("done");
@@ -314,6 +315,9 @@ const Booking = () => {
     form.append("guests", numGuests);
     form.append("payment_type", paymentType);
     form.append("deposit_percentage", 0);
+    form.append("agreed_house_rules", rulesConsent);
+    form.append("agreed_privacy_policy", privacyConsent);
+    form.append("agreed_cancellation_policy", cancellationConsent);
     if (discountResult) {
       form.append("discount_code", discountCode);
       form.append("discount_amount", price.discountCode);
@@ -339,7 +343,7 @@ const Booking = () => {
   const resetForm = () => {
     setGuestName(""); setGuestEmail(""); setGuestPhone("");
     setCheckIn(""); setCheckOut(""); setNumGuests(2); setAvailability(null);
-    setPrivacyConsent(false); setCancellationConsent(false);
+    setPrivacyConsent(false); setCancellationConsent(false); setRulesConsent(false);
     setShowBookingModal(false); setUploadStep("form");
     setDiscountCode(""); setDiscountResult(null); setDiscountError("");
     setOtpSent(false); setOtpCode(""); setEmailVerified(false); setOtpError("");
@@ -490,8 +494,9 @@ const Booking = () => {
                   <div className="border-t-2 border-amber-500/20 pt-4 space-y-3">
                     <p className="text-xs font-bold text-gray-300">Required Agreements</p>
                     {[
-                      { id: "privacy", checked: privacyConsent, setter: setPrivacyConsent, label: "I have read and agree to the", link: "/privacy-policy", linkText: "Privacy Policy" },
-                      { id: "cancel", checked: cancellationConsent, setter: setCancellationConsent, label: "I agree to the", link: "/cancellation-policy", linkText: "Cancellation Policy" },
+                      { id: "rules", checked: rulesConsent, setter: setRulesConsent, label: "I have read and agreed to the", link: "/rules", linkText: "House Rules" },
+                      { id: "privacy", checked: privacyConsent, setter: setPrivacyConsent, label: "I have read and agreed to the", link: "/privacy-policy", linkText: "Privacy Policy" },
+                      { id: "cancel", checked: cancellationConsent, setter: setCancellationConsent, label: "I have read and agreed to the", link: "/cancellation-policy", linkText: "Cancellation Policy" },
                     ].map(({ id, checked, setter, label, link, linkText }) => (
                       <div key={id} className="flex items-start gap-3">
                         <input type="checkbox" id={id} checked={checked} onChange={e => setter(e.target.checked)}
@@ -505,7 +510,7 @@ const Booking = () => {
                   </div>
 
                   <button onClick={handleContinueToPayment}
-                    disabled={!guestName || !guestEmail || !guestPhone || !emailVerified || !privacyConsent || !cancellationConsent}
+                    disabled={!guestName || !guestEmail || !guestPhone || !emailVerified || !rulesConsent || !privacyConsent || !cancellationConsent}
                     className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 rounded-xl font-bold hover:from-blue-400 hover:to-blue-500 transition disabled:opacity-50 disabled:cursor-not-allowed mt-2 text-sm">
                     Continue to Payment
                   </button>
