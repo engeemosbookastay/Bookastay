@@ -660,7 +660,7 @@ const Booking = () => {
       <div ref={detailsRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
         <div className="grid lg:grid-cols-5 gap-8 md:gap-12">
           {/* Left: details */}
-          <div className="lg:col-span-3 space-y-8">
+          <div className="lg:col-span-3 space-y-8 min-w-0">
             <div>
               <div className="flex items-center gap-2 mb-3 flex-wrap">
                 <span className="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 rounded-xl font-bold text-xs">{currentOption?.category}</span>
@@ -773,7 +773,7 @@ const Booking = () => {
           </div>
 
           {/* Right: booking card */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 min-w-0">
             <div className="sticky top-20 md:top-24">
               <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-900/95 backdrop-blur-xl border-2 border-amber-500/30 rounded-2xl shadow-2xl p-6 md:p-8">
                 <div className="mb-6">
