@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
   ],
    server: {
-    port: 5177,
+    port: 5178, // 5177 is used by the Vectra project's dev server
     strictPort: true,
       allowedHosts: [
       'london-segments-responding-brother.trycloudflare.com', // your tunnel URL

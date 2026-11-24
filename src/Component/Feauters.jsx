@@ -66,7 +66,7 @@ const Features = () => {
       <Navbar />
 
       {/* Hero Banner - Dark Blue & Gold */}
-      {/* 🎯 SPACING CONTROL: Change pb-12 to adjust bottom padding (gap before next section) */}
+      {/* SPACING CONTROL: Change pb-12 to adjust bottom padding (gap before next section) */}
       <section className="relative pt-28 md:pt-32 pb-12 md:pb-16 px-4 overflow-hidden">
         {/* Animated Background Pattern */}
         <div className="absolute inset-0 opacity-10">
@@ -110,10 +110,10 @@ const Features = () => {
       </section>
 
       {/* Facilities by Category - Vibrant Color-Coded */}
-      {/* 🎯 SPACING CONTROL #1: Change py-6 to adjust top/bottom padding of entire section */}
+      {/* SPACING CONTROL #1: Change py-6 to adjust top/bottom padding of entire section */}
       {/* Examples: py-0 (no space), py-4 (small), py-6 (medium), py-8 (large), py-12 (extra large) */}
       <section className="py-6 md:py-10 px-4">
-        {/* 🎯 SPACING CONTROL #2: Change space-y-12 to adjust gap BETWEEN categories */}
+        {/* SPACING CONTROL #2: Change space-y-12 to adjust gap BETWEEN categories */}
         {/* Examples: space-y-6 (tight), space-y-8 (small), space-y-12 (medium), space-y-16 (large) */}
         <div className="max-w-7xl mx-auto space-y-12 md:space-y-16">
           {amenitiesCategories.map((category, idx) => (
@@ -129,7 +129,7 @@ const Features = () => {
                 </div>
               </div>
 
-              {/* 🎯 SPACING CONTROL #3: Change gap-4 to adjust gap between cards */}
+              {/* SPACING CONTROL #3: Change gap-4 to adjust gap between cards */}
               {/* Examples: gap-2 (tight), gap-4 (small), gap-6 (medium), gap-8 (large) */}
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {category.items.map((item, index) => {
@@ -170,7 +170,7 @@ const Features = () => {
       </section>
 
       {/* Additional Info Banner */}
-      {/* 🎯 SPACING CONTROL #4: Change py-12 to adjust spacing of bottom banner */}
+      {/* SPACING CONTROL #4: Change py-12 to adjust spacing of bottom banner */}
       <section className="py-12 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="relative group">

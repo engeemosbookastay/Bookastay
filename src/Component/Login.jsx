@@ -36,17 +36,17 @@ const Login = () => {
       const body = await response.json().catch(() => ({}))
       if (!response.ok) throw new Error(body.error || 'Login failed')
 
-      // ✅ Extract Supabase user/session info
+      // Extract Supabase user/session info
       const user = body.data?.user || body.user || body.data || {}
       const { id, name, email } = user
 
-      // ✅ Save tokens (optional but useful)
+      // Save tokens (optional but useful)
       const accessToken = body.data?.access_token || body.access_token
       const refreshToken = body.data?.refresh_token || body.refresh_token
       if (accessToken) localStorage.setItem('access_token', accessToken)
       if (refreshToken) localStorage.setItem('refresh_token', refreshToken)
 
-      // ✅ Save user info for bookings, profile, etc.
+      // Save user info for bookings, profile, etc.
       if (id) {
         localStorage.setItem('userId', id)
         localStorage.setItem('userName', name || formData.email)
@@ -64,7 +64,7 @@ const Login = () => {
     }
   }
 
-  // ✅ OAuth login (Google/Facebook)
+  // OAuth login (Google/Facebook)
   const startOAuth = (provider) => {
     const redirect = `${window.location.origin}/auth/callback`
     window.location.href = `${backendUrl}/auth/oauth/${provider}?redirect=${encodeURIComponent(redirect)}`

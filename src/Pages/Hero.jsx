@@ -15,17 +15,13 @@ import { FcGoogle } from "react-icons/fc";
 import { backendUrl } from "../App";
 import { minCheckInDate, LEAD_TIME_MESSAGE } from "../utils/leadTime";
 import useSiteContent, { pickContent } from "../utils/useSiteContent";
+import { useStayDiscounts, describeTiers } from "../utils/stayDiscounts";
 // import { Link } from 'react-router-dom';
 
-import Living from "../assets/Living.jpg";
-import Dine from "../assets/Dine.jpg";
-import LiveRoom from "../assets/LiveRoom.jpg";
-import Room from "../assets/Room.jpg";
-import Bedroom from "../assets/Bedroom.jpg";
-import Bedroomss from "../assets/Bedroomss.jpg";
 import Logo from "../assets/Logo.png";
 
 const Hero = () => {
+  const stayDiscountText = describeTiers(useStayDiscounts()); // editable in Admin → Booking Settings
   const [currentSlide, setCurrentSlide] = useState(0);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
@@ -43,58 +39,13 @@ const Hero = () => {
   // Debounce timer
   const availabilityTimer = useRef(null);
 
-  // Homepage carousel — admin-managed (home_hero), with these bundled images as the fallback
-  const DEFAULT_IMAGES = [
-    {
-      src: Living,
-      caption: "Engeemos Bookastay",
-      subtitle: "Hosting Temporary Stay In Exotic Style",
-      transition: "fade",
-    },
-    {
-      src: LiveRoom,
-      caption: "Modern Interiors",
-      subtitle: "Designed For Your Comfort",
-      transition: "slide",
-    },
-    {
-      src: Room,
-      caption: "Peaceful Retreats",
-      subtitle: "Your Home Away From Home",
-      transition: "zoom",
-    },
-    {
-      src: Bedroomss,
-      caption: "Luxury Living Spaces",
-      subtitle: "Where Comfort Meets Elegance",
-      transition: "slide",
-    },
-    {
-      src: Dine,
-      caption: "Elegant Dining",
-      subtitle: "Create Memorable Moments",
-      transition: "fade",
-    },
-    {
-      src: Bedroom,
-      caption: "Cozy Bedrooms",
-      subtitle: "Restful Sleep Awaits",
-      transition: "zoom",
-    },
-    {
-      src: Logo,
-      caption: "Engeemos Bookastay",
-      subtitle: "Hosting Temporary Stay In Exotic Style",
-      transition: "fade",
-    },
-  ];
-
-  // Admin-managed slides are used exactly (deleted slides stay deleted); the
-  // bundled images only show if the carousel has never been saved.
+  // The carousel shows exactly the slides uploaded in the admin (Edit Content →
+  // Carousel) — no built-in default pictures. With no slides, the hero keeps its
+  // dark background.
   const heroContent = useSiteContent("home_hero");
   const savedSlides = pickContent(heroContent, null, { slides: [] })?.slides;
   const images = useMemo(() => {
-    if (!Array.isArray(savedSlides)) return DEFAULT_IMAGES;
+    if (!Array.isArray(savedSlides)) return [];
     const transitions = ["fade", "slide", "zoom"];
     return savedSlides
       .filter((s) => s && s.url)
@@ -300,7 +251,7 @@ const Hero = () => {
       {/* Hero Section with Full-Screen Carousel */}
       <div className="relative h-screen overflow-hidden">
         {/* Image Carousel Background */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
           {images.map((img, index) => (
             <div
               key={index}
@@ -539,9 +490,9 @@ const Hero = () => {
                     "Enter your dates and number of guests to check availability"
                   )}
                 </p>
-                <p className="text-yellow-400 font-semibold">
-                   10% off for 7+ nights • 15% off for 30+ nights — applied automatically
-                </p>
+                {stayDiscountText && (
+                  <p className="text-yellow-400 font-semibold">{stayDiscountText}</p>
+                )}
                 <p className="flex items-center justify-center gap-1 text-emerald-300">
                   <ShieldCheck size={12} className="shrink-0" /> Secured by Paystack — we never see your card details
                 </p>

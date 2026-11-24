@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+/* ── Scrollbars: slim, dark track with a gold thumb (matches the site theme) ── */
+/* Firefox */
+html,
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(245, 158, 11, 0.55) transparent;
+}
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.45);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 158, 11, 0.8);
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+/* Page scrollbar sits on the dark background */
+html::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+/* Hide the scrollbar but keep scrolling (swipe / trackpad / auto-scroll) */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

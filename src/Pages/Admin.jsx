@@ -5,7 +5,7 @@ import { RAW_GETTING_AROUND } from './GettingAround';
 import {
   Wifi, Wind, Monitor, Zap, Shield, Activity, Briefcase,
   Sun, Droplet, RefreshCw, Coffee, MapPin, Anchor, SlidersHorizontal,
-  Power, Trash2, Plus, Save, ArrowUp, ArrowDown,
+  Power, Trash2, Plus, Save, ArrowUp, ArrowDown, X, Camera, Copy, Settings,
 } from 'lucide-react';
 
 // Category keys the "Getting Around" page knows how to style.
@@ -675,7 +675,7 @@ function Admin() {
                     <form onSubmit={saveEdit} className="p-5 space-y-4">
                       <div className="flex items-center justify-between">
                         <h3 className="font-bold text-slate-800">Editing: {p.name}</h3>
-                        <button type="button" onClick={() => setEditingKey(null)} className="text-xs text-gray-400 hover:text-gray-600">✕ Cancel</button>
+                        <button type="button" onClick={() => setEditingKey(null)} className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600"><X size={12} /> Cancel</button>
                       </div>
 
                       <div className="grid sm:grid-cols-2 gap-3">
@@ -728,8 +728,8 @@ function Admin() {
                               <div key={i} className="relative group aspect-square rounded-lg overflow-hidden border">
                                 <img src={url} alt={`Photo ${i + 1}`} className="w-full h-full object-cover" />
                                 <button type="button" onClick={() => removeImage(url)}
-                                  className="absolute top-1 right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                                  ✕
+                                  className="absolute top-1 right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition" aria-label="Remove photo">
+                                  <X size={12} />
                                 </button>
                               </div>
                             ))}
@@ -743,7 +743,7 @@ function Admin() {
                           onChange={e => { if (e.target.files[0]) uploadImage(e.target.files[0]); e.target.value = ''; }} />
                         <button type="button" onClick={() => imgInputRef.current?.click()} disabled={imgUploading}
                           className="px-4 py-2 bg-slate-100 text-slate-700 border rounded text-sm font-semibold hover:bg-slate-200 disabled:opacity-50">
-                          {imgUploading ? 'Uploading...' : '📷 Upload Photo'}
+                          {imgUploading ? 'Uploading...' : <span className="inline-flex items-center gap-1.5"><Camera size={14} /> Upload Photo</span>}
                         </button>
                         <p className="text-xs text-gray-400 mt-1">Photos appear on the booking page for this property</p>
                       </div>
@@ -849,7 +849,7 @@ function Admin() {
                         <div className="text-xs bg-green-50 border border-green-200 rounded px-2 py-1.5 font-mono text-green-700 truncate cursor-pointer hover:bg-green-100"
                           onClick={() => { navigator.clipboard?.writeText(`${backendUrl}/api/calendar/ical/${p.room_key}.ics`); setPropMsg(`Copied export URL for ${p.name}`); }}
                           title="Click to copy">
-                          📋 {backendUrl}/api/calendar/ical/{p.room_key}.ics
+                          <Copy size={12} className="inline mr-1 -mt-0.5" />{backendUrl}/api/calendar/ical/{p.room_key}.ics
                         </div>
                       </div>
 
@@ -1039,7 +1039,7 @@ function Admin() {
                       <textarea value={rule.content || ''} onChange={e => updateRule(i, { content: e.target.value })} placeholder="Rule text" rows={2} className="w-full border rounded px-2 py-1.5 text-sm mb-2" />
                       <textarea value={rule.extra || ''} onChange={e => updateRule(i, { extra: e.target.value })} placeholder="Extra paragraph (optional)" rows={1} className="w-full border rounded px-2 py-1.5 text-sm" />
                       {Array.isArray(rule.details) && rule.details.length > 0 && (
-                        <p className="text-xs text-amber-600 mt-2">⚙ Has {rule.details.length} advanced sub-section(s) — preserved unchanged on save.</p>
+                        <p className="text-xs text-amber-600 mt-2 flex items-center gap-1"><Settings size={12} /> Has {rule.details.length} advanced sub-section(s) — preserved unchanged on save.</p>
                       )}
                     </div>
                   ))}
@@ -1103,7 +1103,7 @@ function Admin() {
               <form onSubmit={submitPost} className="bg-white border rounded-xl p-5 mb-5 space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-bold text-slate-800">{editingPostId ? 'Edit Post' : 'New Post'}</h3>
-                  <button type="button" onClick={() => { setShowPostForm(false); setEditingPostId(null); }} className="text-xs text-gray-400 hover:text-gray-600">✕ Cancel</button>
+                  <button type="button" onClick={() => { setShowPostForm(false); setEditingPostId(null); }} className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600"><X size={12} /> Cancel</button>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-3">
@@ -1147,7 +1147,7 @@ function Admin() {
                     <div className="relative inline-block mb-3">
                       <img src={postForm.image} alt="cover" className="h-32 rounded-lg border object-cover" />
                       <button type="button" onClick={() => setPostForm(f => ({ ...f, image: '' }))}
-                        className="absolute top-1 right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">✕</button>
+                        className="absolute top-1 right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center" aria-label="Remove image"><X size={12} /></button>
                     </div>
                   ) : <p className="text-xs text-gray-400 mb-3">No cover image yet.</p>}
                   <div className="flex items-center gap-2 flex-wrap">
@@ -1155,7 +1155,7 @@ function Admin() {
                       onChange={e => { if (e.target.files[0]) uploadPostImage(e.target.files[0]); e.target.value = ''; }} />
                     <button type="button" onClick={() => postImgRef.current?.click()} disabled={postImgUploading}
                       className="px-4 py-2 bg-slate-100 text-slate-700 border rounded text-sm font-semibold hover:bg-slate-200 disabled:opacity-50">
-                      {postImgUploading ? 'Uploading...' : '📷 Upload Image'}
+                      {postImgUploading ? 'Uploading...' : <span className="inline-flex items-center gap-1.5"><Camera size={14} /> Upload Image</span>}
                     </button>
                     <span className="text-xs text-gray-400">or paste a URL:</span>
                     <input value={postForm.image} onChange={e => setPostForm(f => ({ ...f, image: e.target.value }))}

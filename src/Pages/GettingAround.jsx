@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, ShoppingCart, Utensils, Camera, Music, DollarSign, Fuel, Navigation, Clock, ExternalLink, Crown, Train } from 'lucide-react';
+import { MapPin, ShoppingCart, Utensils, Camera, Music, DollarSign, Fuel, Navigation, Clock, ExternalLink, Crown, Train, Star } from 'lucide-react';
 import useSiteContent, { pickContent } from '../utils/useSiteContent';
 
 const categoryMeta = {
@@ -156,10 +156,51 @@ const buildCategories = (value) => {
   return merged;
 };
 
+const DEFAULT_INTRO = [
+  "For guests arriving on the train, the apartment is 27-28 minutes' drive from Professor Wole Soyinka Train Station.",
+  'Carefully curated below is a list of important places and things that guests may want to visit or do during their stay...',
+];
+const DEFAULT_NOTE = 'There are small stalls along Sekoni Street within walking distance from the apartment where guests can make urgent shopping for things like pepper, vegetable, beverages, etc.';
+
+// Address, map and Google reviews — editable in Admin → Edit Content → Location & Reviews.
+export const LOCATION_DEFAULTS = {
+  address: 'No. 5 Adesola Babarinde Close, Prof. Adewunmi Abioye Avenue, off Professor, Abeokuta 111105, Ogun State, Nigeria',
+  map_query: '',        // what the map searches for; empty = the address
+  rating: '',           // e.g. 4.9 — the reviews box only shows once this is set
+  review_count: '',     // e.g. 37
+  reviews_url: '',      // link to the Google reviews
+};
+
+const Stars = ({ rating }) => (
+  <div className="flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
+    {[1, 2, 3, 4, 5].map(n => {
+      const fill = Math.max(0, Math.min(1, rating - (n - 1)));
+      return (
+        <span key={n} className="relative inline-block w-5 h-5">
+          <Star className="absolute inset-0 w-5 h-5 text-amber-400/30" />
+          <span className="absolute inset-0 overflow-hidden" style={{ width: `${fill * 100}%` }}>
+            <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+          </span>
+        </span>
+      );
+    })}
+  </div>
+);
+
 const GettingAround = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const saved = pickContent(useSiteContent('getting_around'), { categories: RAW_GETTING_AROUND }, { categories: [] });
   const categories = buildCategories(saved);
+  // Intro paragraphs + bottom note — editable in Admin → Edit Content → Getting Around.
+  const intro = Array.isArray(saved?.intro) ? saved.intro : DEFAULT_INTRO;
+  const note = typeof saved?.note === 'string' ? saved.note : DEFAULT_NOTE;
+  const location = { ...LOCATION_DEFAULTS, ...(pickContent(useSiteContent('location'), LOCATION_DEFAULTS, LOCATION_DEFAULTS) || {}) };
+  const address = (location.address || LOCATION_DEFAULTS.address).trim();
+  const mapQuery = (location.map_query || address).trim();
+  const rating = Number(location.rating);
+  const reviewCount = Number(location.review_count);
+  const hasRating = rating > 0 && rating <= 5;
+  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(mapQuery)}`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
@@ -193,20 +234,18 @@ const GettingAround = () => {
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 md:mb-6 tracking-tight">
                   Getting <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-200">Around</span>
                 </h1>
-                {/* UPDATED: Split into two paragraphs as per Gbenga's feedback */}
-                <p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-4">
-                  For guests arriving on the train, the apartment is 27-28 minutes' drive from Professor Wole Soyinka Train Station.
-                </p>
-                <p className="text-lg md:text-xl text-gray-300 max-w-2xl">
-                  Carefully curated below is a list of important places and things that guests may want to visit or do during their stay...
-                </p>
+                {intro.map((para, i) => (
+                  <p key={i} className={`text-lg md:text-xl text-gray-300 max-w-2xl ${i < intro.length - 1 ? 'mb-4' : ''}`}>
+                    {para}
+                  </p>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Location - Airbnb Style (General Area Only) */}
+      {/* Location — full address, exact map, Google reviews (editable in the admin) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="relative group mb-12">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-blue-900/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all"></div>
@@ -216,44 +255,65 @@ const GettingAround = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
                   <MapPin className="w-6 h-6 text-slate-900" />
                 </div>
-                <div>
+                <div className="flex-1 min-w-0">
                   <h2 className="text-2xl font-bold text-white mb-2">Where you'll be</h2>
-                  <p className="text-gray-300 text-lg">
-                    Olomore, Abeokuta, Ogun State, Nigeria
-                  </p>
+                  <p className="text-gray-300 text-base md:text-lg">{address}</p>
+                  <div className="flex flex-wrap gap-3 mt-4">
+                    <a href={directionsUrl} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-900 font-bold text-sm hover:from-amber-400 hover:to-amber-500 transition">
+                      <Navigation className="w-4 h-4" /> Get directions
+                    </a>
+                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm transition">
+                      <ExternalLink className="w-4 h-4" /> Open in Google Maps
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Map with area circle overlay */}
-            <div className="relative h-[400px] md:h-[500px]">
+            {/* Exact location map */}
+            <div className="relative h-[350px] md:h-[450px]">
               <iframe
-                src="https://maps.google.com/maps?q=Olomore,+Abeokuta,+Ogun+State&t=m&z=14&output=embed&iwloc=near"
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=m&z=16&output=embed`}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen=""
                 loading="lazy"
-                title="General area - Olomore, Abeokuta"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Engeemos Bookastay location map"
               />
-              {/* Airbnb-style circle overlay to indicate general area */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-48 h-48 md:w-64 md:h-64 rounded-full bg-amber-500/15 border-2 border-amber-500/40 backdrop-blur-[1px]"></div>
-              </div>
             </div>
 
-            {/* Exact location notice */}
-            <div className="p-6 md:p-8 bg-slate-800/50">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-white font-semibold text-base">Exact location provided after booking</p>
-                  <p className="text-gray-400 text-sm mt-1">
-                    The property is located in the Olomore area of Abeokuta. You'll receive the full address and directions once your booking is confirmed.
-                  </p>
+            {/* Google reviews — shown once a rating is set in the admin */}
+            {(hasRating || location.reviews_url) && (
+              <div className="p-6 md:p-8 bg-slate-800/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-lg flex-shrink-0">
+                    <span className="text-2xl font-bold" style={{ background: 'linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853)', WebkitBackgroundClip: 'text', color: 'transparent' }}>G</span>
+                  </div>
+                  <div>
+                    <p className="text-gray-400 text-xs uppercase tracking-wider font-semibold">Google reviews</p>
+                    {hasRating ? (
+                      <div className="flex items-center gap-2 flex-wrap mt-1">
+                        <span className="text-white text-2xl font-bold">{rating.toFixed(1)}</span>
+                        <Stars rating={rating} />
+                        {reviewCount > 0 && <span className="text-gray-300 text-sm">({reviewCount.toLocaleString()} review{reviewCount === 1 ? '' : 's'})</span>}
+                      </div>
+                    ) : (
+                      <p className="text-white font-semibold mt-1">See what our guests say</p>
+                    )}
+                  </div>
                 </div>
+                {location.reviews_url && (
+                  <a href={location.reviews_url} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-slate-900 font-bold text-sm hover:bg-gray-100 transition whitespace-nowrap">
+                    <Star className="w-4 h-4 text-amber-500 fill-amber-500" /> Read our Google reviews
+                  </a>
+                )}
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -342,15 +402,17 @@ const GettingAround = () => {
             })}
         </div>
 
-        {/* Note */}
-        <div className="mt-12 relative group">
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-2xl blur-lg"></div>
-          <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-xl">
-            <p className="text-gray-300 leading-relaxed">
-              <strong className="text-amber-400">Note:</strong> There are small stalls along Sekoni Street within walking distance from the apartment where guests can make urgent shopping for things like pepper, vegetable, beverages, etc.
-            </p>
+        {/* Note — hidden when emptied in the admin */}
+        {note.trim() && (
+          <div className="mt-12 relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-yellow-500/20 rounded-2xl blur-lg"></div>
+            <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-6 shadow-xl">
+              <p className="text-gray-300 leading-relaxed">
+                <strong className="text-amber-400">Note:</strong> {note}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

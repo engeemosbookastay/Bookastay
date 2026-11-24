@@ -4,8 +4,10 @@ import { minCheckInDate, LEAD_TIME_MESSAGE } from "../utils/leadTime";
 import {
   Users, Home, Bed, Star, ChevronLeft, ChevronRight, Wifi, Tv,
   Wind, Car, MapPin, Check, X, DoorOpen, Utensils, Shield, Lock, Calendar,
-  Sparkles, FileText, Clock, Tag, CreditCard, Percent, Loader2,
+  Sparkles, FileText, Clock, Tag, CreditCard, Percent, Loader2, Maximize2,
 } from "lucide-react";
+import PhotoLightbox from "../Component/PhotoLightbox";
+import { useStayDiscounts, tierFor, describeTiers } from "../utils/stayDiscounts";
 
 import Living from "../assets/Living.jpg";
 
@@ -21,6 +23,16 @@ const Booking = () => {
   const [checkOut, setCheckOut] = useState("");
   const [numGuests, setNumGuests] = useState(2);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const swipeStartX = useRef(null);
+  const thumbStripRef = useRef(null);
+
+  // Keep the active thumbnail visible (the strip has no scrollbar).
+  useEffect(() => {
+    const strip = thumbStripRef.current;
+    const thumb = strip?.children?.[currentImageIndex];
+    if (strip && thumb) strip.scrollTo({ left: thumb.offsetLeft - strip.clientWidth / 2 + thumb.clientWidth / 2, behavior: "smooth" });
+  }, [currentImageIndex]);
 
   // ── Guest details
   const [guestName, setGuestName] = useState("");
@@ -80,6 +92,9 @@ const Booking = () => {
               title: p.name,
               base_price: Number(p.base_price),
               max_guests: Number(p.max_guests),
+              // Base price covers this many guests; each guest above it adds extra_guest_fee per night.
+              included_guests: Number(p.included_guests) || 2,
+              extra_guest_fee: Number(p.extra_guest_fee) || 0,
               min_nights: Number(p.min_nights),
               bedrooms: Number(p.bedrooms),
               bathrooms: Number(p.bathrooms),
@@ -101,6 +116,12 @@ const Booking = () => {
   const hasRooms = roomKeys.length > 0;
   const currentOption = rooms[activeTab] || rooms[roomKeys[0]];
   const currentRoomKey = currentOption?.room_key || (activeTab === "2bedroom" ? "entire" : "room1");
+
+  // Keep the guest count within this apartment's maximum.
+  useEffect(() => {
+    const max = currentOption?.max_guests || 0;
+    if (max > 0 && numGuests > max) setNumGuests(max);
+  }, [currentOption?.max_guests, numGuests]);
 
   // ── URL params on mount
   useEffect(() => {
@@ -157,28 +178,38 @@ const Booking = () => {
   const canProceed = () => availability === true && !availabilityLoading && checkIn && checkOut;
 
   // ── Price calculation
+  const stayDiscounts = useStayDiscounts();
   const calculatePrice = () => {
     if (!checkIn || !checkOut || !currentOption) return { base: 0, discount: 0, extraGuest: 0, discountCode: 0, total: 0, nights: 0, depositAmount: 0 };
     const start = new Date(checkIn), end = new Date(checkOut);
     const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
     if (nights <= 0) return { base: 0, discount: 0, extraGuest: 0, discountCode: 0, total: 0, nights: 0, depositAmount: 0 };
 
-    const basePrice = currentOption.base_price * nights;
-    let discountRate = 0, discountType = "";
-    if (nights >= 30) { discountRate = 0.15; discountType = "15% Monthly Discount (auto-applied)"; }
-    else if (nights >= 7) { discountRate = 0.10; discountType = "10% Weekly Discount (auto-applied)"; }
-    const discount = Math.round(basePrice * discountRate);
+    // Nightly rate = base price (covers `included_guests`) + extra fee for each guest above that.
+    const extraGuests = Math.max(0, numGuests - (currentOption.included_guests || 2));
+    const extraPerNight = extraGuests * (currentOption.extra_guest_fee || 0);
+    const nightlyRate = currentOption.base_price + extraPerNight;
 
-    const extraGuestCharge = currentRoomKey === "entire" && numGuests > 2 ? (numGuests - 2) * 5000 * nights : 0;
-    const subtotal = basePrice - discount + extraGuestCharge;
+    const basePrice = currentOption.base_price * nights;
+    const extraGuestCharge = extraPerNight * nights;
+    const tier = tierFor(stayDiscounts, nights);
+    const discountRate = tier ? tier.percent / 100 : 0;
+    const discountType = tier ? `${tier.percent}% ${tier.label} Discount (${tier.minNights}+ nights)` : "";
+    const discount = Math.round((basePrice + extraGuestCharge) * discountRate);
+
+    const subtotal = basePrice + extraGuestCharge - discount;
     const codeDiscount = discountResult?.discount?.discount_amount || 0;
     const total = Math.max(0, subtotal - codeDiscount);
     const depositAmount = total; // always paid in full
 
-    return { base: basePrice, discount, discountType, extraGuest: extraGuestCharge, discountCode: codeDiscount, total, nights, depositAmount };
+    return { base: basePrice, discount, discountType, extraGuest: extraGuestCharge, extraGuests, nightlyRate, discountCode: codeDiscount, total, nights, depositAmount };
   };
 
   const price = calculatePrice();
+
+  // Per-night price for the selected guest count — shown before dates are picked too.
+  const selectedExtraGuests = Math.max(0, numGuests - (currentOption?.included_guests || 2));
+  const selectedNightlyRate = Number(currentOption?.base_price || 0) + selectedExtraGuests * (currentOption?.extra_guest_fee || 0);
 
   // ── Email OTP verification
   const sendOtp = async () => {
@@ -289,6 +320,25 @@ const Booking = () => {
       email: guestEmail,
       amount: Math.round(amount * 100),
       ref: `book_${Date.now()}`,
+      // Booking details travel with the payment, so a paid booking can always be
+      // traced in the Paystack dashboard even if saving it on our side fails.
+      metadata: {
+        room_type: currentRoomKey,
+        apartment: currentOption?.title || currentRoomKey,
+        check_in: checkIn,
+        check_out: checkOut,
+        guests: numGuests,
+        name: guestName,
+        phone: fullPhone,
+        custom_fields: [
+          { display_name: "Apartment", variable_name: "apartment", value: currentOption?.title || currentRoomKey },
+          { display_name: "Check-in", variable_name: "check_in", value: checkIn },
+          { display_name: "Check-out", variable_name: "check_out", value: checkOut },
+          { display_name: "Guests", variable_name: "guests", value: String(numGuests) },
+          { display_name: "Guest name", variable_name: "guest_name", value: guestName },
+          { display_name: "Phone", variable_name: "phone", value: fullPhone },
+        ],
+      },
       onClose: () => {},
       callback: (response) => {
         const paymentRef = response?.reference || response?.txRef;
@@ -328,7 +378,7 @@ const Booking = () => {
       .then(async r => {
         const data = await r.json().catch(() => ({}));
         setIsSubmitting(false);
-        if (!r.ok || data.error) return alert("Booking failed: " + (data?.error || data?.message || "Unknown error"));
+        if (!r.ok || data.error) return alert(`Your payment was received (reference ${paymentRef}), but we could not complete the booking: ${data?.error || data?.message || "Unknown error"}.\n\nPlease contact us with this reference and we will sort it out or refund you.`);
         setBookingDetails({
           transactionRef: paymentRef, name: guestName, email: guestEmail,
           roomType: currentOption.title, checkIn, checkOut, guests: numGuests,
@@ -337,7 +387,7 @@ const Booking = () => {
         resetForm();
         setBookingSuccess(true);
       })
-      .catch(err => { setIsSubmitting(false); alert("Confirmation failed: " + err.message); });
+      .catch(err => { setIsSubmitting(false); alert(`Your payment was received (reference ${paymentRef}), but the confirmation did not reach us (${err.message}).\n\nPlease contact us with this reference and we will confirm your booking.`); });
   };
 
   const resetForm = () => {
@@ -621,29 +671,57 @@ const Booking = () => {
               <p className="text-gray-400 text-base md:text-xl">{currentOption?.subtitle}</p>
             </div>
 
-            {/* Image carousel */}
-            <div className="relative rounded-2xl overflow-hidden group shadow-2xl">
-              <div className="relative h-64 md:h-96 lg:h-[500px]">
-                <img src={currentOption?.images?.[currentImageIndex] || Living} alt="Room" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                {(currentOption?.images?.length || 0) > 1 && (
-                  <>
-                    <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition">
-                      <ChevronLeft size={20} />
-                    </button>
-                    <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition">
-                      <ChevronRight size={20} />
-                    </button>
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                      {currentOption.images.map((_, idx) => (
-                        <button key={idx} onClick={() => setCurrentImageIndex(idx)}
-                          className={`h-1.5 rounded-full transition-all ${idx === currentImageIndex ? "bg-amber-400 w-8" : "bg-white/60 w-1.5"}`} />
-                      ))}
-                    </div>
-                  </>
-                )}
+            {/* Photo gallery — tap/click the photo for full-screen view with zoom */}
+            <div className="space-y-3">
+              <div className="relative rounded-2xl overflow-hidden group shadow-2xl">
+                <div className="relative h-64 md:h-96 lg:h-[500px] cursor-zoom-in"
+                  onClick={() => setLightboxOpen(true)}
+                  onTouchStart={e => { swipeStartX.current = e.touches[0].clientX; }}
+                  onTouchEnd={e => {
+                    if (swipeStartX.current === null) return;
+                    const dx = e.changedTouches[0].clientX - swipeStartX.current;
+                    swipeStartX.current = null;
+                    if (Math.abs(dx) > 50 && (currentOption?.images?.length || 0) > 1) { e.preventDefault(); dx < 0 ? nextImage() : prevImage(); }
+                  }}>
+                  <img src={currentOption?.images?.[currentImageIndex] || Living} alt={currentOption?.title || "Apartment"} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  <button onClick={e => { e.stopPropagation(); setLightboxOpen(true); }}
+                    className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/60 hover:bg-black/80 text-white text-xs font-semibold px-3 py-2 rounded-full">
+                    <Maximize2 size={14} /> View all {currentOption?.images?.length || 0} photos
+                  </button>
+                  {(currentOption?.images?.length || 0) > 1 && (
+                    <>
+                      <button onClick={e => { e.stopPropagation(); prevImage(); }} aria-label="Previous photo"
+                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 p-3 rounded-full text-white md:opacity-0 md:group-hover:opacity-100 transition">
+                        <ChevronLeft size={20} />
+                      </button>
+                      <button onClick={e => { e.stopPropagation(); nextImage(); }} aria-label="Next photo"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 p-3 rounded-full text-white md:opacity-0 md:group-hover:opacity-100 transition">
+                        <ChevronRight size={20} />
+                      </button>
+                      <span className="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-2.5 py-1 rounded-full">
+                        {currentImageIndex + 1} / {currentOption.images.length}
+                      </span>
+                    </>
+                  )}
+                </div>
               </div>
+              {/* Thumbnails */}
+              {(currentOption?.images?.length || 0) > 1 && (
+                <div ref={thumbStripRef} className="flex gap-2 overflow-x-auto no-scrollbar">
+                  {currentOption.images.map((src, idx) => (
+                    <button key={idx} onClick={() => setCurrentImageIndex(idx)} aria-label={`Show photo ${idx + 1}`}
+                      className={`shrink-0 w-20 h-14 md:w-24 md:h-16 rounded-lg overflow-hidden border-2 transition ${idx === currentImageIndex ? "border-amber-400" : "border-transparent opacity-60 hover:opacity-100"}`}>
+                      <img src={src} alt="" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
+            {lightboxOpen && (
+              <PhotoLightbox images={currentOption?.images || []} startIndex={currentImageIndex}
+                title={currentOption?.title} onClose={() => setLightboxOpen(false)} />
+            )}
 
             {/* Room stats */}
             <div className="flex items-center gap-4 py-6 border-y-2 border-amber-500/20 flex-wrap">
@@ -700,10 +778,15 @@ const Booking = () => {
                 <div className="mb-6">
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">
-                      ₦{Number(currentOption?.base_price || 0).toLocaleString()}
+                      ₦{selectedNightlyRate.toLocaleString()}
                     </span>
-                    <span className="text-gray-400 text-sm">/ night</span>
+                    <span className="text-gray-400 text-sm">/ night{selectedExtraGuests > 0 ? ` for ${numGuests} guests` : ""}</span>
                   </div>
+                  {(currentOption?.extra_guest_fee || 0) > 0 && (currentOption?.max_guests || 0) > (currentOption?.included_guests || 2) && (
+                    <p className="text-xs text-gray-300 mt-1">
+                      For up to {currentOption.included_guests} guests · +₦{Number(currentOption.extra_guest_fee).toLocaleString()} per extra guest per night
+                    </p>
+                  )}
                   {(currentOption?.min_nights || 0) > 1 && (
                     <p className="text-xs text-amber-400 mt-1 font-semibold">Minimum {currentOption.min_nights} nights required</p>
                   )}
@@ -730,9 +813,15 @@ const Booking = () => {
                     <label className="block text-xs font-bold text-gray-300 uppercase mb-1">Guests</label>
                     <select value={numGuests} onChange={e => setNumGuests(parseInt(e.target.value))}
                       className="w-full text-xs text-white focus:outline-none bg-transparent font-semibold">
-                      {[...Array(currentOption?.max_guests || 2)].map((_, i) => (
-                        <option key={i + 1} value={i + 1} className="bg-slate-800">{i + 1} guest{i > 0 ? "s" : ""}</option>
-                      ))}
+                      {[...Array(currentOption?.max_guests || 2)].map((_, i) => {
+                        const n = i + 1;
+                        const extra = Math.max(0, n - (currentOption?.included_guests || 2)) * (currentOption?.extra_guest_fee || 0);
+                        return (
+                          <option key={n} value={n} className="bg-slate-800">
+                            {n} guest{n > 1 ? "s" : ""}{extra > 0 ? ` (+₦${extra.toLocaleString()}/night)` : ""}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                 </div>
@@ -770,8 +859,10 @@ const Booking = () => {
                         </div>
                       )}
                       {price.extraGuest > 0 && (
-                        <div className="flex justify-between text-gray-300 text-sm">
-                          <span>Extra guest fee</span>
+                        <div className="flex justify-between text-gray-300 font-semibold text-sm">
+                          <span>
+                            {price.extraGuests} extra guest{price.extraGuests > 1 ? "s" : ""} × ₦{Number(currentOption?.extra_guest_fee || 0).toLocaleString()} × {price.nights} night{price.nights > 1 ? "s" : ""}
+                          </span>
                           <span className="text-white">₦{price.extraGuest.toLocaleString()}</span>
                         </div>
                       )}
@@ -818,8 +909,9 @@ const Booking = () => {
                 {(!checkIn || !checkOut) && (
                   <div className="text-center py-10">
                     <Calendar className="w-14 h-14 mx-auto mb-3 text-amber-400" />
-                    <p className="text-yellow-400 text-sm font-bold">10% off for 7+ nights • 15% off for 30+ nights</p>
-                    <p className="text-emerald-300 text-xs mt-1">✓ Applied automatically — no code needed</p>
+                    {describeTiers(stayDiscounts) && (
+                      <p className="text-yellow-400 text-sm font-bold">{describeTiers(stayDiscounts)}</p>
+                    )}
                     <p className="text-gray-400 text-sm mt-1">Select dates to view pricing</p>
                   </div>
                 )}
