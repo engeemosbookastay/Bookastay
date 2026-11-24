@@ -1,26 +1,23 @@
-# Builds the site and uploads it to the QServers cPanel hosting on every push
-# to main — no manual zips or uploads.
-#
-# One-time setup in GitHub → this repo → Settings → Secrets and variables → Actions:
-#   Secrets:   FTP_SERVER   (e.g. ftp.bookastayng.com)
-#              FTP_USERNAME (a cPanel FTP account whose folder is this site's folder)
-#              FTP_PASSWORD
-#   Variables: VITE_API_URL             (https://bookastay-backend-zuwa.onrender.com)
-#              VITE_PAYSTACK_PUBLIC_KEY (the live pk_live_... key)
-#              FTP_SERVER_DIR           (optional; folder to upload into, default ./)
-name: Deploy to cPanel
+# Builds the website on every push to main and publishes the finished files to the
+# "deploy" branch of this repo. The cPanel server picks up that branch
+# automatically (see deploy/cpanel-sync.sh), so a push is all it takes to go live.
+# No secrets needed — only public settings are used below.
+name: Build for cPanel
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 concurrency:
-  group: deploy-cpanel
-  cancel-in-progress: false
+  group: build-deploy
+  cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,24 +29,17 @@ jobs:
 
       - run: npm ci
 
-      # Without the Paystack key the site would build but payments would break.
-      - name: Check settings
-        run: |
-          if [ -z "${{ vars.VITE_PAYSTACK_PUBLIC_KEY }}" ]; then
-            echo "::error::Set the VITE_PAYSTACK_PUBLIC_KEY variable in the repo settings before deploying."
-            exit 1
-          fi
-
       - run: npm run build
         env:
-          VITE_API_URL: ${{ vars.VITE_API_URL }}
-          VITE_PAYSTACK_PUBLIC_KEY: ${{ vars.VITE_PAYSTACK_PUBLIC_KEY }}
-
-      - uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+          VITE_API_URL: https://bookastay-backend-zuwa.onrender.com
+          # Paystack *public* key — it is visible in the website's code anyway.
+          VITE_PAYSTACK_PUBLIC_KEY: pk_live_37617a38bec498dc66448202fb07b1e89b5f6fac
+      - name: Publish build to the deploy branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          local-dir: ./dist/
-          server-dir: ${{ vars.FTP_SERVER_DIR || './' }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: deploy
+          force_orphan: true
+          enable_jekyll: true
+          commit_message: "Build of"

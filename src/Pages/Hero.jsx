@@ -16,6 +16,7 @@ import { backendUrl } from "../App";
 import { minCheckInDate, LEAD_TIME_MESSAGE } from "../utils/leadTime";
 import useSiteContent, { pickContent } from "../utils/useSiteContent";
 import { useStayDiscounts, describeTiers } from "../utils/stayDiscounts";
+import { sizedImage } from "../utils/imageUrl";
 // import { Link } from 'react-router-dom';
 
 import Logo from "../assets/Logo.png";
@@ -261,7 +262,7 @@ const Hero = () => {
               )}`}
             >
               <img
-                src={img.src}
+                src={sizedImage(img.src, 1920)}
                 alt={img.caption}
                 className="w-full h-full object-cover"
               />

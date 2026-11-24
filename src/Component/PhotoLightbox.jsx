@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
+import { sizedImage } from "../utils/imageUrl";
 
 // Full-screen photo viewer: arrows / swipe / keyboard to move between photos,
 // zoom with buttons, mouse wheel or double-click/double-tap, drag to pan when
@@ -100,7 +101,7 @@ const PhotoLightbox = ({ images = [], startIndex = 0, title = "", onClose }) => 
         onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
       >
         <img
-          src={images[index]}
+          src={sizedImage(images[index], 2400)}
           alt={`${title} photo ${index + 1}`}
           draggable={false}
           className="max-w-full max-h-full object-contain transition-transform duration-150"
@@ -121,7 +122,7 @@ const PhotoLightbox = ({ images = [], startIndex = 0, title = "", onClose }) => 
             <button key={i} onClick={() => { resetView(); setIndex(i); }}
               className={`shrink-0 w-16 h-12 sm:w-20 sm:h-14 rounded-lg overflow-hidden border-2 transition ${i === index ? "border-amber-400 opacity-100" : "border-transparent opacity-50 hover:opacity-90"}`}
               aria-label={`Photo ${i + 1}`}>
-              <img src={src} alt="" className="w-full h-full object-cover" draggable={false} />
+              <img src={sizedImage(src, 240)} alt="" className="w-full h-full object-cover" draggable={false} />
             </button>
           ))}
         </div>

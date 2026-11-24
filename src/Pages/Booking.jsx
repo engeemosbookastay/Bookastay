@@ -7,6 +7,7 @@ import {
   Sparkles, FileText, Clock, Tag, CreditCard, Percent, Loader2, Maximize2,
 } from "lucide-react";
 import PhotoLightbox from "../Component/PhotoLightbox";
+import { sizedImage } from "../utils/imageUrl";
 import { useStayDiscounts, tierFor, describeTiers } from "../utils/stayDiscounts";
 
 import Living from "../assets/Living.jpg";
@@ -683,7 +684,7 @@ const Booking = () => {
                     swipeStartX.current = null;
                     if (Math.abs(dx) > 50 && (currentOption?.images?.length || 0) > 1) { e.preventDefault(); dx < 0 ? nextImage() : prevImage(); }
                   }}>
-                  <img src={currentOption?.images?.[currentImageIndex] || Living} alt={currentOption?.title || "Apartment"} className="w-full h-full object-cover" />
+                  <img src={sizedImage(currentOption?.images?.[currentImageIndex], 1400) || Living} alt={currentOption?.title || "Apartment"} className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                   <button onClick={e => { e.stopPropagation(); setLightboxOpen(true); }}
                     className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/60 hover:bg-black/80 text-white text-xs font-semibold px-3 py-2 rounded-full">
@@ -712,7 +713,7 @@ const Booking = () => {
                   {currentOption.images.map((src, idx) => (
                     <button key={idx} onClick={() => setCurrentImageIndex(idx)} aria-label={`Show photo ${idx + 1}`}
                       className={`shrink-0 w-20 h-14 md:w-24 md:h-16 rounded-lg overflow-hidden border-2 transition ${idx === currentImageIndex ? "border-amber-400" : "border-transparent opacity-60 hover:opacity-100"}`}>
-                      <img src={src} alt="" className="w-full h-full object-cover" />
+                      <img src={sizedImage(src, 240)} alt="" className="w-full h-full object-cover" />
                     </button>
                   ))}
                 </div>

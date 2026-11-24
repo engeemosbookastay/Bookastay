@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { backendUrl } from '../App';
+import { sizedImage } from '../utils/imageUrl';
 import useSiteContent, { pickContent } from '../utils/useSiteContent';
 import {
   Users, Bed, Bath, Star, Wifi, Wind, Monitor, Zap, Shield, Activity,
@@ -66,7 +67,7 @@ function CardCarousel({ images, alt, accent, onOpen, children }) {
       }}>
       <div className="flex h-full transition-transform duration-500" style={{ transform: `translateX(-${i * 100}%)` }}>
         {images.map((src, n) => (
-          <img key={n} src={src} alt={`${alt} photo ${n + 1}`} loading={n === 0 ? 'eager' : 'lazy'}
+          <img key={n} src={sizedImage(src, 800)} alt={`${alt} photo ${n + 1}`} loading={n === 0 ? 'eager' : 'lazy'}
             className="w-full h-full object-cover shrink-0" draggable={false} />
         ))}
       </div>
