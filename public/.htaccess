@@ -1,3 +1,5 @@
+# Single-page app: send every route that isn't a real file to index.html,
+# so refreshing or opening a deep link (e.g. /bookings) works on Apache.
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
