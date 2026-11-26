@@ -165,7 +165,9 @@ const DEFAULT_NOTE = 'There are small stalls along Sekoni Street within walking 
 // Address, map and Google reviews — editable in Admin → Edit Content → Location & Reviews.
 export const LOCATION_DEFAULTS = {
   address: 'No. 5 Adesola Babarinde Close, Prof. Adewunmi Abioye Avenue, off Professor, Abeokuta 111105, Ogun State, Nigeria',
-  map_query: '',        // what the map searches for; empty = the address
+  // What the map searches for. The Google business name pins the apartment and
+  // shows Google's live rating card; a street address can land on the street.
+  map_query: 'Engeemos Bookastay Apartments, Abeokuta',
   rating: '',           // e.g. 4.9 — the reviews box only shows once this is set
   review_count: '',     // e.g. 37
   reviews_url: '',      // link to the Google reviews
@@ -196,7 +198,7 @@ const GettingAround = () => {
   const note = typeof saved?.note === 'string' ? saved.note : DEFAULT_NOTE;
   const location = { ...LOCATION_DEFAULTS, ...(pickContent(useSiteContent('location'), LOCATION_DEFAULTS, LOCATION_DEFAULTS) || {}) };
   const address = (location.address || LOCATION_DEFAULTS.address).trim();
-  const mapQuery = (location.map_query || address).trim();
+  const mapQuery = (location.map_query || LOCATION_DEFAULTS.map_query).trim();
   const rating = Number(location.rating);
   const reviewCount = Number(location.review_count);
   const hasRating = rating > 0 && rating <= 5;
