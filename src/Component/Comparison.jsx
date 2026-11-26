@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, Crown, ShieldCheck } from 'lucide-react';
+import { Crown, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useSiteContent, { pickContent } from '../utils/useSiteContent';
 
@@ -17,6 +17,9 @@ const DEFAULTS = {
   ],
   footnote: 'Why pay more? Book directly with us and save on every single stay.',
 };
+
+// Let long "A/B" words wrap after the slash on narrow screens instead of mid-word.
+const wrapSlashes = (text) => String(text || '').replace(/\//g, '/\u200B');
 
 const Comparison = () => {
   // Saved content is used as-is (deleted rows stay deleted); defaults only
@@ -58,18 +61,18 @@ const Comparison = () => {
           <div className="relative bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-xl border border-amber-500/20 rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl">
             {/* Column headers */}
             <div className="grid grid-cols-3">
-              <div className="p-4 md:p-6"></div>
-              <div className="p-4 md:p-6 text-center bg-gradient-to-b from-amber-500/20 to-transparent border-l border-r border-amber-500/20">
+              <div className="p-3 md:p-6"></div>
+              <div className="p-3 md:p-6 text-center bg-gradient-to-b from-amber-500/20 to-transparent border-l border-r border-amber-500/20">
                 <div className="flex items-center justify-center gap-1.5 md:gap-2">
                   <ShieldCheck className="w-4 h-4 md:w-5 md:h-5 text-amber-400 shrink-0" />
-                  <span className="text-sm md:text-lg font-bold text-amber-300 leading-tight">
-                    {data.columns.ours}
+                  <span className="text-sm md:text-lg font-bold text-amber-300 leading-tight [overflow-wrap:anywhere]">
+                    {wrapSlashes(data.columns.ours)}
                   </span>
                 </div>
               </div>
-              <div className="p-4 md:p-6 text-center">
-                <span className="text-sm md:text-lg font-bold text-gray-200 leading-tight">
-                  {data.columns.theirs}
+              <div className="p-3 md:p-6 text-center">
+                <span className="text-sm md:text-lg font-bold text-gray-200 leading-tight [overflow-wrap:anywhere]">
+                  {wrapSlashes(data.columns.theirs)}
                 </span>
               </div>
             </div>
@@ -82,18 +85,15 @@ const Comparison = () => {
                   i % 2 === 0 ? 'bg-slate-800/30' : ''
                 }`}
               >
-                <div className="p-4 md:p-6 text-sm md:text-base font-medium text-gray-200">
+                <div className="p-3 md:p-6 text-sm md:text-base font-medium text-gray-200">
                   {row.label}
                 </div>
-                <div className="p-4 md:p-6 text-center bg-amber-500/5 border-l border-r border-amber-500/10 h-full flex items-center justify-center">
-                  <div className="flex items-center gap-1.5 md:gap-2">
-                    <Check className="w-4 h-4 md:w-5 md:h-5 text-emerald-400 shrink-0" />
-                    <span className="text-sm md:text-base font-semibold text-white">{row.ours}</span>
-                  </div>
+                <div className="p-3 md:p-6 text-center bg-amber-500/5 border-l border-r border-amber-500/10 h-full flex items-center justify-center">
+                  <span className="text-sm md:text-base font-semibold text-white [overflow-wrap:anywhere]">{wrapSlashes(row.ours)}</span>
                 </div>
-                <div className="p-4 md:p-6 text-center">
+                <div className="p-3 md:p-6 text-center">
                   <div className="flex items-center justify-center gap-1.5 md:gap-2">
-                    <span className="text-sm md:text-base font-semibold text-gray-200">{row.theirs}</span>
+                    <span className="text-sm md:text-base font-semibold text-gray-200 [overflow-wrap:anywhere]">{wrapSlashes(row.theirs)}</span>
                   </div>
                 </div>
               </div>
